@@ -42,6 +42,10 @@ router.get("/login", async (req, res) => {
 // Login Handle
 router.post(
   "/login",
+  async (req) => {
+    settings = await fetchServerSettings();
+    req.body.username = req.body.username.toLowerCase();
+  },
   passport.authenticate("local", {
     // Dont add or we wont reach remember_me cookie successRedirect: "/dashboard",
     failureRedirect: "/users/login",
@@ -87,7 +91,8 @@ router.get("/register", async (req, res) => {
 
 // Register Handle
 router.post("/register", async (req, res) => {
-  const { name, username, password, password2 } = req.body;
+  const { name, usernameCaseSense, password, password2 } = req.body;
+  const username = usernameCaseSense.toLowerCase();
   const errors = [];
 
   let settings = await fetchServerSettings();
@@ -123,7 +128,11 @@ router.post("/register", async (req, res) => {
     });
   } else {
     // Validation Passed
-    User.findOne({ username }).then((user) => {
+    User.findOne({
+      username: {
+        $regex: new RegExp(username, "i")
+      }
+    }).then((user) => {
       if (user) {
         // User exists
         errors.push({ msg: "Username is already registered" });
