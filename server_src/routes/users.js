@@ -42,9 +42,10 @@ router.get("/login", async (req, res) => {
 // Login Handle
 router.post(
   "/login",
-  async (req) => {
+  async (req, res, next) => {
     settings = await fetchServerSettings();
-    req.body.username = req.body.username.toLowerCase();
+    req.body.username = req.body.username?.toLowerCase();
+    next();
   },
   passport.authenticate("local", {
     // Dont add or we wont reach remember_me cookie successRedirect: "/dashboard",
@@ -91,15 +92,15 @@ router.get("/register", async (req, res) => {
 
 // Register Handle
 router.post("/register", async (req, res) => {
-  const { name, usernameCaseSense, password, password2 } = req.body;
-  const username = usernameCaseSense.toLowerCase();
+  const { name, username, password, password2 } = req.body;
+  const usernameCaseInvariant = username?.toLowerCase();
   const errors = [];
 
   let settings = await fetchServerSettings();
   let currentUsers = await fetchUsers(true);
 
   // Check required fields
-  if (!name || !username || !password || !password2) {
+  if (!name || !usernameCaseInvariant || !password || !password2) {
     errors.push({ msg: "Please fill in all fields..." });
   }
 
@@ -121,7 +122,7 @@ router.post("/register", async (req, res) => {
       serverSettings: settings,
       errors,
       name,
-      username,
+      username: usernameCaseInvariant,
       password,
       password2,
       userCount: currentUsers.length
@@ -130,7 +131,7 @@ router.post("/register", async (req, res) => {
     // Validation Passed
     User.findOne({
       username: {
-        $regex: new RegExp(username, "i")
+        $regex: new RegExp(usernameCaseInvariant, "i")
       }
     }).then((user) => {
       if (user) {
@@ -143,7 +144,7 @@ router.post("/register", async (req, res) => {
           serverSettings: settings,
           errors,
           name,
-          username,
+          username: usernameCaseInvariant,
           password,
           password2,
           userCount: currentUsers.length
@@ -159,7 +160,7 @@ router.post("/register", async (req, res) => {
           }
           const newUser = new User({
             name,
-            username,
+            username: usernameCaseInvariant,
             password,
             group: userGroup
           });
