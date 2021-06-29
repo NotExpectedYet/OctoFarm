@@ -23,6 +23,20 @@ The following variables are read and used by OctoFarm at startup. Always restart
 - OCTOFARM_SITE_TITLE **Custom site title for OctoFarm**
 > OCTOFARM_SITE_TITLE=OctoFarm
 
+## Plugin variables
+These environment variables apply to plugins only and might vary per plugin version.
+
+<details>
+  <summary>octoprint-companion - binding OctoPrint to OctoFarm more closely</summary>
+
+- OIDC_CLIENT_ID (Required, v0.0.1)
+> OIDC_CLIENT_ID=MyOctoPrintOrOctoFarmMachineClientId
+- OIDC_CLIENT_SECRET (Required, v0.0.1)
+> OIDC_CLIENT_SECRET=TheSecretPasswordWeDontSharePublicly
+- OIDC_COOKIE_KEY (Optional, v0.0.1)
+> Might be used in future.
+</details>
+
 ## The `.env` file
 A very simple text file with a variable per line. The following `.env` is often already enough to make sure OctoFarm works as you like:
 ```

@@ -18,7 +18,7 @@ beforeAll(async () => {
 });
 
 describe("Printer Settings Update Endpoint", () => {
-  it("should return 400 error when wrong input is provided", async function () {
+  it("should return 400 error when wrong input is provided", async () => {
     const res = await request.post("/printers/updatePrinterSettings").send();
 
     // Assert input validation failed
@@ -27,7 +27,7 @@ describe("Printer Settings Update Endpoint", () => {
     expect(res.res.statusMessage).toEqual("No ID key was provided");
   }, 10000);
 
-  it("should return 500 if server fails to update printer settings", async function () {
+  it("should return 500 if server fails to update printer settings", async () => {
     const res = await request
       .post("/printers/updatePrinterSettings")
       .send(requestBody);

@@ -7,6 +7,8 @@ const ServerSettingsDB = require("./server_src/models/ServerSettings");
 const expressLayouts = require("express-ejs-layouts");
 const Logger = require("./server_src/lib/logger.js");
 const { OctoFarmTasks } = require("./server_src/tasks");
+const { initHistoryCache } = require("./server_src/cache/history.cache");
+const { scanPlugins } = require("./server_src/plugins/plugin-manager");
 const {
   optionalInfluxDatabaseSetup
 } = require("./server_src/lib/influxExport.js");
@@ -128,16 +130,6 @@ function serveOctoFarmRoutes(app) {
   );
   app.use("/system", require("./server_src/routes/system", { page: "route" }));
   app.use("/client", require("./server_src/routes/sorting", { page: "route" }));
-  app.get("*", function (req, res) {
-    console.debug("Had to redirect resource request:", req.originalUrl);
-    if (req.originalUrl.endsWith(".min.js")) {
-      logger.error("Javascript resource was not found " + req.originalUrl);
-      res.status(404);
-      res.send("Resource not found " + req.originalUrl);
-      return;
-    }
-    res.redirect("/");
-  });
 }
 
 async function serveOctoFarmNormally(app, quick_boot = false) {
@@ -162,11 +154,23 @@ async function serveOctoFarmNormally(app, quick_boot = false) {
   return app;
 }
 
+/**
+ * Scan for plugins in a safe manner, prepare for loading them sync/async.
+ */
+async function initPluginManager() {
+  try {
+    await scanPlugins();
+  } catch (e) {
+    logger.error(e, e.stack);
+  }
+}
+
 const logger = new Logger("OctoFarm-Server");
 
 module.exports = {
   setupExpressServer,
   ensureSystemSettingsInitiated,
   serveOctoFarmRoutes,
-  serveOctoFarmNormally
+  serveOctoFarmNormally,
+  initPluginManager
 };

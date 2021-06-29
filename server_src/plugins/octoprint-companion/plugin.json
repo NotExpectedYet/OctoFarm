@@ -1,0 +1,12 @@
+{
+  "name": "octoprint-companion",
+  "description": "Plugin extension to exchange plug-and-play registration, address resolution and filament data with OctoPrint.",
+  "author": "David J. Zwart",
+  "repository": "octofarm/octofarm",
+  "dependencies": {
+    "oidc-provider": "^7.4.1"
+  },
+  "devDependencies": {},
+  "version": "0.0.1",
+  "minVersion": "^1.1.14"
+}

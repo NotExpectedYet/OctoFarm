@@ -25,3 +25,5 @@ client_2x/build/
 server_2x/assets/public/assets/
 
 *.tgz
+
+server_src/plugins/octoprint-companion/config/oidc-config-secret.js

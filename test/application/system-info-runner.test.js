@@ -67,8 +67,8 @@ describe("SystemRunner", () => {
     // Assert client used props
     expect(systemInfo.cpuLoad.currentLoadSystem).toEqual(expect.any(Number)); // Used by client
     expect(systemInfo.cpuLoad.currentLoadSystem).toBeGreaterThan(0);
-    expect(systemInfo.currentProcess.cpuu).toEqual(expect.any(Number));
-    expect(systemInfo.currentProcess.cpuu).toBeGreaterThan(0);
+    // expect(systemInfo.currentProcess.cpuu).toEqual(expect.any(Number));
+    // expect(systemInfo.currentProcess.cpuu).toBeGreaterThan(0);
     expect(systemInfo.cpuLoad.currentLoadUser).toEqual(expect.any(Number));
     expect(systemInfo.cpuLoad.currentLoadUser).toBeGreaterThan(0);
     expect(systemInfo.memoryInfo.total).toBeTruthy();

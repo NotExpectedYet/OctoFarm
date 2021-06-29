@@ -4,11 +4,18 @@ const router = express.Router();
 const { ensureCurrentUserAndGroup } = require("../config/users.js");
 const softwareUpdateChecker = require("../services/octofarm-update.service");
 const isDocker = require("is-docker");
-const { isPm2, isNodemon, isNode } = require("../utils/env.utils");
+const {AppConstants} = require("../app.constants");
+const {isPm2, isNodemon, isNode} = require("../utils/env.utils");
+
+router.get("/version", async (req, res) => {
+  res.json({
+    version: process.env[AppConstants.VERSION_KEY]
+  });
+});
 
 router.get("/amialive", ensureCurrentUserAndGroup, async (req, res) => {
   let softwareUpdateNotification =
-    softwareUpdateChecker.getUpdateNotificationIfAny();
+      softwareUpdateChecker.getUpdateNotificationIfAny();
 
   // ensure update_vailable can only be true when Administrator group found
   if (req?.user?.group !== "Administrator") {

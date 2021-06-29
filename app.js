@@ -31,15 +31,17 @@ if (!!majorVersion && majorVersion < 14) {
   const {
     setupExpressServer,
     serveOctoFarmNormally,
-    ensureSystemSettingsInitiated
+    ensureSystemSettingsInitiated,
+    initPluginManager
   } = require("./app-core");
-
+  const { configurePlugins } = require("./server_src/plugins/plugin-manager");
   const mongoose = require("mongoose");
   const Logger = require("./server_src/lib/logger.js");
+  
   const logger = new Logger("OctoFarm-Server");
 
   const octoFarmServer = setupExpressServer();
-
+  
   mongoose
     .connect(fetchMongoDBConnectionString(), {
       useNewUrlParser: true,
@@ -57,7 +59,28 @@ if (!!majorVersion && majorVersion < 14) {
         );
       }
 
+      await initPluginManager();
+
       const app = await serveOctoFarmNormally(octoFarmServer);
+
+      const serverUrl = `http://0.0.0.0:${port}`;
+
+      await configurePlugins(octoFarmServer, serverUrl);
+
+      // Allowed by process.env.NODE_ENV === development
+      // const { listAPI } = require("./server_src/utils/api.util");
+      // listAPI(app);
+
+      app.get("*", function (req, res) {
+        console.debug("Had to redirect resource request:", req.originalUrl);
+        if (req.originalUrl.endsWith(".min.js")) {
+          logger.error("Javascript resource was not found " + req.originalUrl);
+          res.status(404);
+          res.send("Resource not found " + req.originalUrl);
+          return;
+        }
+        res.redirect("/");
+      });
       app.listen(port, "0.0.0.0", () => {
         logger.info(`Server started... open it at http://127.0.0.1:${port}`);
       });

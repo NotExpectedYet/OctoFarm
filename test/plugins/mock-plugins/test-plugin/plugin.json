@@ -1,0 +1,11 @@
+{
+  "name": "Test-pLuGiN",
+  "description": "Plugin extension to test plugins for plugging plug plug.",
+  "author": "Plugger Plug",
+  "repository": "octofarm/octofarm",
+  "dependencies": {
+  },
+  "devDependencies": {},
+  "version": "0.0.1",
+  "minVersion": "^1.1.14"
+}
