@@ -297,7 +297,7 @@ describe("SSE-dashboard", () => {
           },
           historical: {
             weeklyUtilisation: true,
-            hourlyTotalTemperatures: true,
+            hourlyTotalTemperatures: false,
             environmentalHistory: false,
             filamentUsageOverTime: false,
             filamentUsageByDay: false,

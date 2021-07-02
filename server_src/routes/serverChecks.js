@@ -1,12 +1,11 @@
 const express = require("express");
 
 const router = express.Router();
-const { ensureCurrentUserAndGroup } = require("../config/users.js");
 const softwareUpdateChecker = require("../runners/softwareUpdateChecker");
 const isDocker = require("is-docker");
 const { isPm2, isNodemon, isNode } = require("../utils/env.utils");
 
-router.get("/amialive", ensureCurrentUserAndGroup, async (req, res) => {
+router.get("/amialive", async (req, res) => {
   let softwareUpdateNotification =
     softwareUpdateChecker.getUpdateNotificationIfAny();
 

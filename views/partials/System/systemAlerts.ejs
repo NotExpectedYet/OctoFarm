@@ -1,0 +1,223 @@
+<div class="row">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active"
+               id="alerts-new-list" data-toggle="list" href="#alerts-new" role="tab"
+               aria-controls="system"><i class="fas fa-plus"></i> New</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"
+               id="alerts-current-list" data-toggle="list" href="#alerts-current"
+               role="tab" aria-controls="panelview"><i class="fas fa-list"></i>
+                Current</a>
+        </li>
+    </ul>
+    <div class="col-12">
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="alerts-new" role="tabpanel"
+                 aria-labelledby="server-status-list">
+                <p class="mb-0">Alerts are managed by the OctoFarm server.</p>
+                <p>NOTE: If you want to pass through information to your script then
+                    it needs to allow for a single variable, the message you input
+                    below will be passed into that variable before sending.</p>
+                <p>List of available tags here: <a class="" data-toggle="collapse"
+                                                   href="#variableList"
+                                                   role="button"
+                                                   aria-expanded="false"
+                                                   aria-controls="variableList">
+                        Variable List
+                    </a></p>
+                <div class="collapse" id="variableList">
+                    <div class="card card-body">
+                        <div class="col-lg-12 table-responsive-sm table-responsive-md">
+                            <table class="table-hover table table-dark text-center">
+                                <thead>
+                                <tr>
+                                    <th class="table-dark" scope="col"
+                                        width="200px">Variable
+                                    </th>
+                                    <th class="table-dark" scope="col">Example</th>
+                                    <th class="table-dark" scope="col">Notes</th>
+                                </tr>
+                                </thead>
+                                <tbody id="historyTable">
+                                <tr>
+                                    <td><code>[PrinterName]</code></td>
+                                    <td>CR10</td>
+                                    <td>Defaults to <code>[PrinterURL]</code> if not
+                                        available.
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>[PrinterURL]</code></td>
+                                    <td>http://192.168.1.124:5000</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><code>[PrinterAPIKey]</code></td>
+                                    <td>ECB8BBB91F204F55AC80A47A3DC0A7F2</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><code>[TimeRemaining]</code></td>
+                                    <td>3 Hrs, 48 Mins, 48 Seconds</td>
+                                    <td>"No Time Estimate" will be shown if not
+                                        available
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>[EstimatedTime]</code></td>
+                                    <td>5 Days, 24 Hrs, 10 Mins, 48 Seconds</td>
+                                    <td>"No Estimated Time Available" will be shown
+                                        if not available
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>[CurrentZ]</code></td>
+                                    <td>25.5mm</td>
+                                    <td>"No Current Z" will be shown if not
+                                        available
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>[PercentRemaining]</code></td>
+                                    <td>55%</td>
+                                    <td>"No Percent Available" will be shown if not
+                                        available
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>[ETA]</code></td>
+                                    <td>Tue Jun 02 2020: 02:47:17</td>
+                                    <td>"No Percent Available" will be shown if not
+                                        available
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>[CurrentTime]</code></td>
+                                    <td>Web Jun 15 2020: 05:34:11</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td><code>[CurrentFile]</code></td>
+                                    <td>dickasaurous.gcode</td>
+                                    <td>"No selected file" will be shown if not
+                                        available
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>[CurrentFilePath]</code></td>
+                                    <td>/lewd/dickasaurous.gcode</td>
+                                    <td>"No selected file" will be shown if not
+                                        available
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>[Tool0Temp]</code></td>
+                                    <td>T:220°C / A:220°C</td>
+                                    <td>"No tool0 temperature" will be shown if not
+                                        available
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>[BedTemp]</code></td>
+                                    <td>T:60°C / A:60°C</td>
+                                    <td>"No bed temperature" will be shown if not
+                                        available
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><code>[Error!]</code></td>
+                                    <td>Thermal Runaway detected! Halting printer
+                                    </td>
+                                    <td>"No error" If not available</td>
+                                </tr>
+                                <tr>
+                                    <td><code>[historyID]</code></td>
+                                    <td>5f76e9e99c99832cd8fef414</td>
+                                    <td>"history id undefined" if not available,
+                                        only works on Print Done, Print Failed,
+                                        Print Error.
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Choose the initial trigger for the alert</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text"
+                                           for="alertsTrigger">Trigger</label>
+                                </div>
+                                <select class="custom-select" id="alertsTrigger">
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="scriptLocation">Input the current script
+                            location (must be reachable by OctoFarm and have
+                            permissions to execute)</label>
+                        <input type="text" class="form-control" id="scriptLocation"
+                               placeholder="/home/octofarm/printAlert">
+                    </div>
+                    <div class="form-group">
+                        <label for="scriptMessage">Input the message that is passed
+                            through to the script.</label>
+                        <textarea id="scriptMessage" class="form-control"
+                                  aria-label="With textarea"
+                                  placeholder="[PrinterName]: Just completed [CurrentFilePath] and took [EstimatedTime]"></textarea>
+                    </div>
+
+                </form>
+                <button id="testScript" type="button"
+                        class="btn btn-secondary btn-block mt-1">Test Script
+                </button>
+                <button id="saveScript" type="button"
+                        class="btn btn-success btn-block">Save Script
+                </button>
+            </div>
+            <div class="tab-pane fade" id="alerts-current" role="tabpanel"
+                 aria-labelledby="server-settings-list">
+                <div class="col-lg-12 table-responsive-sm table-responsive-md">
+                    <table class="table-hover table table-dark text-center">
+                        <thead>
+                        <tr>
+                            <th class="table-dark d-none" scope="col"></th>
+                            <th class="table-dark" scope="col">Active</th>
+                            <th class="table-dark" scope="col" width="150px">
+                                Trigger
+                            </th>
+                            <th class="table-dark" scope="col">Script</th>
+                            <th class="table-dark" scope="col">Message</th>
+                            <th class="table-dark" scope="col">Printers</th>
+                            <th class="table-dark" scope="col" width="200px"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="alertsTable">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+            <div class="tab-pane fade" id="alerts-log" role="tabpanel"
+                 aria-labelledby="server-timeout">
+                <h5>Alert Logs</h5>
+                <hr>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+

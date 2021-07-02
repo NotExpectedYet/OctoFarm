@@ -1,9 +1,6 @@
 import OctoFarmclient from "./lib/octofarm.js";
 import UI from "./lib/functions/ui.js";
-import {
-  selectFilament,
-  checkFilamentManager
-} from "./lib/modules/filamentGrab.js";
+import { setupFilamentManagerReSyncBtn } from "./lib/modules/filamentManagerPlugin.js";
 import * as ApexCharts from "apexcharts";
 import { getLastThirtyDaysText } from "./utils/time.util";
 
@@ -606,7 +603,7 @@ async function updatePrinterDrops() {
       if (filament?.Spool[spool]?.printerAssignment.length > 0) {
         drop.innerHTML = `<option>${filament?.Spool[spool]?.printerAssignment[0]?.name}: Tool ${filament?.Spool[spool]?.printerAssignment[0]?.tool}</option>`;
       } else {
-        drop.innerHTML = `<option>Not Assigned</option>`;
+        drop.innerHTML = "<option>Not Assigned</option>";
       }
     }
     // Not needed until bring back selecting spool function server side
@@ -957,43 +954,7 @@ async function init() {
         spoolsTempOffset
       );
     });
-  filamentManager = await checkFilamentManager();
-
-  if (filamentManager) {
-    const resyncBtn = document.getElementById("resyncFilament");
-    resyncBtn.addEventListener("click", async (e) => {
-      resyncBtn.innerHTML =
-        '<i class="fas fa-sync fa-spin"></i> <br> Syncing <br> Please Wait...';
-      const post = await OctoFarmclient.post("filament/filamentManagerReSync");
-      resyncBtn.innerHTML =
-        '<i class="fas fa-sync"></i> Re-Sync Filament Manager';
-      if (post.status === 200) {
-        const meta = await post.json();
-        if (meta.success) {
-          UI.createAlert(
-            "success",
-            `Successfully synced filament manager! <br> Profiles - Updated: ${meta.updatedProfiles} / New: ${meta.newProfiles} <br> Spools - Updated: ${meta.updatedSpools} / New: ${meta.newSpools}`,
-            4000,
-            "Clicked"
-          );
-        } else {
-          UI.createAlert(
-            "error",
-            `Successfully synced filament manager! <br> Profiles Status: ${meta.profiles} <br> Spools Status: ${meta.spools}`,
-            4000,
-            "Clicked"
-          );
-        }
-        resyncBtn.disabled = false;
-      } else {
-        UI.createAlert(
-          "error",
-          "Could not contact server to sync, is it online?"
-        );
-        resyncBtn.disabled = false;
-      }
-    });
-  }
+  await setupFilamentManagerReSyncBtn();
 
   // fill.Spool.forEach((spools) => {
   //   profile.profiles.forEach((prof) => {

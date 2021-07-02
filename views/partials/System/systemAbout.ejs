@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-lg-12">
+        <center>
+            <p>OctoFarm is the creation of James Mackay from <a
+                        href="https://notexpectedyet.com">NotExpectedYet</a> which
+                is also one of his personal projects. It was designed after using
+                the wonderful software Octoprint for well over a year
+                before getting his second printer. Realising he could only
+                control/monitor one printer from the Octoprint interface he decided
+                to write his own implementation using the API in Octoprint. This
+                spawned OctoFarm which is used
+                currently for monitoring and managing multiple Octoprint attached
+                printers. <br>If you would like to say thanks to James for designing
+                this free and open source software package then feel free to send
+                him a donation using the
+                button below.</p>
+            <p><a href="https://www.patreon.com/bePatron?u=19808757"
+                  target="_blank">
+                    <button type="button" class="btn btn-danger">Become a Patreon!
+                    </button>
+                </a></p>
+            <p>
+                <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=QGBJML3E7268L&source=url"
+                   target="_blank">
+                    <button type="button" class="btn btn-info">Paypal Donation!
+                    </button>
+                </a></p>
+        </center>
+    </div>
+    <div class="col-lg-12">
+        <center>
+            <div class="row">
+                <div class="col-12">
+                    <h5>Big thanks to the following Supporters!</h5>
+                </div>
+                        <% patreonData.forEach(patreon => { %>
+                            <div class="col-12 col-sm-6 col-md-3 col-lg-2 col-lg-1">
+                                <li class="list-group-item">
+                                    <i style="color:gold;" class="fas fa-trophy"></i>
+                                        <%= patreon %>
+                                    <i style="color:gold;" class="fas fa-trophy"></i>
+                                </li>
+                            </div>
+                        <% }) %>
+                </div>
+            </div>
+        </center>
+    </div>
+</div>

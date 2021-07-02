@@ -14,7 +14,9 @@ const {
 } = require("../providers/cleaner.constants");
 const historyService = require("../../services/history.service");
 const Logger = require("../logger.js");
-const serverSettingsCache = require("../../settings/serverSettings");
+const {
+  getServerSettingsCache
+} = require("../../cache/server-settings.cache.js");
 const { noCostSettingsMessage } = require("../utils/print-cost.util");
 const { stateToHtml } = require("../utils/html.util");
 const { toDefinedKeyValue } = require("../utils/property.util");
@@ -73,7 +75,7 @@ class HistoryClean {
     }
 
     let spoolLeftoverConditional = "";
-    if (serverSettingsCache.filamentManager) {
+    if (getServerSettingsCache().octoPrintFilamentManagerPluginSettings) {
       const spoolWeight = (spool.weight - spool.used).toFixed(0);
       spoolLeftoverConditional = `(${spoolWeight}g)`;
     }

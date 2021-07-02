@@ -100,7 +100,7 @@ describe("SystemRunner", () => {
     expect(systemInfo.cpuLoad.currentLoad).toEqual(expect.any(Number));
     expect(systemInfo.cpuLoad.currentLoadIdle).toEqual(expect.any(Number));
     expect(systemInfo.memoryInfo.total).toEqual(expect.any(Number));
-    expect(systemInfo.memoryInfo.free).toBeGreaterThan(500000000); // 1GB
+    expect(systemInfo.memoryInfo.free).toBeGreaterThan(100000000); // 1GB
     expect(systemInfo.sysUptime.uptime).toBeGreaterThan(50); // s uptime
     expect(systemInfo.sysUptime.current).toBeGreaterThan(1617880660070); // ms time as of writing this test ^^
     expect(systemInfo.sysUptime.timezone).toBeTruthy();

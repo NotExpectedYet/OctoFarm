@@ -9,7 +9,6 @@ import {
 } from "./Printers/actionButtons.js";
 import OctoPrintClient from "../octoprint.js";
 import { checkTemps } from "../modules/temperatureCheck.js";
-import { checkFilamentManager } from "./filamentGrab.js";
 import currentOperations from "./currentOperations";
 import doubleClickFullScreen from "../functions/fullscreen.js";
 import OctoFarmclient from "../octofarm";
@@ -999,7 +998,6 @@ async function updateState(printer, clientSettings, view) {
     for (let i = 0; i < printer.selectedFilament.length; i++) {
       const tool = document.getElementById(`${printer._id}-spool-${i}`);
       if (printer.selectedFilament[i] !== null) {
-        const filamentManager = await checkFilamentManager();
         if (tool) {
           tool.innerHTML = `${printer.selectedFilament[i].spools.material}`;
         }

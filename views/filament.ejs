@@ -1,10 +1,6 @@
 <% if(typeof printerCount != 'undefined' && printerCount > 0 ) {%>
-<%let filamentManager = false;%>
 <% let displayNone = "d-none" %>
-<% if(typeof serverSettings != 'undefined'){ %>
-    <%filamentManager = serverSettings.filamentManager%>
-<% } %>
-<% if(filamentManager){ %>
+<% if(filamentManagerEnabled){ %>
 <% displayNone = ""; %>
 <% } %>
 <% let filamentTotals = statistics %>
@@ -36,10 +32,10 @@
                     <i class="fas fa-toilet-paper"></i> Spool Manager
                 </button>
                 <button title="Updates OctoFarms Spools and Profiles database with the filament manager plugin."
-                        id="resyncFilament"
+                        id="resyncFilamentManagerBtn"
                         type="button"
                         class="btn btn-primary m-2 <%= displayNone %>">
-                    <i class="fas fa-sync"></i> Re-Sync Filament Manager
+                    <i class="fas fa-sync"></i> Re-Sync Spools / Profiles
                 </button>
 
             </div>

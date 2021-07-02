@@ -1,0 +1,45 @@
+<div class="<%= list.menuClass %>">
+    <div class="list-group" id="list-tab" role="tablist">
+        <button type="button" class="btn btn-secondary list-group-item" disabled>
+            <i class="far fa-user"></i><br>
+            <%= name; %><br>
+            <%= userGroup; %>
+        </button>
+        <button type="button" class="btn btn-success mb-3" href="/users/logout">
+            <i class="fas fa-sign-out-alt"></i>Sign Out
+        </button><br>
+        <% list.listItems.forEach((item, index) => {  %>
+            <% if(item.permissionGroup === "" || item.permissionGroup === userGroup){ %>
+            <a
+                id="<%= item.id %>-list"
+                class="list-group-item list-group-item-action <%= index === 0 ? "active" : "" %>"
+                data-toggle="list"
+                href="#<%= item.id %>"
+                role="tab">
+                <i class="<%= item.icon %>"></i> <%= item.name %>
+            </a>
+          <% } %>
+        <% }) %>
+    </div>
+
+</div>
+<div class="<%= list.bodyClass %>">
+    <div class="tab-content" id="nav-tabContent">
+        <% list.listItems.forEach((item, index) => {  %>
+            <% if(item.permissionGroup === "" || item.permissionGroup === userGroup){ %>
+                <div
+                        id="<%= item.id %>"
+                        class="tab-pane fade <%= index === 0 ? "show active" : "" %>"
+                        role="tabpanel"
+                        aria-labelledby="<%= item.id %>-list">
+                    <% if (!item.bodyFile) { %>
+                        <em> This widget failed to render due to missing 'tile.bodyId' or 'bodyFile' alternative </em>
+                    <% } else { %>
+                        <%# More complex card-body content %>
+                        <%- include(item.bodyFile) %>
+                    <% } %>
+                </div>
+            <% } %>
+        <% }) %>
+    </div>
+</div>

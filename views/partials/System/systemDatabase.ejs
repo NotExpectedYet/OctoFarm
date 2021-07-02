@@ -1,0 +1,100 @@
+<p>Current Database URL used for keeping all your farm information.</p>
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon3">Database URL: </span>
+    </div>
+    <input type="text" class="form-control" id="basic-url"
+           aria-describedby="basic-addon3" value="<%= db; %>" disabled>
+</div>
+<br>
+<h5>Actions</h5>
+<hr>
+<p class="mb-1">Actions to perform at the database level.</p>
+
+<small>Below are some actions you can perform on your database.</small><br>
+
+<br>
+<h6>Export the Database to .json</h6>
+<hr>
+<p class="mb-1">Primarily used by the developers to better understand an issue you
+    have logged. Press a button below to export your database into a .json file.</p>
+<center>
+    <button id="exportAlerts" type="button"
+            class="btn btn-warning btn-lg bg-colour-1 mb-2"><i
+                class="fas fa-history"></i> <br> Export Alerts
+    </button>
+    <button id="exportClientSettings" type="button"
+            class="btn btn-info btn-lg bg-colour-2 mb-2"><i class="fas fa-cog"></i><br>
+        Export Client Settings
+    </button>
+    <button id="exportFilament" type="button"
+            class="btn btn-primary btn-lg bg-colour-3 mb-2"><i
+                class="fas fa-toilet-paper"></i><br> Export Filament
+    </button>
+    <button id="exportHistory" type="button"
+            class="btn btn-danger btn-lg bg-colour-4 mb-2"><i class="fas fa-history"></i>
+        <br> Export History
+    </button>
+    <button id="exportPrinters" type="button"
+            class="btn btn-warning btn-lg bg-colour-1 mb-2"><i
+                class="fas fa-print"></i><br> Export Printers
+    </button>
+    <button id="exportRoomData" type="button"
+            class="btn btn-info btn-lg bg-colour-2 mb-2"><i class="fas fa-print"></i><br>
+        Export Room Data
+    </button>
+    <button id="exportServerSettings" type="button"
+            class="btn btn-primary btn-lg bg-colour-3 mb-2"><i
+                class="fas fa-cog"></i><br> Export Server Settings
+    </button>
+    <button id="exportUsers" type="button"
+            class="btn btn-secondary btn-lg bg-colour-4 mb-2"><i
+                class="fas fa-users"></i><br> Export Users
+    </button>
+</center>
+<br>
+<h6>Nuke the Database</h6>
+<hr>
+<p class="mb-1">This should only be used as a last resort. You will clear out your
+    entire database so it's best to have a backup in place before even thinking of
+    actioning the below options.</p>
+<code>WARNING! Do not mess around with this unless you have a backup in place and/or
+    know what your doing...</code>
+<center>
+    <button id="nukeAlerts" type="button"
+            class="btn btn-warning btn-lg bg-colour-1 mb-2"><i
+                class="fas fa-history"></i> <br> Nuke Alerts
+    </button>
+    <button id="nukeClientSettings" type="button"
+            class="btn btn-info btn-lg bg-colour-2 mb-2"><i class="fas fa-cog"></i><br>
+        Nuke Client Settings
+    </button>
+    <button id="nukeFilament" type="button"
+            class="btn btn-primary btn-lg bg-colour-3 mb-2"><i
+                class="fas fa-toilet-paper"></i><br> Nuke Filament
+    </button>
+    <button id="nukeHistory" type="button"
+            class="btn btn-danger btn-lg bg-colour-4 mb-2"><i class="fas fa-history"></i>
+        <br> Nuke History
+    </button>
+    <button id="nukePrinters" type="button"
+            class="btn btn-warning btn-lg bg-colour-1 mb-2"><i
+                class="fas fa-print"></i><br> Nuke Printers
+    </button>
+    <button id="nukeRoomData" type="button" class="btn btn-info btn-lg bg-colour-2 mb-2">
+        <i class="fas fa-print"></i><br> Nuke Room Data
+    </button>
+    <button id="nukeServerSettings" type="button"
+            class="btn btn-primary btn-lg bg-colour-3 mb-2"><i
+                class="fas fa-cog"></i><br> Nuke Server Settings
+    </button>
+    <button id="nukeUsers" type="button"
+            class="btn btn-secondary btn-lg bg-colour-4 mb-2"><i
+                class="fas fa-users"></i><br> Nuke Users
+    </button>
+    <br>
+    <button id="nukeEverything" type="button"
+            class="btn btn-danger mb-1 btn-lg mb-2"><i
+                class="fas fa-database"></i><br> Nuke Everything
+    </button>
+</center>

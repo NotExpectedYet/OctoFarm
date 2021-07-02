@@ -1,0 +1,49 @@
+<div class="row">
+    <div class="col-12 text-center">
+        <h5 class="text-light">Suffering some OctoFarm woes?</h5>
+        <p class="text-light">Use the "Log Dump" button below to dump out a .zip file ready to be
+            uploaded to a github issue.</p>
+        <button
+                id="logDumpGenerateBtn"
+                type="button"
+                class="btn btn-info"
+                href="#"
+                aria-expanded="false"
+        >
+            <i class="fas fa-file-archive"></i> Log Dump <i id="logDumpSpinner"
+                                                            class="fas fa-spinner fa-spin d-none"></i>
+        </button>
+
+        <button
+                id="logDumpDownloadBtn"
+                type="button"
+                class="btn btn-success d-none"
+                href="#"
+                aria-expanded="false"
+        >
+            <i class="fas fa-file-download"></i> Download Log Dump
+        </button>
+
+    </div>
+</div>
+
+<hr>
+<div class="row">
+
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <table class="table-hover table table-dark">
+            <thead>
+            <tr>
+                <th scope="col">File Name</th>
+                <th scope="col">Last Modified</th>
+                <th scope="col">Size</th>
+                <th scope="col">Download</th>
+                <!--                                                    <th scope="col">Delete</th>-->
+            </tr>
+            </thead>
+            <tbody id="serverLogs">
+
+            </tbody>
+        </table>
+    </div>
+</div>

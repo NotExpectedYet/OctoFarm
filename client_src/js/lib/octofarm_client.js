@@ -7,11 +7,7 @@ export default class OctoFarmClient {
         "Content-Type": "application/json"
       }
     });
-    if (get.status === 400) {
-      throw new Error(
-        `Malformed request! Status: ${get.status} - ${get.statusText}`
-      );
-    } else if (get.status === 503) {
+    if (get.status === 503) {
       throw new Error("Error contacting server, is it alive?");
     } else if (get.status === 204) {
       return;
@@ -32,6 +28,22 @@ export default class OctoFarmClient {
         `Malformed request! Status: ${post.status} - ${post.statusText}`
       );
     } else if (post.status === 503) {
+      throw new Error("Error contacting server, is it alive?");
+    } else if (post.status === 204) {
+      return;
+    }
+
+    return await post.json();
+  }
+  static async delete(item) {
+    const url = `/${item}`;
+    const post = await fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    if (post.status === 503) {
       throw new Error("Error contacting server, is it alive?");
     } else if (post.status === 204) {
       return;

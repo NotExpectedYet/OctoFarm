@@ -2,7 +2,10 @@ import OctoFarmClient from "./lib/octofarm.js";
 import Calc from "./lib/functions/calc.js";
 import FileManager from "./lib/modules/fileManager.js";
 import { dragAndDropEnable } from "./lib/functions/dragAndDrop.js";
-import { returnDropDown, selectFilament } from "./lib/modules/filamentGrab.js";
+import {
+  returnDropDown,
+  selectFilament
+} from "./lib/modules/filamentManagerPlugin.js";
 import FileSorting from "./lib/modules/fileSorting.js";
 
 let lastId = null;
@@ -30,7 +33,7 @@ class Manager {
       }
     });
     onlinePrinterList.forEach((printer, index) => {
-      let extruderList = ``;
+      let extruderList = "";
       for (let i = 0; i < printer.currentProfile.extruder.count; i++) {
         extruderList += `<div class="input-group mb-1"> <div class="input-group-prepend"> <label class="input-group-text bg-secondary text-light" for="tool${i}-${printer._id}">Filament:</label> </div> <select class="custom-select bg-secondary text-light" id="tool${i}-${printer._id}"></select></div>`;
       }

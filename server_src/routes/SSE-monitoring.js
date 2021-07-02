@@ -8,11 +8,13 @@ const Logger = require("../lib/logger.js");
 const logger = new Logger("OctoFarm-API");
 //Global store of dashboard info... wonder if there's a cleaner way of doing all this?!
 let clientInformation = null;
-
-const printerClean = require("../lib/dataFunctions/printerClean.js");
-const PrinterClean = printerClean.PrinterClean;
+const { getServerSettingsCache } = require("../cache/server-settings.cache.js");
+// TODO
+// Replace settings clean for client once client settings update done
 const settingsClean = require("../lib/dataFunctions/settingsClean.js");
 const SettingsClean = settingsClean.SettingsClean;
+const printerClean = require("../lib/dataFunctions/printerClean.js");
+const PrinterClean = printerClean.PrinterClean;
 const { getSorting, getFilter } = require("../lib/sorting.js");
 const { writePoints } = require("../lib/influxExport.js");
 // User Modal
@@ -140,12 +142,7 @@ if (interval === false) {
       clientSettings = await SettingsClean.returnClientSettings();
     }
 
-    let serverSettings = await SettingsClean.returnSystemSettings();
-    if (typeof serverSettings === "undefined") {
-      await SettingsClean.start();
-      serverSettings = await SettingsClean.returnSystemSettings();
-    }
-    if (!!serverSettings.influxExport?.active) {
+    if (getServerSettingsCache().influxDatabaseSettings.active) {
       if (influxCounter >= 2000) {
         sendToInflux(printersInformation);
         influxCounter = 0;

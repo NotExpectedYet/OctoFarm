@@ -31,7 +31,8 @@ if (!!majorVersion && majorVersion < 14) {
   const {
     setupExpressServer,
     serveOctoFarmNormally,
-    ensureSystemSettingsInitiated
+    ensureSystemSettingsInitiated,
+    ensureOctoFarmMiddleWareInitiated
   } = require("./app-core");
 
   const mongoose = require("mongoose");
@@ -49,6 +50,7 @@ if (!!majorVersion && majorVersion < 14) {
       serverSelectionTimeoutMS: 2500
     })
     .then(() => ensureSystemSettingsInitiated())
+    .then(() => ensureOctoFarmMiddleWareInitiated(octoFarmServer))
     .then(async () => {
       const port = fetchOctoFarmPort();
       if (!port || Number.isNaN(parseInt(port))) {

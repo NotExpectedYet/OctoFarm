@@ -4,7 +4,7 @@ const { ensureSystemSettingsInitiated } = require("../../../app-core");
 beforeAll(async () => {
   await dbHandler.connect();
   const settings = await ensureSystemSettingsInitiated();
-  expect(settings).toEqual("Server settings have been created...");
+  expect(settings).toEqual("Default server settings have been created");
 });
 
 afterAll(async () => {

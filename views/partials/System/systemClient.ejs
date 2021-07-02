@@ -1,0 +1,456 @@
+<div class="row">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active"
+               id="client-settings-list" data-toggle="list" href="#client-settings"
+               role="tab" aria-controls="system"><i class="fas fa-desktop"></i> General</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"
+               id="system-monitoring-list" data-toggle="list"
+               href="#system-monitoring" role="tab"
+               aria-controls="dashboard"><i class="fas fa-eye"></i> Views</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"
+               id="system-dashboard-list" data-toggle="list"
+               href="#system-dashboard" role="tab" aria-controls="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"
+               id="system-printer-control-list" data-toggle="list"
+               href="#system-printer-control" role="tab" aria-controls="dashboard"><i class="fas fa-gamepad"></i> Printer
+                Control</a>
+        </li>
+    </ul>
+
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="client-settings"
+                 role="tabpanel" aria-labelledby="client-settings-list">
+                <div class="row">
+                    <div class="col-12 col-md-4">
+                        <p class="font-weight-bold">Change Background</p>
+                        <p>Click the button below to upload your background
+                            image.</p>
+                        <small>NOTE: You may need to refresh your browser cache if
+                            this doesn't apply straight away.</small>
+                        <form action="/settings/backgroundUpload"
+                              enctype="multipart/form-data" method="POST">
+                            <input class="btn bg-secondary" type="file"
+                                   name="myFile"
+                                   accept="image/jpeg,image/png,image/jpg"/>
+                            <input id="backgroundSubmit" class="btn btn-primary"
+                                   type="submit" value="Upload"
+                                   accept="image/jpeg,image/png">
+                        </form>
+                        <p> Supports <code>PNG, JPG</code></p>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <img width="100%" src="/images/bg.jpg">
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="system-monitoring" role="tabpanel"
+                 aria-labelledby="dashboard-monitoring-list">
+                <p>Enable and disable different parts of the UI on the views
+                    pages.</p>
+                <div class="row">
+                    <div class="col-3">
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="panelCurrentOpOn" required>
+                                <label class="custom-control-label"
+                                       for="panelCurrentOpOn">Current
+                                    Operations</label>
+                                <div class="valid-feedback">Current Operations will
+                                    be shown on the views.
+                                </div>
+                                <div class="invalid-feedback">Current Operations
+                                    will not be shown on the views.
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-3">
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="panelHideOffline" checked required>
+                                <label class="custom-control-label"
+                                       for="panelHideOffline">Offline
+                                    Printers</label>
+                                <div class="valid-feedback">Offline printers will be
+                                    hidden from the views.
+                                </div>
+                                <div class="invalid-feedback">Offline printers will
+                                    be shown on the views.
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-3">
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="panelHideClosed" required>
+                                <label class="custom-control-label"
+                                       for="panelHideClosed">Disconnected
+                                    Printers</label>
+                                <div class="valid-feedback">Disconnected printers
+                                    will be hidden from the views.
+                                </div>
+                                <div class="invalid-feedback">Disconnected printers
+                                    will be shown on the views.
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <!--                                                    <div class="col-3">-->
+                    <!--                                                        <form class="was-validated">-->
+                    <!--                                                            <div class="custom-control custom-checkbox mb-3">-->
+                    <!--                                                                <input type="checkbox" class="custom-control-input" id="panelHideIdle" required>-->
+                    <!--                                                                <label class="custom-control-label" for="panelHideIdle">Hide Idle</label>-->
+                    <!--                                                                <div class="valid-feedback">Idle printers will be hidden from the views.</div>-->
+                    <!--                                                                <div class="invalid-feedback">Idle printers will be shown on the views.</div>-->
+                    <!--                                                            </div>-->
+                    <!--                                                        </form>-->
+                    <!--                                                    </div>-->
+                    <div class="col-12">
+                        <p>Select how many columns you would like on camera view
+                            (excl. List View)</p>
+                        <div class="alert alert-warning" role="alert">
+                            This only takes effect on screen sizes larger than a
+                            tablet.
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text"
+                                       for="selectCameraGrid">Camera Columns</label>
+                            </div>
+                            <select class="custom-select" id="selectCameraGrid">
+                                <option value="12">1</option>
+                                <option value="6" selected>2</option>
+                                <option value="4">3</option>
+                                <option value="3">4</option>
+                                <option value="5">5</option>
+                                <option value="2">6</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="system-dashboard" role="tabpanel"
+                 aria-labelledby="dashboard-settings-list">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <button id="resetDashboardBtn" type="button"
+                                class="btn btn-danger">Reset Dashboard
+                        </button>
+                    </div>
+                    <div class="col-lg-12">
+                        <h5>Enable/Disable</h5>
+                        <hr>
+                        <p>Select which sections of your dasboard you'd like enabled
+                            or disabled. Disabling a dashboard panel will hide it
+                            from view.</p>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6 title="Current Operations block shows any currently active prints on the farm.">
+                            Farm Activity</h6>
+                        <hr>
+
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="currentOperations" required>
+                                <label class="custom-control-label"
+                                       for="currentOperations">Current
+                                    Operations</label><br>
+
+                                <div class="valid-feedback">Shown</div>
+                                <div class="invalid-feedback">Hidden</div>
+                                <small><i class="fas fa-info-circle"></i> Shows the
+                                    current active prints</small>
+                            </div>
+                        </form>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="cumulativeTimes" checked required>
+                                <label class="custom-control-label"
+                                       for="cumulativeTimes">Cumulative
+                                    Times</label><br>
+
+                                <div class="valid-feedback">Shown</div>
+                                <div class="invalid-feedback">Hidden</div>
+                                <small><i class="fas fa-info-circle"></i> Totals up
+                                    the Estimated, Remaining and Eslapsed time of
+                                    active prints on the farm</small>
+                            </div>
+                        </form>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="averageTimes" checked required>
+                                <label class="custom-control-label"
+                                       for="averageTimes">Average Times</label><br>
+
+                                <div class="valid-feedback">Shown</div>
+                                <div class="invalid-feedback">Hidden</div>
+                                <small><i class="fas fa-info-circle"></i> Mean
+                                    Averages of the Estimated, Remaining and
+                                    Eslapsed time of active prints on the
+                                    farm</small>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6 title="Printer Status blocks will show the last state grabbed of each instance. (these may need re-sizing to see all printers)">
+                            Printer Status</h6>
+                        <hr>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="printerState" checked required>
+                                <label class="custom-control-label"
+                                       for="printerState">State</label><br>
+
+                                <div class="valid-feedback">Shown</div>
+                                <div class="invalid-feedback">Hidden</div>
+                                <small><i class="fas fa-info-circle"></i> Grid that
+                                    shows the individual printer states on the farm</small>
+                            </div>
+                        </form>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="printerTemps" checked required>
+                                <label class="custom-control-label"
+                                       for="printerTemps">Temps</label><br>
+
+                                <div class="valid-feedback">Shown</div>
+                                <div class="invalid-feedback">Hidden</div>
+                                <small><i class="fas fa-info-circle"></i> Grid that
+                                    shows the individual printer temps on the
+                                    farm</small>
+                            </div>
+                        </form>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="printerUtilisation" checked required>
+                                <label class="custom-control-label"
+                                       for="printerUtilisation">Utilisation</label><br>
+
+                                <div class="valid-feedback">Shown</div>
+                                <div class="invalid-feedback">Hidden</div>
+                                <small><i class="fas fa-info-circle"></i> Grid that
+                                    shows the individual printer utilisation
+                                    activitiy vs idle/offline time.</small>
+                            </div>
+                        </form>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="printerProgress" checked required>
+                                <label class="custom-control-label"
+                                       for="printerProgress">Progress</label><br>
+
+                                <div class="valid-feedback">Shown</div>
+                                <div class="invalid-feedback">Hidden</div>
+                                <small><i class="fas fa-info-circle"></i> Grid that
+                                    shows the individual printer progress for active
+                                    prints</small>
+                            </div>
+                        </form>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="currentStatus" checked required>
+                                <label class="custom-control-label"
+                                       for="currentStatus">Current
+                                    Status</label><br>
+
+                                <div class="valid-feedback">Shown</div>
+                                <div class="invalid-feedback">Hidden</div>
+                                <small><i class="fas fa-info-circle"></i> Overview
+                                    of all the printers status totalled into a bar
+                                    graph</small>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6>Farm Utilisation</h6>
+                        <hr>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="weeklyUtilisation" checked required>
+                                <label class="custom-control-label"
+                                       for="weeklyUtilisation">Weekly
+                                    Utilisation</label><br>
+
+                                <div class="valid-feedback">Shown</div>
+                                <div class="invalid-feedback">Hidden</div>
+                                <small><i class="fas fa-info-circle"></i> Heat map
+                                    showing the total percentages of printer states
+                                    on the farm. Shows previous 7 days.</small>
+                            </div>
+                        </form>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="currentUtilisation" checked required>
+                                <label class="custom-control-label"
+                                       for="currentUtilisation">Current
+                                    Utilisation</label><br>
+
+                                <div class="valid-feedback">Shown</div>
+                                <div class="invalid-feedback">Hidden</div>
+                                <small><i class="fas fa-info-circle"></i> Donut
+                                    chart of total printers in Active/Idle/Offline
+                                    states</small>
+                            </div>
+                        </form>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="farmUtilisation" checked required>
+                                <label class="custom-control-label"
+                                       for="farmUtilisation">Farm
+                                    Utilisation</label><br>
+
+                                <div class="valid-feedback">Shown</div>
+                                <div class="invalid-feedback">Hidden</div>
+                                <small><i class="fas fa-info-circle"></i> Overview
+                                    of the entire farms utilisation hours inc.
+                                    Active/Failed/Idle/Offline</small>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6>Historical</h6>
+                        <hr>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="hourlyTotalTemperatures" required>
+                                <label class="custom-control-label"
+                                       for="hourlyTotalTemperatures">Hourly Total
+                                    Temperatures</label><br>
+                                <div class="valid-feedback">Shown</div>
+                                <div class="invalid-feedback">Hidden</div>
+                                <small><i class="fas fa-info-circle"></i> Graph
+                                    showing the total tool/bed/chamber temperatures
+                                    across the farm inc. total temp.</small>
+
+                            </div>
+                        </form>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="printCompletionCheck" required>
+                                <label class="custom-control-label"
+                                       for="printCompletionCheck">Print Completion
+                                    By Day</label><br>
+                                <div class="valid-feedback">Shown</div>
+                                <div class="invalid-feedback">Hidden</div>
+                                <small><i class="fas fa-info-circle"></i> Graph
+                                    showing counts of daily print completion
+                                    totalled by day.</small>
+
+                            </div>
+                        </form>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="filamentUsageCheck" required>
+                                <label class="custom-control-label"
+                                       for="filamentUsageCheck">Filament Usage By
+                                    Day</label><br>
+                                <div class="valid-feedback">Shown</div>
+                                <div class="invalid-feedback">Hidden</div>
+                                <small><i class="fas fa-info-circle"></i> Graph
+                                    showing filament usage totally by day.</small>
+
+                            </div>
+                        </form>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="filamentUsageOverTimeCheck" required>
+                                <label class="custom-control-label"
+                                       for="filamentUsageOverTimeCheck">Filament
+                                    Usage Over Time</label><br>
+                                <div class="valid-feedback">Shown</div>
+                                <div class="invalid-feedback">Hidden</div>
+                                <small><i class="fas fa-info-circle"></i> Graph
+                                    showing filament usage summed up by day over
+                                    time.</small>
+
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-4">
+                        <h6>Environmental</h6>
+                        <hr>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="environmentalHistory" required>
+                                <label class="custom-control-label"
+                                       for="environmentalHistory">Environmental
+                                    History</label><br>
+                                <div class="valid-feedback">Shown</div>
+                                <div class="invalid-feedback">Hidden</div>
+                                <small><i class="fas fa-info-circle"></i> Shows
+                                    global Environmental data for room
+                                    temperature/humidity/pressure/IAQ. To setup fire
+                                    a POST request(requires Auth) to <code>/input/roomData</code>
+                                    with the following format:<br> <code>{<br>
+                                        temperature: value (°C),<br>
+                                        humidity: value (%),<br>
+                                        iaq: value,<br>
+                                        pressure: value (Pa)<br>
+                                        date: value<br>
+                                        }</code><br> Null values are required if
+                                    data is missing!</small>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+            <div class="tab-pane fade" id="system-printer-control" role="tabpanel"
+                 aria-labelledby="dashboard-settings-list">
+                <div class="row">
+                    <div class="col-3">
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="printerControlFilesFirst" required>
+                                <label class="custom-control-label"
+                                       for="printerControlFilesFirst">Files
+                                    First</label>
+                                <div class="valid-feedback">Show files at the top of
+                                    the Printer Control Modal
+                                </div>
+                                <div class="invalid-feedback">Show files under
+                                    Printer Status on the Printer Control Modal
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<button type="button" class="btn btn-success btn-block mt-1"
+        id="saveSettings">Save
+</button>

@@ -1,0 +1,221 @@
+<% if(!!systemInformation){ %>
+        <% if(systemInformation?.warnings?.status){ %>
+            <div class="alert alert-<%= systemInformation.warnings.status; %>" role="alert">
+                <%= systemInformation.warnings?.message; %>
+            </div>
+        <% } %>
+        <% if(!serviceInformation?.isPm2 && !serviceInformation?.isNodemon){ %>
+            <div class="alert alert-warning" role="alert">
+                Your system is not running with PM2! Some commands below may not work... Please
+                setup your system correctly as instructed here: <a
+                        href='https://octofarm.net/installation' target='_blank'>Click Here</a>
+            </div>
+        <% } %>
+        <% if(serviceInformation?.isNodemon){ %>
+            <div class="alert alert-success" role="alert">
+                <i class="fas fa-heart text-danger"></i> Hey lovely developer! Thanks for helping make OctoFarm great!
+            </div>
+        <% } %>
+        <% let systemButtonsDisabled = false; %>
+        <% if(serviceInformation?.isDockerContainer){ %>
+            <div class="alert alert-warning" role="alert">
+                TThe "Restart" and "Update" have all been disabled due to
+                Docker having it's own update mechanism
+                Please check the <a
+                        href="https://octofarm.net/installation">Installation
+                    Instructions</a> for more information on how to update
+                your docker container.
+            </div>
+            <% systemButtonsDisabled = true; %>
+        <% } %>
+        <% if(serviceInformation?.isNodemon && !serviceInformation?.isPm2){ %>
+            <div class="alert alert-warning" role="alert">
+                The "Restart" and "Update" functions have all been disabled due to not been
+                able to detect the use of the pm2 process manager.
+                Please check the <a target="_blank" href="https://octofarm.net/installation">Installation
+                    Instructions</a> for more information on how to set this
+                up.
+            </div>
+            <% systemButtonsDisabled = true; %>
+        <% } %>
+<div class="row">
+    <div class="col-12">
+        <button title="Performs a restart of the OctoFarm service"
+                id="restartOctoFarmBtn" type="button"
+                <%= systemButtonsDisabled ? "disabled" : "" %>
+                class="btn btn-danger mr-3 btn-lg">
+            <i class="fas fa-sync"></i> Restart
+        </button>
+        <button title="Performs a check for latest updates of OctoFarm"
+                id="checkUpdatesForOctoFarmBtn" type="button"
+                <%= systemButtonsDisabled ? "disabled" : "" %>
+                class="btn btn-info ml-3 float-right btn-lg">
+            <i class="fab fa-github"></i> Check for Update
+        </button>
+        <button title="Performs an update command on OctoFarm to the latest version"
+                id="updateOctoFarmBtn" type="button"
+                class="btn btn-success ml-3 float-right btn-lg"
+                disabled>
+            <i class="fas fa-thumbs-up"></i> Update OctoFarm
+        </button>
+    </div>
+</div>
+            <hr>
+<div class="row">
+            <div class="col-12 text-center">
+                <div class="row">
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                        <% if(serviceInformation?.air_gapped){ %>
+                            <p class="text-light mb-0"><i class="fas fa-heartbeat text-danger"></i> Farm is
+                                currently air gapped</p>
+                            <small class="text-warning">Please note some features may not work as intended</small>
+                        <% }else{ %>
+                            <p class="text-light"><i class="fas fa-heart text-success"></i> Farm is connected to the
+                                internet</p>
+                        <% } %>
+                    </div>
+                    <% if(serviceInformation?.isNode){ %>
+                        <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                            <p class="text-light mt-2">Powered by <i class="fab fa-node fa-2x text-success"></i></p>
+                        </div>
+                    <% } %>
+                    <% if(serviceInformation?.isDockerContainer){ %>
+                        <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                            <p class="text-light"><i class="fab fa-docker text-info"></i></p>
+                        </div>
+                    <% } %>
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-4 col-xl-4">
+                        <% if(serviceInformation?.isPm2){ %>
+                            <p class="text-light"><i class="far fa-eye text-info"></i></i> Running under pm2</p>
+                        <% } %>
+                        <% if(serviceInformation?.isNodemon){ %>
+                            <p class="text-light"><i class="far fa-eye text-info"></i> Running under nodemon</p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+ <div class="row">
+     <div class="col-12 text-center">
+         <div class="row">
+             <div class="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2">
+                 <i class="fas fa-hourglass-half"></i> OctoFarm Uptime: <br>
+                 <span class="text-light" id="processUpdate" style="font-size:0.8rem;">
+                       <%= helpers.generateTime(systemInformation.processUptime); %>
+                </span>
+             </div>
+             <div class="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2">
+                 <i class="fas fa-code-branch"></i> Current Version: <a
+                         title="OctoFarm current version, will take you to github releases page"
+                         class="text-light"
+                         href="https://github.com/NotExpectedYet/OctoFarm/releases"
+                         target="_blank"><br><%= serviceInformation?.update?.current_version; %></a>
+             </div>
+             <div class="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2">
+                 <% if(!serviceInformation?.update?.latestReleaseKnown){ %>
+                     <i class="fas fa-code-branch"></i> Latest Version: <a
+                                 title="OctoFarm latest version, will take you to github releases page"
+                                 class="text-light"
+                                 href="https://github.com/NotExpectedYet/OctoFarm/releases"
+                                 target="_blank"><br><%= serviceInformation?.update?.current_version; %></a>
+                 <% }else{ %>
+                     <i class="fas fa-code-branch"></i> Latest Version:
+                         <a title="OctoFarm latest version, will take you to github releases page"
+                                 class="text-light"
+                                 href="<%= serviceInformation?.update?.latestReleaseKnown.html_url;  %>"
+                                 target="_blank"><br><%= serviceInformation?.update?.latestReleaseKnown.name; %>
+                             <br><%= serviceInformation?.update?.latestReleaseKnown.tag_name; %>
+                         </a>
+                 <% } %>
+             </div>
+             <div class="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2">
+                 <i class="fas fa-hourglass-half"></i> System Uptime: <br>
+                 <span class="text-light" id="systemUptime" style="font-size:0.8rem;">
+                        <%= helpers.generateTime(systemInformation.sysUptime.uptime); %>
+                 </span>
+             </div>
+             <div class="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2">
+                 <i class="fas fa-hourglass-half"></i> System Uptime: <br>
+                 <span class="text-light" id="systemUptime" style="font-size:0.8rem;">
+                        <%= helpers.generateTime(systemInformation.sysUptime.uptime); %>
+                 </span>
+             </div>
+         </div>
+     </div>
+ </div>
+        <hr>
+<div class="row">
+            <div class="col-12 text-center">
+                <div class="row">
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2">
+                        <i class="fas fa-hourglass-half"></i> System Uptime: <br><span
+                                class="text-light" id="systemUptime" style="font-size:0.8rem;">
+                                <%= helpers.generateTime(systemInformation.sysUptime.uptime); %>
+                            </span>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2">
+                        <i class="fas fa-server"></i> OS: <br><span class="text-light"
+                                                                    id="systemArch"
+                                                                    style="font-size:0.8rem;">
+                                <%= systemInformation.osInfo.distro; %>
+                            </span>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2">
+                        <i class="fas fa-bullseye"></i> System Architecture: <br><span
+                                class="text-light" id="systemArch" style="font-size:0.8rem;">
+                                    <%= systemInformation.osInfo.arch; %>
+                                </span>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2">
+                        <i class="fas fa-hdd"></i> Main Disk:
+                        <b><%= systemInformation.systemDisk.mount; %></b><br>
+                        <b>Disk Partition: </b>
+                        <%= systemInformation.systemDisk.fs; %><br>
+                        <span class="text-light" id="systemHardDrive" style="font-size:0.8rem;">
+                                  <%= helpers.generateBytes(systemInformation.systemDisk.used); %>  /  <%= helpers.generateBytes(systemInformation.systemDisk.size); %> |  <%= systemInformation.systemDisk.use.toFixed(2); %>%
+                            </span>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2">
+                        <i class="far fa-clock"></i> Timezone: <br>
+                        <span class="text-light" id="timeZone" style="font-size:0.8rem;">
+                                 <%= systemInformation.sysUptime.timezoneName; %> (<%= systemInformation.sysUptime.timezone; %>)
+                        </span>
+                    </div>
+                    <div class="col-6 col-sm-6 col-md-4 col-lg-2 col-xl-2">
+                        <i class="fas fa-terminal"></i> Run Command: <br>
+                        <span class="text-light" id="runCommand" style="font-size:0.8rem;">
+                           <%= systemInformation.currentProcess?.command; %>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+<div class="row">
+    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
+        <i class="fas fa-microchip"></i> CPU: <br><span
+                class="text-light" id="systemArch"
+                style="font-size:0.8rem;"></span>
+        <% systemInformation.cpuCurrentSpeed.cores.forEach((core, index) => { %>
+            <small class="text-light">  <%= index; %>:</small>
+            <code><%= core; %>Ghz</code>
+        <% }); %>
+        <div id="systemChartCPU"></div>
+    </div>
+    <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 text-center">
+        <i class="fas fa-memory"></i> Memory: <br>
+        <span
+                class="text-light" id="systemArch"
+                style="font-size:0.8rem;">
+                                           <%= helpers.generateBytes(systemInformation.memoryInfo.total); %>
+                                </span>
+        <div id="systemChartMemory"></div>
+    </div>
+</div>
+<% }else{ %>
+<div class="row">
+    <div class="col-12 text-center">
+        <h5> It seems there was an issue generating your system information. Please use the "Log Dump" function on the logs page and upload it to a github issue!</h5>
+    </div>
+<% } %>

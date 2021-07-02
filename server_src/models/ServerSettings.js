@@ -131,6 +131,12 @@ const ServerSettingsSchema = new mongoose.Schema({
   }
 });
 
+//Make sure validation is run for findOneAndUpdate...
+ServerSettingsSchema.pre("findOneAndUpdate", function (next) {
+  this.options.runValidators = true;
+  next();
+});
+
 const ServerSettings = mongoose.model("ServerSettings", ServerSettingsSchema);
 
 module.exports = ServerSettings;

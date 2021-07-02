@@ -1,6 +1,7 @@
 import currentOperations from "../lib/modules/currentOperations";
 import { DashUpdate } from "./dashboard.updater";
 import UI from "../lib/functions/ui";
+import {dashboardOptions} from "./dashboard.options";
 
 const workerResource = "/assets/dist/dashboard-sse.client.min.js";
 
@@ -28,6 +29,7 @@ function createWebWorker() {
       const printerInfo = event.data.printerInformation;
       const dashboard = event.data.dashStatistics;
       const dashboardSettings = event.data.dashboardSettings;
+
       if (dashboardSettings.farmActivity.currentOperations) {
         currentOperations(
           currentOperationsData.operations,

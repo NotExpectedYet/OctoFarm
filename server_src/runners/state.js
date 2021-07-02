@@ -15,10 +15,6 @@ const {
   OctoprintApiClientService
 } = require("../services/octoprint/octoprint-api-client.service");
 const { HistoryCollection } = require("./history.js");
-const {
-  ServerSettings,
-  filamentManager
-} = require("../settings/serverSettings.js");
 const { ScriptRunner } = require("./scriptCheck.js");
 const { PrinterClean } = require("../lib/dataFunctions/printerClean.js");
 const { JobClean } = require("../lib/dataFunctions/jobClean.js");
@@ -26,21 +22,21 @@ const { FileClean } = require("../lib/dataFunctions/fileClean.js");
 const { FilamentClean } = require("../lib/dataFunctions/filamentClean.js");
 const { PrinterTicker } = require("./printerTicker.js");
 
+const { getServerSettingsCache } = require("../cache/server-settings.cache.js");
+
 const logger = new Logger("OctoFarm-State");
 let farmPrinters = [];
 let farmPrintersGroups = [];
-let systemSettings = {};
 
 const countersInterval = false;
 const printersInformation = false;
-let timeout = null;
 if (printersInformation === false) {
   setInterval(async () => {
     for (let index = 0; index < farmPrinters.length; index++) {
       if (typeof farmPrinters[index] !== "undefined") {
         PrinterClean.generate(
           farmPrinters[index],
-          systemSettings.filamentManager
+          getServerSettingsCache().octoPrintFilamentManagerPluginSettings
         );
       }
     }
@@ -50,7 +46,7 @@ if (printersInformation === false) {
       if (typeof farmPrinters[index] !== "undefined") {
         PrinterClean.generate(
           farmPrinters[index],
-          systemSettings.filamentManager
+          getServerSettingsCache().octoPrintFilamentManagerPluginSettings
         );
       }
     }
@@ -65,7 +61,8 @@ if (countersInterval === false) {
 
 function WebSocketClient() {
   this.number = 0; // Message number
-  this.autoReconnectInterval = timeout.webSocketRetry; // ms
+  this.autoReconnectInterval =
+    getServerSettingsCache().octoPrintTimeoutSettings.webSocketRetry; // ms
 }
 
 function noop() {}
@@ -180,7 +177,7 @@ WebSocketClient.prototype.open = function (url, index) {
             if (typeof farmPrinters[this.index] !== "undefined") {
               PrinterClean.generate(
                 farmPrinters[this.index],
-                systemSettings.filamentManager
+                getServerSettingsCache().octoPrintFilamentManagerPluginSettings
               );
             }
           } catch (e) {
@@ -206,7 +203,7 @@ WebSocketClient.prototype.open = function (url, index) {
             if (typeof farmPrinters[this.index] !== "undefined") {
               PrinterClean.generate(
                 farmPrinters[this.index],
-                systemSettings.filamentManager
+                getServerSettingsCache().octoPrintFilamentManagerPluginSettings
               );
             }
           } catch (e) {
@@ -231,7 +228,7 @@ WebSocketClient.prototype.open = function (url, index) {
             if (typeof farmPrinters[this.index] !== "undefined") {
               PrinterClean.generate(
                 farmPrinters[this.index],
-                systemSettings.filamentManager
+                getServerSettingsCache().octoPrintFilamentManagerPluginSettings
               );
             }
           } catch (e) {
@@ -360,7 +357,7 @@ WebSocketClient.prototype.open = function (url, index) {
             if (typeof farmPrinters[this.index] !== "undefined") {
               PrinterClean.generate(
                 farmPrinters[this.index],
-                systemSettings.filamentManager
+                getServerSettingsCache().octoPrintFilamentManagerPluginSettings
               );
             }
           } catch (e) {
@@ -441,7 +438,7 @@ WebSocketClient.prototype.reconnect = async function (e) {
     if (typeof farmPrinters[that.index] !== "undefined") {
       PrinterClean.generate(
         farmPrinters[that.index],
-        systemSettings.filamentManager
+        getServerSettingsCache().octoPrintFilamentManagerPluginSettings
       );
     }
     that.open(that.url, that.index);
@@ -452,7 +449,7 @@ WebSocketClient.prototype.reconnect = async function (e) {
 WebSocketClient.prototype.onopen = async function (e) {
   // eslint-disable-next-line prefer-rest-params
   logger.info("WebSocketClient: open", arguments, `${this.index}: ${this.url}`);
-  const Polling = systemSettings.onlinePolling;
+  const Polling = getServerSettingsCache().octoPrintWebsocketPollingSettings;
   const data = {};
   const throt = {};
   data.auth = `${farmPrinters[this.index].currentUser}:${
@@ -473,7 +470,7 @@ WebSocketClient.prototype.onopen = async function (e) {
   if (typeof farmPrinters[this.index] !== "undefined") {
     PrinterClean.generate(
       farmPrinters[this.index],
-      systemSettings.filamentManager
+      getServerSettingsCache().octoPrintFilamentManagerPluginSettings
     );
   }
 };
@@ -597,7 +594,9 @@ WebSocketClient.prototype.onmessage = async function (data, flags, number) {
         ) {
           if (farmPrinters[this.index].selectedFilament[s] !== null) {
             let profile = null;
-            if (systemSettings.filamentManager) {
+            if (
+              getServerSettingsCache().octoPrintFilamentManagerPluginSettings
+            ) {
               profile = await Profiles.findOne({
                 "profile.index": parseInt(
                   farmPrinters[this.index].selectedFilament[s].spools.profile
@@ -623,7 +622,9 @@ WebSocketClient.prototype.onmessage = async function (data, flags, number) {
         ) {
           if (farmPrinters[this.index].selectedFilament[s] !== null) {
             let profile = null;
-            if (systemSettings.filamentManager) {
+            if (
+              getServerSettingsCache().octoPrintFilamentManagerPluginSettings
+            ) {
               profile = await Profiles.findOne({
                 "profile.index": parseInt(
                   farmPrinters[this.index].selectedFilament[s].spools.profile
@@ -872,7 +873,10 @@ WebSocketClient.prototype.onmessage = async function (data, flags, number) {
     }
     // Information cleaning of farmPrinters
     if (typeof farmPrinters[this.index] !== "undefined") {
-      PrinterClean.generate(farmPrinters[this.index], filamentManager);
+      PrinterClean.generate(
+        farmPrinters[this.index],
+        getServerSettingsCache().octoPrintFilamentManagerPluginSettings
+      );
     }
   } catch (e) {
     console.log("Safe to ignore", e);
@@ -921,7 +925,7 @@ WebSocketClient.prototype.onerror = function (e) {
     JobClean.generate(farmPrinters[this.index]);
     PrinterClean.generate(
       farmPrinters[this.index],
-      systemSettings.filamentManager
+      getServerSettingsCache().octoPrintFilamentManagerPluginSettings
     );
   }
 };
@@ -961,7 +965,7 @@ WebSocketClient.prototype.onclose = function (e) {
     JobClean.generate(farmPrinters[this.index]);
     PrinterClean.generate(
       farmPrinters[this.index],
-      systemSettings.filamentManager
+      getServerSettingsCache().octoPrintFilamentManagerPluginSettings
     );
   }
 };
@@ -971,11 +975,10 @@ class Runner {
 
   static async init() {
     farmPrinters = [];
-    const server = await ServerSettings.check();
-    systemSettings = server[0];
-    timeout = systemSettings.timeout;
 
-    Runner.octoPrintService = new OctoprintApiClientService(timeout);
+    Runner.octoPrintService = new OctoprintApiClientService(
+      getServerSettingsCache().octoPrintTimeoutSettings
+    );
 
     // Grab printers from database....
     try {
@@ -1004,9 +1007,14 @@ class Runner {
       for (let i = 0; i < farmPrinters.length; i++) {
         // Make sure runners are created ready for each printer to pass between...
         await Runner.setupWebSocket(farmPrinters[i]._id);
-        PrinterClean.generate(farmPrinters[i], systemSettings.filamentManager);
+        PrinterClean.generate(
+          farmPrinters[i],
+          getServerSettingsCache().octoPrintFilamentManagerPluginSettings
+        );
       }
-      FilamentClean.start(systemSettings.filamentManager);
+      FilamentClean.start(
+        getServerSettingsCache().octoPrintFilamentManagerPluginSettings
+      );
     }, 5000);
     return `System Runner has checked over ${farmPrinters.length} printers...`;
   }
@@ -1075,7 +1083,10 @@ class Runner {
       farmPrinters[i].webSocketDescription = "Websocket Offline";
       farmPrinters[i].ws = ws;
       if (typeof farmPrinters[i] !== "undefined") {
-        PrinterClean.generate(farmPrinters[i], systemSettings.filamentManager);
+        PrinterClean.generate(
+          farmPrinters[i],
+          getServerSettingsCache().octoPrintFilamentManagerPluginSettings
+        );
       }
       let globalAPICheck = await this.compareEnteredKeyToGlobalKey(
         farmPrinters[i]
@@ -1227,7 +1238,7 @@ class Runner {
             if (typeof farmPrinters[i] !== "undefined") {
               PrinterClean.generate(
                 farmPrinters[i],
-                systemSettings.filamentManager
+                getServerSettingsCache().octoPrintFilamentManagerPluginSettings
               );
             }
           } catch (e) {
@@ -1260,7 +1271,7 @@ class Runner {
             if (typeof farmPrinters[i] !== "undefined") {
               PrinterClean.generate(
                 farmPrinters[i],
-                systemSettings.filamentManager
+                getServerSettingsCache().octoPrintFilamentManagerPluginSettings
               );
             }
           } catch (e) {
@@ -1278,7 +1289,9 @@ class Runner {
             PrinterTicker.addIssue(
               new Date(),
               farmPrinters[i].printerURL,
-              `${e.message}: Connection refused, trying again in: ${systemSettings.timeout.apiRetry}`,
+              `${e.message}: Connection refused, trying again in: ${
+                getServerSettingsCache().octoPrintTimeoutSettings.apiRetry
+              }`,
               "Disconnected",
               farmPrinters[i]._id
             );
@@ -1293,7 +1306,7 @@ class Runner {
             if (typeof farmPrinters[i] !== "undefined") {
               PrinterClean.generate(
                 farmPrinters[i],
-                systemSettings.filamentManager
+                getServerSettingsCache().octoPrintFilamentManagerPluginSettings
               );
             }
           } catch (e) {
@@ -1301,10 +1314,9 @@ class Runner {
               "Couldn't set state of missing printer, safe to ignore"
             );
           }
-          timeout = systemSettings.timeout;
           setTimeout(function () {
             Runner.setupWebSocket(id);
-          }, timeout.apiRetry);
+          }, getServerSettingsCache().octoPrintTimeoutSettings.apiRetry);
           break;
         case "ENOTFOUND":
           try {
@@ -1330,7 +1342,7 @@ class Runner {
             if (typeof farmPrinters[i] !== "undefined") {
               PrinterClean.generate(
                 farmPrinters[i],
-                systemSettings.filamentManager
+                getServerSettingsCache().octoPrintFilamentManagerPluginSettings
               );
             }
           } catch (e) {
@@ -1351,7 +1363,9 @@ class Runner {
             PrinterTicker.addIssue(
               new Date(),
               farmPrinters[i].printerURL,
-              `${e.message} retrying in ${timeout.webSocketRetry}`,
+              `${e.message} retrying in ${
+                getServerSettingsCache().octoPrintTimeoutSettings.webSocketRetry
+              }`,
               "Disconnected",
               farmPrinters[i]._id
             );
@@ -1371,18 +1385,20 @@ class Runner {
           if (typeof farmPrinters[i] !== "undefined") {
             PrinterClean.generate(
               farmPrinters[i],
-              systemSettings.filamentManager
+              getServerSettingsCache().octoPrintFilamentManagerPluginSettings
             );
           }
-          timeout = systemSettings.timeout;
           setTimeout(function () {
             Runner.setupWebSocket(id);
-          }, timeout.apiRetry);
+          }, getServerSettingsCache().octoPrintTimeoutSettings.apiRetry);
           break;
       }
     }
     if (typeof farmPrinters[i] !== "undefined") {
-      PrinterClean.generate(farmPrinters[i], systemSettings.filamentManager);
+      PrinterClean.generate(
+        farmPrinters[i],
+        getServerSettingsCache().octoPrintFilamentManagerPluginSettings
+      );
     }
 
     return true;
@@ -1435,7 +1451,10 @@ class Runner {
     farmPrinters[i].hostDescription = "Setting up your Printer";
     farmPrinters[i].webSocketDescription = "Websocket is Offline";
     farmPrinters[i].stepRate = 10;
-    PrinterClean.generate(farmPrinters[i], systemSettings.filamentManager);
+    PrinterClean.generate(
+      farmPrinters[i],
+      getServerSettingsCache().octoPrintFilamentManagerPluginSettings
+    );
     farmPrinters[i].systemChecks = {
       scanning: {
         api: {
@@ -1851,7 +1870,10 @@ class Runner {
         farmPrinters[p].stateDescription = "Attempting to connect to OctoPrint";
         farmPrinters[p].hostDescription = "Attempting to connect to OctoPrint";
         farmPrinters[p].webSocketDescription = "Websocket Offline";
-        PrinterClean.generate(farmPrinters[p], systemSettings.filamentManager);
+        PrinterClean.generate(
+          farmPrinters[p],
+          getServerSettingsCache().octoPrintFilamentManagerPluginSettings
+        );
         await logger.info(
           `Regenerating existing indexes: ${farmPrinters[p].printerURL}`
         );
@@ -1928,7 +1950,10 @@ class Runner {
       "Re-Scanning your OctoPrint Instance";
     farmPrinters[index].hostDescription = "Re-Scanning for OctoPrint Host";
     farmPrinters[index].webSocketDescription = "Websocket is Offline";
-    PrinterClean.generate(farmPrinters[index], systemSettings.filamentManager);
+    PrinterClean.generate(
+      farmPrinters[index],
+      getServerSettingsCache().octoPrintFilamentManagerPluginSettings
+    );
     if (
       typeof farmPrinters[index].ws !== "undefined" &&
       typeof farmPrinters[index].ws.instance !== "undefined"
@@ -1975,7 +2000,7 @@ class Runner {
           "Awaiting current websocket attempt to end...";
         PrinterClean.generate(
           farmPrinters[index],
-          systemSettings.filamentManager
+          getServerSettingsCache().octoPrintFilamentManagerPluginSettings
         );
         setTimeout(function () {
           PrinterTicker.addIssue(
@@ -2017,10 +2042,8 @@ class Runner {
 
   static async updatePoll() {
     for (let i = 0; i < farmPrinters.length; i++) {
-      // Update the server
-      const server = await ServerSettings.check();
-      systemSettings = server[0];
-      const Polling = systemSettings.onlinePolling;
+      const Polling =
+        getServerSettingsCache().octoPrintWebsocketPollingSettings;
       const throt = {};
       logger.info(
         `Updating websock poll time: ${(Polling.seconds * 1000) / 500}`
@@ -2346,7 +2369,7 @@ class Runner {
         for (let s = 0; s < farmPrinters[index].selectedFilament.length; s++) {
           if (farmPrinters[index].selectedFilament[s] !== null) {
             const profile = null;
-            // if (systemSettings.filamentManager) {
+            // if (getServerSettingsCache().octoPrintFilamentManagerPluginSettings) {
             //   profile = await Profiles.findOne({
             //     "profile.index":
             //       farmPrinters[index].selectedFilament[s].spools.profile,
@@ -2888,12 +2911,13 @@ class Runner {
       await Runner.getSettings(id);
       // Update the printers cached system settings from OctoPrint
       await Runner.getSystem(id);
-      // Re-generate the printer clean information - This is just cautionary, my tests showed it wasn't needed.
     }
 
+    // Re-generate the printer clean information - This is just cautionary, my tests showed it wasn't needed.
+    const serverSettings = getServerSettingsCache();
     await PrinterClean.generate(
       farmPrinters[index],
-      systemSettings.filamentManager
+      serverSettings.filamentManager
     );
   }
 
@@ -2984,7 +3008,7 @@ class Runner {
       if (selectedFilament[s] !== null) {
         let profile = null;
         try {
-          if (systemSettings.filamentManager) {
+          if (getServerSettingsCache().octoPrintFilamentManagerPluginSettings) {
             profile = await Profiles.findOne({
               "profile.index": selectedFilament[s].spools.profile
             });
@@ -3033,7 +3057,10 @@ class Runner {
     const printer = await Printers.findById(id);
     printer.flowRate = farmPrinters[i].flowRate;
     printer.save();
-    PrinterClean.generate(farmPrinters[i], systemSettings.filamentManager);
+    PrinterClean.generate(
+      farmPrinters[i],
+      getServerSettingsCache().octoPrintFilamentManagerPluginSettings
+    );
   }
 
   static async feedRate(id, newRate) {
@@ -3044,7 +3071,10 @@ class Runner {
     const printer = await Printers.findById(id);
     printer.feedRate = farmPrinters[i].feedRate;
     printer.save();
-    PrinterClean.generate(farmPrinters[i], systemSettings.filamentManager);
+    PrinterClean.generate(
+      farmPrinters[i],
+      getServerSettingsCache().octoPrintFilamentManagerPluginSettings
+    );
   }
 
   static async updateSortIndex(list) {
@@ -3055,11 +3085,17 @@ class Runner {
       });
 
       farmPrinters[id].sortIndex = i;
-      PrinterClean.generate(farmPrinters[id], systemSettings.filamentManager);
+      PrinterClean.generate(
+        farmPrinters[id],
+        getServerSettingsCache().octoPrintFilamentManagerPluginSettings
+      );
       const printer = await Printers.findById(list[i]);
       printer.sortIndex = i;
       printer.save();
-      PrinterClean.generate(farmPrinters[i], systemSettings.filamentManager);
+      PrinterClean.generate(
+        farmPrinters[i],
+        getServerSettingsCache().octoPrintFilamentManagerPluginSettings
+      );
     }
   }
 
@@ -3068,7 +3104,10 @@ class Runner {
       return o._id == id;
     });
     farmPrinters[i].stepRate = newRate;
-    PrinterClean.generate(farmPrinters[i], systemSettings.filamentManager);
+    PrinterClean.generate(
+      farmPrinters[i],
+      getServerSettingsCache().octoPrintFilamentManagerPluginSettings
+    );
   }
 
   static async updateSettings(settings) {

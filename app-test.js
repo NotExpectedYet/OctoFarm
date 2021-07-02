@@ -1,6 +1,9 @@
 const { setupExpressServer, serveOctoFarmRoutes } = require("./app-core");
 const { setupEnvConfig } = require("./app-env");
-const { ensureSystemSettingsInitiated } = require("./app-core");
+const {
+  ensureSystemSettingsInitiated,
+  ensureOctoFarmMiddleWareInitiated
+} = require("./app-core");
 
 /**
  * Setup the application without any async work
@@ -11,6 +14,9 @@ async function setupTestApp() {
   await ensureSystemSettingsInitiated();
 
   const newServer = setupExpressServer();
+
+  await ensureOctoFarmMiddleWareInitiated(newServer);
+
   serveOctoFarmRoutes(newServer);
   return newServer;
 }

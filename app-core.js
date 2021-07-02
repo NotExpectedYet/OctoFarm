@@ -3,9 +3,19 @@ const flash = require("connect-flash");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
-const ServerSettingsDB = require("./server_src/models/ServerSettings");
+const {
+  initializeServerSettingsCache
+} = require("./server_src/cache/server-settings.cache.js");
+const {
+  ensureSystemSettingsCache
+} = require("./server_src/middleware/settings.js");
+const {
+  ensureCurrentUserAndGroup
+} = require("./server_src/middleware/users.js");
+const envUtils = require("./server_src/utils/env.utils");
 const expressLayouts = require("express-ejs-layouts");
 const Logger = require("./server_src/lib/logger.js");
+
 const {
   FilamentClean
 } = require("./server_src/lib/dataFunctions/filamentClean");
@@ -16,7 +26,7 @@ const { getViewsPath } = require("./app-env");
 const {
   PrinterClean
 } = require("./server_src/lib/dataFunctions/printerClean.js");
-const { ServerSettings } = require("./server_src/settings/serverSettings.js");
+const { SystemRunner } = require("./server_src/runners/systemInfo.js");
 const { ClientSettings } = require("./server_src/settings/clientSettings.js");
 
 function setupExpressServer() {
@@ -63,22 +73,25 @@ function setupExpressServer() {
 }
 
 async function ensureSystemSettingsInitiated() {
-  logger.info("Checking Server Settings...");
-
-  await ServerSettingsDB.find({}).catch((e) => {
-    if (e.message.includes("command find requires authentication")) {
-      throw "Database authentication failed.";
-    } else {
-      throw "Database connection failed.";
-    }
-  });
+  logger.info("Initialising Server Settings...");
 
   // Setup Settings as connection is established
-  const serverSettingsStatus = await ServerSettings.init();
-  await ClientSettings.init();
-  logger.info(serverSettingsStatus);
+  const serverSettingsInitialisation =
+    await initializeServerSettingsCache().catch((e) => {
+      logger.error("Error initialising Server Settings... ", e);
+    });
 
-  return serverSettingsStatus;
+  return serverSettingsInitialisation;
+}
+
+function ensureOctoFarmMiddleWareInitiated(app) {
+  logger.info("Initiating Middleware");
+
+  // Make sure settings are grabbed from the cache in middleware
+  app.use(ensureSystemSettingsCache);
+
+  // Make sure current user and group are set in middleware
+  app.use(ensureCurrentUserAndGroup);
 }
 
 function serveOctoFarmRoutes(app) {
@@ -96,6 +109,7 @@ function serveOctoFarmRoutes(app) {
     "/groups",
     require("./server_src/routes/printerGroups", { page: "route" })
   );
+  // TODO: Set for deprication for another PR with client settings focus.
   app.use(
     "/settings",
     require("./server_src/routes/settings", { page: "route" })
@@ -171,5 +185,6 @@ module.exports = {
   setupExpressServer,
   ensureSystemSettingsInitiated,
   serveOctoFarmRoutes,
-  serveOctoFarmNormally
+  serveOctoFarmNormally,
+  ensureOctoFarmMiddleWareInitiated
 };

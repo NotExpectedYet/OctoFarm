@@ -1,0 +1,772 @@
+<div class="row">
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active"
+               id="server-settings-list" data-toggle="list" href="#server-settings"
+               role="tab" aria-controls="panelview"><i class="fas fa-cogs"></i>
+                System</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"
+               id="server-timeout-list" data-toggle="list" href="#server-timeout"
+               role="tab" aria-controls="listview"><i class="fas fa-stopwatch"></i>
+                Timeout</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"
+               id="server-history-list" data-toggle="list" href="#server-history"
+               role="tab" aria-controls="listview"><i class="fas fa-history"></i>
+                History</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"
+               id="server-filament-list" data-toggle="list" href="#server-filament"
+               role="tab" aria-controls="listview"><i
+                        class="fas fa-toilet-paper"></i> Filament Manager</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link"
+               id="server-influx-list" data-toggle="list" href="#server-influx"
+               role="tab" aria-controls="listview"><i class="fas fa-database"></i>
+                InfluxDB Export</a>
+        </li>
+
+    </ul>
+    <div class="col-12">
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="server-settings"
+                 role="tabpanel" aria-labelledby="server-settings-list">
+                <p class="font-weight-bold">Server Port</p>
+                <p>The port that OctoFarm will accept connections from for it's
+                    inbuilt client.</p>
+                <p><b>Default</b>: 4000</p>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Port (disabled):</span>
+                    </div>
+                    <input id="serverPortNo" type="number" class="form-control"
+                           placeholder="6" aria-label="Refresh Rate"
+                           disabled
+                           id="serverPortNumber" value="4000" step="1">
+
+                </div>
+                <small id="emailHelp" class="form-text text-muted">Requires a server
+                    restart</small>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <p class="font-weight-bold">Login and Registration</p>
+                        <p>Change OctoFarm login/registration requirements. These
+                            are both defaulted as true.</p>
+                    </div>
+
+                    <div class="col-md-12 col-lg-6">
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="requireLogin" required <%= (serverSettingsCache.server.loginRequired) ? "checked" : "" %>
+                                >
+                                <label class="custom-control-label"
+                                       for="requireLogin">Require a login</label>
+                                <div class="valid-feedback">Login turned on</div>
+                                <div class="invalid-feedback">Login turned off</div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-12 col-lg-6">
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="requireRegistration" required <%= (serverSettingsCache.server.registration) ? "checked" : "" %>
+                                >
+                                <label class="custom-control-label"
+                                       for="requireRegistration">Registration</label>
+                                <div class="valid-feedback">Registration is turned
+                                    on
+                                </div>
+                                <div class="invalid-feedback">Registration is turned
+                                    off
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="server-timeout" role="tabpanel"
+                 aria-labelledby="server-timeout">
+                <p class="font-weight-bold">WebSocket Throttle</p>
+                <p>You may be trying to run OctoFarm/OctoPrint on a potato, which
+                    I've no aversion too but the CPU on the potato might not like
+                    it. If you find that to be the case then please increase the
+                    throttle amount.</p>
+                <p>Currently the OctoPrint client will send a message every 500ms,
+                    so the server will process at that rate.</p>
+
+                <p><b>Min</b>: 0.5 seconds (Default), <b>Max:</b> 10 seconds</p>
+
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Throttle:</span>
+                    </div>
+                    <input id="webSocketThrottle" type="number" class="form-control"
+                           placeholder="6" aria-label="Refresh Rate"
+                           id="onlinePollRate" value="<%= serverSettingsCache.onlinePolling.seconds %>" min="0.5" max="10"
+                           step="0.5">
+                    <div class="input-group-append">
+                        <span class="input-group-text">Seconds</span>
+                    </div>
+
+                </div>
+                <small class="form-text text-muted">Does not require a server
+                    restart</small>
+                <hr>
+                <div class="row">
+                    <div class="col-md-12 col-lg-6">
+                        <p class="font-weight-bold">Websocket Retry</p>
+                        <p>The interval in which OctoFarm will re-poll the websocket
+                            when it detects a lost connection during operation. It
+                            will re-poll at this rate until re-established.</p>
+
+                        <p><b>Min</b>: 5 seconds (Default), <b>Max:</b> 30 seconds
+                        </p>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Websocket Retry:</span>
+                            </div>
+                            <input id="webSocketRetry" type="number"
+                                   class="form-control" placeholder="6"
+                                   aria-label="Refresh Rate" id="onlinePollRate"
+                                   value="<%= serverSettingsCache.timeout.webSocketRetry/1000 %>" min="5" max="30" step="0.5">
+                            <div class="input-group-append">
+                                <span class="input-group-text">Seconds</span>
+                            </div>
+
+                        </div>
+                        <small id="emailHelp" class="form-text text-muted">Requires
+                            a server restart</small>
+                        <hr>
+                    </div>
+
+                    <div class="col-md-6 col-lg-6">
+                        <p class="font-weight-bold">API Initial Timeout</p>
+                        <p>The timeout set for the initial connection attempt to
+                            OctoPrints API when it hasn't managed to establish a
+                            connection</p>
+                        <p><b>Min</b>: 1 second (Default), <b>Max:</b> 10 seconds
+                        </p>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">API Timeout:</span>
+                            </div>
+                            <input id="APITimeout" type="number"
+                                   class="form-control" placeholder="6"
+                                   aria-label="Refresh Rate" id="onlinePollRate"
+                                   value="<%= serverSettingsCache.timeout.apiTimeout/1000 %>" min="1" max="10" step="0.5">
+                            <div class="input-group-append">
+                                <span class="input-group-text">Seconds</span>
+                            </div>
+
+                        </div>
+                        <small id="emailHelp" class="form-text text-muted">Requires
+                            a server restart</small>
+                        <hr>
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+
+                        <p class="font-weight-bold">API Secondary Timeout</p>
+                        <p>The secondary timeout for slower OctoPrint connection
+                            attempts to the API, when the first fails it will try
+                            again with this number.</p>
+                        <p><b>Min</b>: 5 seconds, <b>Max:</b> 60 seconds, <b>Default:</b>
+                            10 seconds</p>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Secondary API Timeout:</span>
+                            </div>
+                            <input id="APIRetryTimeout" type="number"
+                                   class="form-control" placeholder="6"
+                                   aria-label="Refresh Rate" id="onlinePollRate"
+                                   value="<%= serverSettingsCache.timeout.apiRetryCutoff/1000 %>" min="5" max="60" step="0.5">
+                            <div class="input-group-append">
+                                <span class="input-group-text">Seconds</span>
+                            </div>
+
+                        </div>
+                        <small id="emailHelp" class="form-text text-muted">Requires
+                            a server restart</small>
+                        <hr>
+                    </div>
+                    <div class="col-md-6 col-lg-6">
+                        <p class="font-weight-bold">API Retry</p>
+                        <p>The interval that OctoFarm will attempt another
+                            connection to OctoPrint. Only really applicable if your
+                            printer is offline when added to the farm.</p>
+                        <p><b>Min</b>: 30 seconds (Default), <b>Max:</b> 60 seconds
+                        </p>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">API Retry:</span>
+                            </div>
+                            <input id="APIRetry" type="number" class="form-control"
+                                   placeholder="6" aria-label="Refresh Rate"
+                                   id="onlinePollRate" value="<%= serverSettingsCache.timeout.apiRetry/1000 %>" min="30" max="60"
+                                   step="0.5">
+                            <div class="input-group-append">
+                                <span class="input-group-text">Seconds</span>
+                            </div>
+
+                        </div>
+                        <small id="emailHelp" class="form-text text-muted">Requires
+                            a server restart</small>
+                        <hr>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="tab-pane fade" id="server-filament" role="tabpanel"
+                 aria-labelledby="server-filament-list">
+                <div id="filamentManagerSetup" class="row">
+                    <div class="col-lg-12">
+                        <h5>Check for filament selection before starting a
+                            print?</h5>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="checkFilament" required <%= (serverSettingsCache.server.registration) ? "checked" : "" %>>
+                                <label class="custom-control-label"
+                                       for="checkFilament">Filament Check</label>
+                                <div class="valid-feedback">Filament Check is turned
+                                    on
+                                </div>
+                                <div class="invalid-feedback">Filament Check is
+                                    turned off
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-lg-12">
+                        <h5>Filament Manager Sync</h5>
+                        <p class="mb-1">Click the button below to activate filament
+                            manager plugin and link it to OctoFarm. Please read the
+                            notes below before proceeding.</p>
+                        <small><b>Note:</b> OctoFarm expects filament manager
+                            installed on every instance. If it isn't, and you
+                            activate it you run the risk of some updates/selections
+                            failing to register.</small>
+                        <br>
+                        <small><b>Note:</b> You must also have all these instances
+                            setup with a postgres database. Without this you will
+                            not be able to select filament on every
+                            instance.</small>
+                        <% if(!serverSettingsCache.filamentManager){ %>
+                            <center>
+                                <br>
+                                <button id="resyncFilamentManagerBtn" type="button"
+                                        class="btn btn-warning mb-1 btn-lg"><i
+                                            class="fas fa-sync"></i><br> Enable Filament Manager Plugin Sync
+                                </button>
+                            </center>
+                        <% }else{ %>
+                            <center>
+                                <br>
+                                <button id="resyncFilamentManagerBtn" type="button"
+                                        class="btn btn-warning mb-1 btn-lg"><i
+                                            class="fas fa-sync"></i><br> Resync Spools / Profiles
+                                </button>
+                                <br>
+                                <button id="disableFilamentManager" type="button"
+                                        class="btn btn-danger mb-1 btn-lg"><i
+                                            class="fas fa-skull-crossbones"></i><br>
+                                    Disable Filament Manager
+                                </button>
+                            </center>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="server-history" role="tabpanel"
+                 aria-labelledby="server-history-list">
+                <div class="alert alert-secondary" role="alert">
+                    OctoFarm has the ability to save a snapshot/thumbnail into
+                    History. These options are turned on by default as it will check
+                    if the thumbnail/camera url exist before actually saving.
+                </div>
+                <div class="alert alert-warning" role="alert">
+                    If your running on Docker, make sure to mount "/app/images"
+                    otherwise these will not persist reboots/upgrades.
+                </div>
+                <div id="filamentManagerSetup" class="row">
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                        <h6>Timelapse Capture</h6>
+                        <div class="alert alert-warning" role="alert">
+                            Timelapse must be turned on in OctoPrint for this to
+                            work, then activated below. It is not turned on by
+                            default and does not react to your OctoPrint setting.
+                        </div>
+                        <div class="alert alert-danger" role="alert">
+                            This only works with the ".mp4" format for video types.
+                            OctoPrint defaults to ".mpg". You can update this under
+                            "Advanced Settings" in your OctoPrint instances "Webcam
+                            & Timelapse" setting. Change the setting to "libx264".
+                            <button id="setupTimelapseOctoPrint" type="button"
+                                    class="btn btn-outline-dark btn-block mt-1">
+                                Setup Your Farm!
+                            </button>
+                        </div>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="timelapseOnComplete" required <%= (serverSettingsCache.history.timelapse.onComplete) ? "checked" : "" %>>
+                                <label class="custom-control-label"
+                                       for="timelapseOnComplete">On
+                                    Completion</label>
+                                <div class="valid-feedback">On Complete timelapse
+                                    will be downloaded to OctoPrint
+                                </div>
+                                <div class="invalid-feedback">On Complete timelapse
+                                    is ignored
+                                </div>
+                            </div>
+                        </form>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="timelapseOnFailure" required  <%= (serverSettingsCache.history.timelapse.onFailure) ? "checked" : "" %>>
+                                <label class="custom-control-label"
+                                       for="timelapseOnFailure">On Failure</label>
+                                <div class="valid-feedback">On Failure timelapse
+                                    will be downloaded to OctoPrint
+                                </div>
+                                <div class="invalid-feedback">On Failure timelapse
+                                    is ignored
+                                </div>
+                            </div>
+                        </form>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="timelapseDelete" required <%= (serverSettingsCache.history.timelapse.deleteAfter) ? "checked" : "" %>>
+                                <label class="custom-control-label"
+                                       for="timelapseDelete">Delete from
+                                    OctoPrint</label>
+                                <div class="valid-feedback">Timelapses will be
+                                    deleted once captured
+                                </div>
+                                <div class="invalid-feedback">Timelapses are not
+                                    removed from OctoPrints storage
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                        <h6>Printer snapshot capture</h6>
+                        <div class="alert alert-warning" role="alert">
+                            Requires an active camera URL in OctoFarm.
+                        </div>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="snapOnComplete" required <%= (serverSettingsCache.history.snapshot.onComplete) ? "checked" : "" %>>
+                                <label class="custom-control-label"
+                                       for="snapOnComplete">On Complete</label>
+                                <div class="valid-feedback">On Complete snapshot
+                                    turned on
+                                </div>
+                                <div class="invalid-feedback">On Complete snapshot
+                                    turned off
+                                </div>
+                            </div>
+                        </form>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="snapOnFailure" required <%= (serverSettingsCache.history.snapshot.onFailure) ? "checked" : "" %>>
+                                <label class="custom-control-label"
+                                       for="snapOnFailure">On Failure</label>
+                                <div class="valid-feedback">On Failure snapshot
+                                    turned on
+                                </div>
+                                <div class="invalid-feedback">On Failure snapshot
+                                    turned off
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4">
+                        <h6>Prusa/Cura slicer thumbnailcapture</h6>
+                        <div class="alert alert-warning" role="alert">
+                            Requires either the Prusa / Cura thumbnail plugins to be
+                            installed on OctoPrint.
+                        </div>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="thumbOnComplete" required <%= (serverSettingsCache.history.thumbnails.onComplete) ? "checked" : "" %>>
+                                <label class="custom-control-label"
+                                       for="thumbOnComplete">On Complete</label>
+                                <div class="valid-feedback">On Complete snapshot
+                                    turned on
+                                </div>
+                                <div class="invalid-feedback">On Complete snapshot
+                                    turned off
+                                </div>
+                            </div>
+                        </form>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="thumbOnFailure" required <%= (serverSettingsCache.history.thumbnails.onFailure) ? "checked" : "" %>>
+                                <label class="custom-control-label"
+                                       for="thumbOnFailure">On Failure</label>
+                                <div class="valid-feedback">On Failure snapshot
+                                    turned on
+                                </div>
+                                <div class="invalid-feedback">On Failure snapshot
+                                    turned off
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="server-influx" role="tabpanel"
+                 aria-labelledby="server-influx-list">
+                <h5>InfluxDB Export (v1.x)</h5>
+                <p>(Currently Experimental - May change formatting see blue
+                    information note)</p>
+                <hr>
+                <div class="alert alert-secondary" role="alert">
+                    OctoFarm can export your printer data to a time series database
+                    called InfluxDB. You can use this data to create yourself a
+                    dashboard in an application called Grafana or InfluxDB itself.
+                    Other options are also available. This option is for power users
+                    who would like to get more information from the data stored in
+                    OctoFarm.
+                </div>
+                <div class="alert alert-info" role="alert">
+                    I'm quite new to time series databases so if there's a tag or a
+                    change/addition to the information format that you'd like please
+                    let me know on github issues and I'll see what I can do.
+                </div>
+                <div class="alert alert-warning" role="alert">
+                    You must already have influxDB setup and working to be able to
+                    use this feature. A restart will be required after saving the
+                    settings to correctly enable.
+                </div>
+                <div class="alert alert-secondary" role="alert" id="influxParent">
+                    <p>This will activate the exporting of the following
+                        measurements you can grab from InfluxDB: (click a button to
+                        expand data view)</p>
+                    <p>
+                        <button class="btn btn-primary" type="button"
+                                data-toggle="collapse"
+                                data-target="#collapseExample1"
+                                aria-expanded="false"
+                                aria-controls="collapseExample1">
+                            Printers Information
+                        </button>
+                        <button class="btn btn-primary" type="button"
+                                data-toggle="collapse"
+                                data-target="#collapseExample2"
+                                aria-expanded="false"
+                                aria-controls="collapseExample2">
+                            History Information
+                        </button>
+                        <button class="btn btn-primary" type="button"
+                                data-toggle="collapse"
+                                data-target="#collapseExample3"
+                                aria-expanded="false"
+                                aria-controls="collapseExample3">
+                            Filament Information
+                        </button>
+                    </p>
+                    <div class="collapse" id="collapseExample1"
+                         data-parent="#influxParent">
+                        <div class="alert alert-dark" role="alert">
+                            Printer information is dumped every 2000ms (2 seconds).
+                            This will dump a record for each printer in your farm
+                            with the information below.
+                        </div>
+                        <h3>Available Tags:</h3>
+                        <code>
+                            name:<br>
+                            group:<br>
+                            url:<br>
+                            state:<br>
+                            stateCategory:<br>
+                            host_state:<br>
+                            websocket_state:<br>
+                            octoprint_version: <br>
+                        </code>
+                        <h3>Information:</h3>
+                        <code>
+                            state: 'Operational',<br>
+                            state_category: 'Idle',<br>
+                            camera_url: 'http://192.168.1.5:5005'<br>
+                            current_idle_time: 21090000,<br>
+                            current_active_time: 0,<br>
+                            current_offline_time: 120000,<br>
+                            date_added: 1606553431625,<br>
+                            storage_free: 27261640704,<br>
+                            storage_total: 41214558208,<br>
+                            timestamp: 1607515805197,<br>
+                            job_resends: '0 / 0.008K (0)',<br>
+                            job_file_name: 'Top_-_0.32mm_-_T230-B75.gcode',<br>
+                            job_file_display: 'Top - 0.32mm - T230-B75.gcode',<br>
+                            job_file_path: 'Top_-_0.32mm_-_T230-B75.gcode',<br>
+                            job_expected_completion_date: 'Wed Dec 09 2020:
+                            12:10',<br>
+                            job_expected_print_time: 22502.662743896966,<br>
+                            job_expected_print_cost: '0.31',<br>
+                            job_average_print_time: 1478.9511556103555,<br>
+                            job_last_print_time: 1454.8682077580597,<br>
+                            job_thumbnail:
+                            'plugin/prusaslicerthumbnails/thumbnail/Top_-_0.32mm_-_T23
+                            0-B75.png?20201112052916',<br>
+                            tool_0_spool_name: 'Spooler',<br>
+                            tool_0_spool_used: '0',<br>
+                            tool_0_spool_weight: '1000',<br>
+                            tool_0_spool_temp_offset: '0',<br>
+                            tool_0_spool_material: 'PETG',<br>
+                            tool0_actual: 21.3,<br>
+                            tool0_target: 0,<br>
+                            bed_actual: 21.3,<br>
+                            bed_target: 0,<br>
+                            chamber_actual: 0,<br>
+                            chamber_target: 0<br>
+                        </code>
+                    </div>
+                    <div class="collapse" id="collapseExample2"
+                         data-parent="#influxParent">
+                        <div class="alert alert-dark" role="alert">
+                            History information will be sent when a print is logged
+                            as completed or failed (cancelled / error).
+                        </div>
+                        <div class="alert alert-warning" role="alert">
+                            If you don't use the Filament Manager plugin then there
+                            will be 0 grams in the used_difference and used_spool
+                            fields as it is not tracked without that.
+                        </div>
+                        <h3>Available Tags:</h3>
+                        <code>
+                            state: <br>
+                            printer_name: <br>
+                            file_name: <br>
+                        </code>
+                        <h3>Information:</h3>
+                        <code>
+                            id: 5fd22d8e916f61b240b98ff6,<br>
+                            index: 248,<br>
+                            state: 'Success',<br>
+                            printer_name: 'Bob Sagget',<br>
+                            start_date: 1607609684000,<br>
+                            end_date: 1607609742000,<br>
+                            print_time: 57,<br>
+                            file_name:
+                            '40mmcube_-_0.94em_-_0.16mm_-_T225-B60.gcode',<br>
+                            file_upload_date: 1605450153,<br>
+                            file_path:
+                            '40mmcube_-_0.94em_-_0.16mm_-_T225-B60.gcode',<br>
+                            file_size: 136901,<br>
+                            file_average_print_time: 51.45868224582051,<br>
+                            file_last_print_time: 57.42492285405751,<br>
+                            notes: '',<br>
+                            job_estimated_print_time: 645.8605059989957,<br>
+                            job_actual_print_time: 57,<br>
+                            job_print_time_accuracy: -103308.86070157819,<br>
+                            cost_printer: 0,<br>
+                            cost_spool: 0,<br>
+                            cost_total: 0,<br>
+                            cost_per_hour: 0,<br>
+                            total_volume: 1.6647433548656279,<br>
+                            total_length: 0.6921198599999999,<br>
+                            total_weight: 2.0642817600333787,<br>
+                            job_resends: '34 / 41.286K (0)' <br>
+
+                        </code>
+                    </div>
+                    <div class="collapse" id="collapseExample3"
+                         data-parent="#influxParent">
+                        <div class="alert alert-dark" role="alert">
+                            Spool information will be logged everytime a print has
+                            completed.
+                        </div>
+                        <div class="alert alert-warning" role="alert">
+                            If you don't use the Filament Manager plugin then there
+                            will be 0 grams in the "used_difference" and
+                            "used_spool" fields as it is not tracked without that.
+                        </div>
+                        <h3>Available Tags:</h3>
+                        <code>
+                            state: <br>
+                            printer_name: <br>
+                            file_name: <br>
+                        </code>
+                        <h3>Information:</h3>
+                        <code>
+                            name: 'Spooler',<br>
+                            price: 25,<br>
+                            weight: 1000,<br>
+                            used_difference: 15.55, <br>
+                            used_spool: 225.45, <br>
+                            temp_offset: 0,<br>
+                            spool_manufacturer: 'Eryone',<br>
+                            spool_material: 'PETG',<br>
+                            spool_density: 1.27,<br>
+                            spool_diameter: 1.75<br>
+
+                        </code>
+                    </div>
+                    <!-- File Manager: -->
+                </div>
+
+                <div id="filamentManagerSetup" class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <h6>Activate</h6>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="infActivateInfluxExport" required <%= (serverSettingsCache.influxExport.active) ? "checked" : "" %>>
+                                <label class="custom-control-label"
+                                       for="infActivateInfluxExport">Activated?</label>
+                                <div class="valid-feedback">InfluxDB Export is
+                                    activated.
+                                </div>
+                                <div class="invalid-feedback">InfluxDB Export is
+                                    de-activated.
+                                </div>
+                            </div>
+                        </form>
+                        <form>
+                            <h6>Connection Settings</h6>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                                                                <span class="input-group-text"
+                                                                                      id="infHostIPe">Host IP Address: </span>
+                                        </div>
+                                        <input id="infHostIP" type="text"
+                                               class="form-control"
+                                               value="<%= (serverSettingsCache?.influxExport.host) ? serverSettingsCache.influxExport.host : "" %>"
+                                               placeholder="192.168.1.5"
+                                               aria-label="Username"
+                                               aria-describedby="infHostIPe">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                                        <span class="input-group-text"
+                                                              id="infHostPorte">Host Port: </span>
+                                        </div>
+                                        <input id="infHostPort" type="text"
+                                               value="<%= (serverSettingsCache?.influxExport.port) ? serverSettingsCache.influxExport.port : "" %>"
+                                               class="form-control"
+                                               placeholder="8086"
+                                               aria-label="Username"
+                                               aria-describedby="infHostPorte">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                                        <span class="input-group-text"
+                                                              id="infUsernamee">Username: </span>
+                                        </div>
+                                        <input id="infUsername" type="text"
+                                               value="<%= (serverSettingsCache?.influxExport.username) ? serverSettingsCache.influxExport.username : "" %>"
+                                               class="form-control" placeholder=""
+                                               aria-label="Username"
+                                               aria-describedby="infUsernamee">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                                        <span class="input-group-text"
+
+                                                              id="infPassworde">Password: </span>
+                                        </div>
+                                        <input id="infPassword" type="text"
+                                               class="form-control" placeholder=""
+                                               aria-label="Username"
+                                               aria-describedby="infPassworde"
+                                               value="<%= (serverSettingsCache?.influxExport.password) ? serverSettingsCache.influxExport.password : "" %>">
+                                    </div>
+                                </div>
+                            </div>
+                            <h6>Database Settings</h6>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                                        <span class="input-group-text"
+
+                                                              id="infDatabasee">Database Name: </span>
+                                        </div>
+                                        <input id="infDatabase" type="text"
+                                               class="form-control"
+                                               placeholder="OctoFarmExport"
+                                               aria-label="Username"
+                                               aria-describedby="infDatabasee"
+                                               value="<%= (serverSettingsCache?.influxExport.database) ? serverSettingsCache.influxExport.database : "" %>">
+                                    </div>
+                                </div>
+                            </div>
+                            <h6>Retention Policy (Advanced)</h6>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                                        <span class="input-group-text"
+                                                              id="infDuration">Duration: </span>
+                                        </div>
+                                        <input type="text" class="form-control"
+                                               placeholder="365d"
+                                               aria-label="Username"
+                                               aria-describedby="infDuration"
+                                               value="<%= (serverSettingsCache?.influxExport.retentionPolicy.duration) ? serverSettingsCache.influxExport.retentionPolicy.duration : "" %>">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                                        <span class="input-group-text"
+                                                              id="infReplication">Replication: </span>
+                                        </div>
+                                        <input type="text" class="form-control"
+                                               placeholder="1" aria-label="Username"
+                                               aria-describedby="infReplication"
+                                               value="<%= (serverSettingsCache?.influxExport.retentionPolicy.replication) ? serverSettingsCache.influxExport.retentionPolicy.replication : "" %>">
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <form class="was-validated">
+                            <div class="custom-control custom-checkbox mb-3">
+                                <input type="checkbox" class="custom-control-input"
+                                       id="infRetention" required <%= (!serverSettingsCache?.influxExport.retentionPolicy.duration) ? "checked": "" %>>
+                                <label class="custom-control-label"
+                                       for="infRetention">Default Retention?</label>
+                                <div class="valid-feedback">Using default retention
+                                    settings.
+                                </div>
+                                <div class="invalid-feedback">Not using default
+                                    retention settings.
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button type="button" class="btn btn-success btn-block"
+        id="saveServerSettings" data-dismiss="modal">Save
+</button>

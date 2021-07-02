@@ -1,8 +1,7 @@
 // Support for influx v1.X
 
 const Influx = require("influx");
-const settingsClean = require("../lib/dataFunctions/settingsClean.js");
-const SettingsClean = settingsClean.SettingsClean;
+const { getServerSettingsCache } = require("../cache/server-settings.cache.js");
 const Logger = require("../lib/logger.js");
 
 const logger = new Logger("OctoFarm-Server");
@@ -10,21 +9,14 @@ const logger = new Logger("OctoFarm-Server");
 let db = null;
 
 async function optionalInfluxDatabaseSetup() {
-  let serverSettings = await SettingsClean.returnSystemSettings();
-  if (typeof clientSettings === "undefined") {
-    await SettingsClean.start();
-    serverSettings = await SettingsClean.returnSystemSettings();
-  }
-  if (
-    typeof serverSettings.influxExport !== "undefined" &&
-    serverSettings.influxExport.active
-  ) {
+  let influxDatabaseSettings = getServerSettingsCache().influxDatabaseSettings;
+  if (influxDatabaseSettings.active) {
     let options = {
-      username: serverSettings.influxExport.username,
-      password: serverSettings.influxExport.password,
-      host: serverSettings.influxExport.host,
-      port: serverSettings.influxExport.port,
-      database: serverSettings.influxExport.database
+      username: influxDatabaseSettings.username,
+      password: influxDatabaseSettings.password,
+      host: influxDatabaseSettings.host,
+      port: influxDatabaseSettings.port,
+      database: influxDatabaseSettings.database
     };
 
     db = new Influx.InfluxDB(options);
@@ -32,7 +24,7 @@ async function optionalInfluxDatabaseSetup() {
 
     return "Setup";
   } else {
-    logger.info("No settings or disabled for influxdb export");
+    logger.info("Influx database is disabled");
   }
 }
 
@@ -62,7 +54,7 @@ function writePoints(tags, measurement, dataPoints) {
       logger.error(`Error saving data to InfluxDB! ${err.stack}`);
     });
   } else {
-    logger.error(`InfluxDB is null... ignoring until setup...`);
+    logger.error("InfluxDB is null... ignoring until setup...");
   }
 }
 

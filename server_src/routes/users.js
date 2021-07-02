@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
-const ServerSettings = require("../models/ServerSettings.js");
+const { getServerSettingsCache } = require("../cache/server-settings.cache.js");
 const { AppConstants } = require("../app.constants");
 
 const User = require("../models/User.js");
@@ -10,16 +10,7 @@ const {
   UserTokenService
 } = require("../services/authentication/user-token.service");
 
-let settings;
 let currentUsers;
-
-async function fetchServerSettings() {
-  if (!settings) {
-    settings = await ServerSettings.find({});
-  }
-
-  return settings;
-}
 
 async function fetchUsers(force = false) {
   if (!currentUsers || force) {
@@ -30,12 +21,10 @@ async function fetchUsers(force = false) {
 
 // Login Page
 router.get("/login", async (req, res) => {
-  settings = await fetchServerSettings();
   res.render("login", {
     page: "Login",
     octoFarmPageTitle: process.env[AppConstants.OCTOFARM_SITE_TITLE_KEY],
-    registration: settings[0].server.registration,
-    serverSettings: settings
+    registration: req.serverSettingsCache.server.registration
   });
 });
 
@@ -71,8 +60,7 @@ router.post(
 
 // Register Page
 router.get("/register", async (req, res) => {
-  let settings = await fetchServerSettings();
-  if (settings[0].server.registration !== true) {
+  if (!req.serverSettingsCache.server.registration) {
     return res.redirect("login");
   }
 
@@ -80,7 +68,7 @@ router.get("/register", async (req, res) => {
   res.render("register", {
     page: "Register",
     octoFarmPageTitle: process.env[AppConstants.OCTOFARM_SITE_TITLE_KEY],
-    serverSettings: settings,
+    registration: req.serverSettingsCache.server.registration,
     userCount: currentUsers.length
   });
 });
@@ -90,7 +78,6 @@ router.post("/register", async (req, res) => {
   const { name, username, password, password2 } = req.body;
   const errors = [];
 
-  let settings = await fetchServerSettings();
   let currentUsers = await fetchUsers(true);
 
   // Check required fields
@@ -112,8 +99,7 @@ router.post("/register", async (req, res) => {
     res.render("register", {
       page: "Login",
       octoFarmPageTitle: process.env[AppConstants.OCTOFARM_SITE_TITLE_KEY],
-      registration: settings[0].server.registration,
-      serverSettings: settings,
+      registration: req.serverSettingsCache.server.registration,
       errors,
       name,
       username,
@@ -130,8 +116,7 @@ router.post("/register", async (req, res) => {
         res.render("register", {
           page: "Login",
           octoFarmPageTitle: process.env[AppConstants.OCTOFARM_SITE_TITLE_KEY],
-          registration: settings[0].server.registration,
-          serverSettings: settings,
+          registration: req.serverSettingsCache.server.registration,
           errors,
           name,
           username,

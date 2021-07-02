@@ -17,7 +17,7 @@ describe("ServerUpdate Endpoint", () => {
     process.env.testlatest_package_version =
       require("../../package.json").version;
 
-    const res = await request.post("/settings/server/update/octofarm").send();
+    const res = await request.post("/system/update").send();
     expect(res.statusCode).toEqual(302);
     done();
   }, 10000);

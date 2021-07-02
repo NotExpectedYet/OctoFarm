@@ -1,0 +1,63 @@
+<% let base = '..' %>
+<% let tabMenu = base + '/octofarm-side-tab-menu.ejs' %>
+
+<div class="row">
+        <%- include(tabMenu, {
+            list:{
+                menuClass: "col-12 col-sm-12 col-md-3 col-lg-2 col-xl-2",
+                bodyClass: "col-12 col-sm-12 col-md-9 col-lg-10 col-xl-10",
+                listItems: [
+                    {
+                        id: "system-information",
+                        name: "Information",
+                        icon: "fas fa-info-circle",
+                        permissionGroup: "",
+                        bodyFile: "./System/systemInformation.ejs"
+                    },
+                    {
+                        id: "system-client",
+                        name: "Client",
+                        icon: "fas fa-desktop",
+                        permissionGroup: "",
+                        bodyFile: "./System/systemClient.ejs"
+                    },
+                    {
+                        id: "system-settings",
+                        name: "Server",
+                        icon: "fas fa-server",
+                        permissionGroup: "Administrator",
+                        bodyFile: "./System/systemServer.ejs"
+                    },
+                    {
+                        id: "system-alerts",
+                        name: "Alerts",
+                        icon: "far fa-bell",
+                        permissionGroup: "Administrator",
+                        bodyFile: "./System/systemAlerts.ejs"
+                    },
+                    {
+                        id: "system-database",
+                        name: "Database",
+                        icon: "fas fa-info-circle",
+                        permissionGroup: "Administrator",
+                        bodyFile: "./System/systemDatabase.ejs"
+                    },
+                    {
+                        id: "system-logs",
+                        name: "Logs",
+                        icon: "fas fa-clipboard-list",
+                        permissionGroup: "Administrator",
+                        bodyFile: "./System/systemLogs.ejs"
+                    },
+                    {
+                        id: "system-about",
+                        name: "About",
+                        icon: "fas fa-address-card",
+                        permissionGroup: "",
+                        bodyFile: "./System/systemAbout.ejs"
+                    },
+                ],
+            }
+            })
+        %>
+</div>
