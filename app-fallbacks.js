@@ -6,8 +6,11 @@ const { AppConstants } = require("./server_src/app.constants");
 const dotenv = require("dotenv");
 const path = require("path");
 
-const Logger = require("./server_src/lib/logger.js");
+const Logger = require("./server_src/handlers/logger.js");
+const { loadControllers } = require("awilix-express");
 const logger = new Logger("OctoFarm-Fallback-Server");
+const routePath = "server_src/routes";
+const opts = { cwd: __dirname };
 
 function setupFallbackExpressServer() {
   let app = express();
@@ -49,8 +52,7 @@ function fetchOctoFarmPort() {
     );
 
     // Update config immediately
-    process.env[AppConstants.OCTOFARM_PORT_KEY] =
-      AppConstants.defaultOctoFarmPort.toString();
+    process.env[AppConstants.OCTOFARM_PORT_KEY] = AppConstants.defaultOctoFarmPort.toString();
     port = process.env[AppConstants.OCTOFARM_PORT_KEY];
   }
   return port;
@@ -63,10 +65,8 @@ function serveNodeVersionFallback(app) {
     logger.info(msg);
   });
 
-  app.use(
-    "/",
-    require("./server_src/routes/nodeVersionIssue", { page: "route" })
-  );
+  app.use(loadControllers(`${routePath}/fallback-node-version-issue.controller.js`, opts));
+  app.use(loadControllers(`${routePath}/amialive.controller.js`, opts));
   app.get("*", function (req, res) {
     res.redirect("/");
   });
@@ -75,11 +75,8 @@ function serveNodeVersionFallback(app) {
 }
 
 function serveDatabaseIssueFallbackRoutes(app) {
-  app.use("/", require("./server_src/routes/databaseIssue", { page: "route" }));
-  app.use(
-    "/serverChecks",
-    require("./server_src/routes/serverChecks", { page: "route" })
-  );
+  app.use(loadControllers(`${routePath}/fallback-database-issue.controller.js`, opts));
+  app.use(loadControllers(`${routePath}/amialive.controller.js`, opts));
   app.get("*", function (req, res) {
     res.redirect("/");
   });
@@ -87,9 +84,7 @@ function serveDatabaseIssueFallbackRoutes(app) {
 
 function serveDatabaseIssueFallback(app, port) {
   if (!port || Number.isNaN(parseInt(port))) {
-    throw new Error(
-      "The server database-issue mode requires a numeric port input argument"
-    );
+    throw new Error("The server database-issue mode requires a numeric port input argument");
   }
   let listenerHttpServer = app.listen(port, "0.0.0.0", () => {
     const msg = `You have database connection issues... open our webpage at http://127.0.0.1:${port}`;

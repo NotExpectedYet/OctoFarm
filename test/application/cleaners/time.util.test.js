@@ -1,4 +1,4 @@
-const { toTimeFormat } = require("../../../server_src/lib/utils/time.util");
+const { toTimeFormat } = require("../../../server_src/utils/time.util");
 
 describe("timeUtil", function () {
   it("should tolerate unix timestamp and return string with at least h:m format", async function () {

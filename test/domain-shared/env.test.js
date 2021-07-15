@@ -11,8 +11,6 @@ describe("Env util package.json check", () => {
   it("should pass validation", () => {
     expect(envUtils.verifyPackageJsonRequirements(__dirname)).toEqual(false);
 
-    expect(
-      envUtils.verifyPackageJsonRequirements(path.join(__dirname, "mock-data"))
-    ).toEqual(true);
+    expect(envUtils.verifyPackageJsonRequirements(path.join(__dirname, "mock-data"))).toEqual(true);
   });
 });

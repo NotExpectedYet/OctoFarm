@@ -14,8 +14,7 @@ beforeAll(async () => {
 describe("ServerUpdate Endpoint", () => {
   it("should return 302 redirect when no user is logged in", async function () {
     process.env.npm_package_version = require("../../package.json").version;
-    process.env.testlatest_package_version =
-      require("../../package.json").version;
+    process.env.testlatest_package_version = require("../../package.json").version;
 
     const res = await request.post("/settings/server/update/octofarm").send();
     expect(res.statusCode).toEqual(302);

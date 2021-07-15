@@ -1,4 +1,4 @@
-const { JobClean } = require("../../../server_src/lib/dataFunctions/jobClean");
+const { JobClean } = require("../../../server_src/state/data/jobClean");
 const { DateTime } = require("luxon");
 
 // Before luxon
@@ -9,12 +9,8 @@ function legacyUUTGetCompletionDate(printTimeLeft, completion) {
     dateComplete = "No Active Job";
   } else {
     currentDate = currentDate.getTime();
-    const futureDateString = new Date(
-      currentDate + printTimeLeft * 1000
-    ).toDateString();
-    let futureTimeString = new Date(
-      currentDate + printTimeLeft * 1000
-    ).toTimeString();
+    const futureDateString = new Date(currentDate + printTimeLeft * 1000).toDateString();
+    let futureTimeString = new Date(currentDate + printTimeLeft * 1000).toTimeString();
     futureTimeString = futureTimeString.substring(0, 5);
     dateComplete = `${futureDateString}: ${futureTimeString}`;
   }
@@ -25,10 +21,7 @@ describe("getCompletionDate", function () {
   it("should calculate formatted completion date", async function () {
     const completionDate = JobClean.getCompletionDate(10, 99);
     expect(completionDate).toBeTruthy();
-    const cutoffDate = completionDate.substring(
-      0,
-      completionDate.length - 1 - 4
-    );
+    const cutoffDate = completionDate.substring(0, completionDate.length - 1 - 4);
     const refCutoffDate = legacyUUTGetCompletionDate(10, 99).substring(
       0,
       completionDate.length - 1 - 4

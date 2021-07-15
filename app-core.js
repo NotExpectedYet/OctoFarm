@@ -3,25 +3,19 @@ const flash = require("connect-flash");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
-const ServerSettingsDB = require("./server_src/models/ServerSettings");
 const expressLayouts = require("express-ejs-layouts");
-const Logger = require("./server_src/lib/logger.js");
+const Logger = require("./server_src/handlers/logger.js");
+const container = require("./server_src/container");
+const { scopePerRequest, loadControllers } = require("awilix-express");
 const { OctoFarmTasks } = require("./server_src/tasks");
-const {
-  optionalInfluxDatabaseSetup
-} = require("./server_src/lib/influxExport.js");
 const { getViewsPath } = require("./app-env");
-const {
-  PrinterClean
-} = require("./server_src/lib/dataFunctions/printerClean.js");
-const { ServerSettings } = require("./server_src/settings/serverSettings.js");
-const { ClientSettings } = require("./server_src/settings/clientSettings.js");
-const { TaskManager } = require("./server_src/runners/task.manager");
 
 function setupExpressServer() {
   let app = express();
 
-  require("./server_src/config/passport.js")(passport);
+  const userTokenService = container.resolve("userTokenService");
+  require("./server_src/middleware/passport.js")(passport, userTokenService);
+
   app.use(express.json());
 
   const viewsPath = getViewsPath();
@@ -58,84 +52,44 @@ function setupExpressServer() {
     next();
   });
 
+  app.use(scopePerRequest(container));
+
   return app;
 }
 
 async function ensureSystemSettingsInitiated() {
-  logger.info("Checking Server Settings...");
+  logger.info("Loading Server Settings.");
 
-  await ServerSettingsDB.find({}).catch((e) => {
-    if (e.message.includes("command find requires authentication")) {
-      throw "Database authentication failed.";
-    } else {
-      throw "Database connection failed.";
-    }
-  });
+  const serverSettingsService = container.resolve("serverSettingsService");
+  await serverSettingsService.probeDatabase();
 
-  // Setup Settings as connection is established
-  const serverSettingsStatus = await ServerSettings.init();
-  await ClientSettings.init();
-
-  return serverSettingsStatus;
+  const settingsStore = container.resolve("settingsStore");
+  return await settingsStore.loadSettings();
 }
 
 function serveOctoFarmRoutes(app) {
-  app.use("/", require("./server_src/routes/index", { page: "route" }));
-  app.use(
-    "/serverChecks",
-    require("./server_src/routes/serverChecks", { page: "route" })
-  );
-  app.use("/users", require("./server_src/routes/users", { page: "route" }));
-  app.use(
-    "/printers",
-    require("./server_src/routes/printers", { page: "route" })
-  );
-  app.use(
-    "/groups",
-    require("./server_src/routes/printerGroups", { page: "route" })
-  );
-  app.use(
-    "/settings",
-    require("./server_src/routes/settings", { page: "route" })
-  );
-  app.use(
-    "/printersInfo",
-    require("./server_src/routes/SSE-printersInfo", { page: "route" })
-  );
-  app.use(
-    "/dashboardInfo",
-    require("./server_src/routes/SSE-dashboard", { page: "route" })
-  );
-  app.use(
-    "/monitoringInfo",
-    require("./server_src/routes/SSE-monitoring", { page: "route" })
-  );
-  app.use(
-    "/filament",
-    require("./server_src/routes/filament", { page: "route" })
-  );
-  app.use(
-    "/history",
-    require("./server_src/routes/history", { page: "route" })
-  );
-  app.use(
-    "/scripts",
-    require("./server_src/routes/scripts", { page: "route" })
-  );
-  app.use(
-    "/input",
-    require("./server_src/routes/externalDataCollection", { page: "route" })
-  );
-  app.use("/system", require("./server_src/routes/system", { page: "route" }));
-  app.use("/client", require("./server_src/routes/sorting", { page: "route" }));
+  const routePath = "./server_src/routes";
+  app.use("/filament", require(`${routePath}/filament`, { page: "route" }));
+  app.use("/history", require(`${routePath}/history`, { page: "route" }));
+
+  app.use(loadControllers("server_src/routes/settings/*.controller.js", { cwd: __dirname }));
+  app.use(loadControllers("server_src/routes/*.controller.js", { cwd: __dirname }));
+
   app.get("*", function (req, res) {
-    console.debug("Had to redirect resource request:", req.originalUrl);
-    if (req.originalUrl.endsWith(".min.js")) {
-      logger.error("Javascript resource was not found " + req.originalUrl);
+    const path = req.originalUrl;
+    if (path.startsWith("/api") || path.startsWith("/plugins")) {
+      logger.error("API resource was not found " + path);
       res.status(404);
-      res.send("Resource not found " + req.originalUrl);
+      res.send({ error: "API endpoint or method not found" });
+      return;
+    } else if (req.originalUrl.endsWith(".min.js")) {
+      logger.error("Javascript resource was not found " + path);
+      res.status(404);
+      res.send("Resource not found " + path);
       return;
     }
+
+    logger.error("MVC resource was not found " + path);
     res.redirect("/");
   });
 }
@@ -143,18 +97,24 @@ function serveOctoFarmRoutes(app) {
 async function serveOctoFarmNormally(app, quick_boot = false) {
   if (!quick_boot) {
     logger.info("Initialising FarmInformation...");
-    await PrinterClean.initFarmInformation();
+    const printerClean = container.resolve("printerClean");
+    await printerClean.initFarmInformation();
 
-    await ClientSettings.init();
+    const octofarmManager = container.resolve("octofarmManager");
+    await octofarmManager.init();
 
-    const { Runner } = require("./server_src/runners/state.js");
-    await Runner.init();
+    const printersStore = container.resolve("printersStore");
+    await printersStore.loadPrintersStore();
 
-    OctoFarmTasks.BOOT_TASKS.forEach((task) =>
-      TaskManager.registerJobOrTask(task)
-    );
+    const taskManagerService = container.resolve("taskManagerService");
+    if (process.env.SAFEMODE_ENABLED !== "true") {
+      OctoFarmTasks.BOOT_TASKS.forEach((task) => taskManagerService.registerJobOrTask(task));
+    } else {
+      logger.warning("Starting in safe mode due to SAFEMODE_ENABLED");
+    }
 
-    await optionalInfluxDatabaseSetup();
+    const influxSetupService = container.resolve("influxSetupService");
+    await influxSetupService.optionalInfluxDatabaseSetup();
   }
 
   serveOctoFarmRoutes(app);

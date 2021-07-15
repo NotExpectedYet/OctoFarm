@@ -18,10 +18,8 @@ const softwareUpdateChecker = require("../../server_src/services/octofarm-update
 
 describe("AmIAlive Endpoint", () => {
   it("should return ok and no update", async () => {
-    process.env[AppConstants.VERSION_KEY] =
-      require("../../package.json").version;
-    process.env.testlatest_package_version =
-      require("../../package.json").version;
+    process.env[AppConstants.VERSION_KEY] = require("../../package.json").version;
+    process.env.testlatest_package_version = require("../../package.json").version;
 
     await softwareUpdateChecker.syncLatestOctoFarmRelease();
 

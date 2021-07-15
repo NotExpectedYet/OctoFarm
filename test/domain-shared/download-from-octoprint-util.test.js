@@ -46,9 +46,7 @@ describe("DownloadUtil", () => {
   });
 
   it("should be able to catch download errors (mocked)", async () => {
-    const {
-      downloadFromOctoPrint
-    } = require("../../server_src/utils/download.util");
+    const { downloadFromOctoPrint } = require("../../server_src/utils/download.util");
 
     const testPath = "test.file";
     const testUrl = "totally.illegal test.url";

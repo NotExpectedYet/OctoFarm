@@ -6,12 +6,11 @@ const envUtils = require("./server_src/utils/env.utils");
 const dotenv = require("dotenv");
 const { AppConstants } = require("./server_src/app.constants");
 
-const Logger = require("./server_src/lib/logger.js");
+const Logger = require("./server_src/handlers/logger.js");
 const logger = new Logger("OctoFarm-Environment", false);
 
 // Constants and definition
-const instructionsReferralURL =
-  "https://github.com/OctoFarm/OctoFarm/blob/master/README.md"; // TODO replace with environment setup markdown
+const instructionsReferralURL = "https://github.com/OctoFarm/OctoFarm/blob/master/README.md"; // TODO replace with environment setup markdown
 const deprecatedConfigFolder = "./config";
 const deprecatedConfigFilePath = deprecatedConfigFolder + "/db.js";
 const packageJsonPath = "./package.json";
@@ -52,15 +51,11 @@ function ensureEnvNpmVersionSet() {
     process.env[AppConstants.VERSION_KEY] = packageJsonVersion;
     process.env[AppConstants.NON_NPM_MODE_KEY] = "true";
     logger.info(
-      `✓ Running OctoFarm version ${
-        process.env[AppConstants.VERSION_KEY]
-      } in non-NPM mode!`
+      `✓ Running OctoFarm version ${process.env[AppConstants.VERSION_KEY]} in non-NPM mode!`
     );
   } else {
     logger.debug(
-      `✓ Running OctoFarm version ${
-        process.env[AppConstants.VERSION_KEY]
-      } in NPM mode!`
+      `✓ Running OctoFarm version ${process.env[AppConstants.VERSION_KEY]} in NPM mode!`
     );
   }
 
@@ -80,9 +75,7 @@ function removePm2Service(reason) {
 function removeFolderIfEmpty(folder) {
   return fs.rmdir(folder, function (err) {
     if (err) {
-      logger.error(
-        `~ Could not clear up the folder ${folder} as it was not empty`
-      );
+      logger.error(`~ Could not clear up the folder ${folder} as it was not empty`);
     } else {
       logger.info(`✓ Successfully removed the empty directory ${folder}`);
     }
@@ -121,8 +114,7 @@ function fetchMongoDBConnectionString(persistToEnv = false) {
       `~ ${AppConstants.MONGO_KEY} environment variable is not set. Assuming default: ${AppConstants.MONGO_KEY}=${AppConstants.defaultMongoStringUnauthenticated}`
     );
     printInstructionsURL();
-    process.env[AppConstants.MONGO_KEY] =
-      AppConstants.defaultMongoStringUnauthenticated;
+    process.env[AppConstants.MONGO_KEY] = AppConstants.defaultMongoStringUnauthenticated;
 
     // is not isDocker just to be sure, also checked in writeVariableToEnvFile
     if (persistToEnv && !isDocker()) {
@@ -156,8 +148,7 @@ function fetchOctoFarmPort() {
     }
 
     // Update config immediately
-    process.env[AppConstants.OCTOFARM_PORT_KEY] =
-      AppConstants.defaultOctoFarmPort.toString();
+    process.env[AppConstants.OCTOFARM_PORT_KEY] = AppConstants.defaultOctoFarmPort.toString();
     port = process.env[AppConstants.OCTOFARM_PORT_KEY];
   }
   return port;
@@ -190,8 +181,7 @@ function ensureMongoDBConnectionStringSet() {
         `~ ${AppConstants.MONGO_KEY} environment variable is not set. Assuming default: ${AppConstants.MONGO_KEY}=${AppConstants.defaultMongoStringUnauthenticated}`
       );
       printInstructionsURL();
-      process.env[AppConstants.MONGO_KEY] =
-        AppConstants.defaultMongoStringUnauthenticated;
+      process.env[AppConstants.MONGO_KEY] = AppConstants.defaultMongoStringUnauthenticated;
     } else {
       // We're not in docker, so we have some patch-work to do.
       removeDeprecatedMongoURIConfigFile();
@@ -224,8 +214,7 @@ function ensurePortSet() {
       `~ ${AppConstants.OCTOFARM_PORT_KEY} environment variable is not set. Assuming default: ${AppConstants.OCTOFARM_PORT_KEY}=${AppConstants.defaultOctoFarmPort}.`
     );
     printInstructionsURL();
-    process.env[AppConstants.OCTOFARM_PORT_KEY] =
-      AppConstants.defaultOctoFarmPort.toString();
+    process.env[AppConstants.OCTOFARM_PORT_KEY] = AppConstants.defaultOctoFarmPort.toString();
   }
 }
 
@@ -284,9 +273,7 @@ function ensurePageTitle() {
 }
 
 function isEnvProd() {
-  return (
-    process.env[AppConstants.NODE_ENV_KEY] === AppConstants.defaultProductionEnv
-  );
+  return process.env[AppConstants.NODE_ENV_KEY] === AppConstants.defaultProductionEnv;
 }
 
 module.exports = {

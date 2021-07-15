@@ -1,6 +1,6 @@
 const path = require("path");
 const fs = require("fs");
-const Logger = require("../lib/logger.js");
+const Logger = require("../handlers/logger.js");
 const dotenv = require("dotenv");
 const isDocker = require("is-docker");
 
@@ -8,16 +8,13 @@ const logger = new Logger("OF-Utils-Env", false);
 
 function isPm2() {
   return (
-    "PM2_HOME" in process.env ||
-    "PM2_JSON_PROCESSING" in process.env ||
-    "PM2_CLI" in process.env
+    "PM2_HOME" in process.env || "PM2_JSON_PROCESSING" in process.env || "PM2_CLI" in process.env
   );
 }
 
 function isNodemon() {
   return (
-    "npm_lifecycle_script" in process.env &&
-    process.env.npm_lifecycle_script.includes("nodemon")
+    "npm_lifecycle_script" in process.env && process.env.npm_lifecycle_script.includes("nodemon")
   );
 }
 
@@ -46,9 +43,7 @@ function stringifyDotEnv(obj) {
  */
 function writeVariableToEnvFile(absoluteEnvPath, variableKey, jsonObject) {
   if (isDocker()) {
-    logger.error(
-      "Tried to persist setting to .env in docker mode. Avoided that."
-    );
+    logger.error("Tried to persist setting to .env in docker mode. Avoided that.");
     return;
   }
   const latestDotEnvConfig = dotenv.config();
@@ -74,17 +69,13 @@ function verifyPackageJsonRequirements(rootPath) {
   const dirConts = fs.readdirSync(rootPath);
   const hasPackageJson = dirConts.includes("package.json");
   if (!hasPackageJson) {
-    logger.error(
-      `FAILURE. Could not find 'package.json' in root folder ${rootPath}`
-    );
+    logger.error(`FAILURE. Could not find 'package.json' in root folder ${rootPath}`);
     return false;
   } else {
     logger.debug("✓ found 'package.json'");
     const packageName = require("../../package.json").name;
     if (!packageName) {
-      logger.error(
-        "X Could not find 'name' property in package.json file. Aborting OctoFarm."
-      );
+      logger.error("X Could not find 'name' property in package.json file. Aborting OctoFarm.");
       return false;
     } else if (packageName.toLowerCase() !== "octofarm") {
       logger.error(
@@ -123,9 +114,7 @@ function ensureBackgroundImageExists(rootPath) {
     // Bug in PKG
     // fs.copyFileSync(defaultBgPath, "C:\\Users\\USER_HERE\\Projects\\NodeJS\\OctoFarm\\package\\images\\roll.jpg");
 
-    logger.info(
-      `✓ Copyied default background image to ${targetBgPath} as it was not found.`
-    );
+    logger.info(`✓ Copyied default background image to ${targetBgPath} as it was not found.`);
   }
 }
 

@@ -18,10 +18,7 @@ export default function initGroupSelect(printers) {
                       <option href="#" data-path=".${group.replace(
                         / /g,
                         "_"
-                      )}" value="${group.replace(
-            / /g,
-            "_"
-          )}">Group: ${group}</option>
+                      )}" value="${group.replace(/ /g, "_")}">Group: ${group}</option>
         `
         );
       }

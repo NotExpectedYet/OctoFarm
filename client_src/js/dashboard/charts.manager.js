@@ -106,8 +106,7 @@ export class ChartsManager {
    * @param labels analyzed labels
    */
   static async renderEnvironmentDataChart(seriesData, labels) {
-    const environmentalHistoryChartOptions =
-      dashboardOptions.environmentalDataChartOptions;
+    const environmentalHistoryChartOptions = dashboardOptions.environmentalDataChartOptions;
     environmentalHistoryChartOptions.yaxis = labels;
     environmentDataChart = await renderChart(
       chartIds.environmentalHistory,

@@ -4,22 +4,9 @@ export const actualToolSeriesName = "Actual Tool";
 export const defaultTheme = "dark";
 export const defaultLoadingText = "Loading...";
 export const darkColor = "#303030";
-export const xAxisConnectionCategories = [
-  "Active",
-  "Complete",
-  "Idle",
-  "Disconnected",
-  "Offline"
-];
+export const xAxisConnectionCategories = ["Active", "Complete", "Idle", "Disconnected", "Offline"];
 export const utilisationConnectionLabels = ["Active", "Idle", "Offline"];
-export const farmTempColors = [
-  "#fcc329",
-  "#ff1500",
-  "#009cff",
-  "#ff1800",
-  "#37ff00",
-  "#ff1800"
-];
+export const farmTempColors = ["#fcc329", "#ff1500", "#009cff", "#ff1800", "#37ff00", "#ff1800"];
 export const utilisationConnectionColors = ["#00bc8c", "#444", "#e74c3c"];
 export const historyColors = ["#00bc8c", "#f39c12", "#e74c3c"];
 export const rainBow = () => [
@@ -33,12 +20,7 @@ export const rainBow = () => [
   "#8000ff",
   "#ff00f2"
 ];
-export const environmentalDataColors = [
-  "#ff1500",
-  "#324bca",
-  "#caa932",
-  "#49ca32"
-];
+export const environmentalDataColors = ["#ff1500", "#324bca", "#caa932", "#49ca32"];
 
 export const dataLabelBackground = {
   enabled: true,

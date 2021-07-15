@@ -21,11 +21,7 @@ export async function monitoringSSEventHandler(data) {
 
     if (event.data.clientSettings.panelView.currentOp) {
       const currentOperationsData = data.currentOperations;
-      currentOperations(
-        currentOperationsData.operations,
-        currentOperationsData.count,
-        printerInfo
-      );
+      currentOperations(currentOperationsData.operations, currentOperationsData.count, printerInfo);
     }
   }
 }

@@ -9,9 +9,7 @@ npmUtils.installNpmDependencies = async () => {
 };
 
 // Test helper
-npmUtils.setHasMissingPackages = (missingPackages) =>
-  (hasMissingPackages = missingPackages);
-npmUtils.setTargetState = (targetState) =>
-  (targetedStateAfterPull = targetState);
+npmUtils.setHasMissingPackages = (missingPackages) => (hasMissingPackages = missingPackages);
+npmUtils.setTargetState = (targetState) => (targetedStateAfterPull = targetState);
 
 module.exports = npmUtils;

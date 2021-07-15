@@ -293,11 +293,7 @@ const printCompletionByDayChartOptions = {
   ...theme(),
   ...loadingText(),
   series: [],
-  yaxis: [
-    succesCountSeries(true),
-    succesCountSeries(false),
-    succesCountSeries(false)
-  ],
+  yaxis: [succesCountSeries(true), succesCountSeries(false), succesCountSeries(false)],
   xaxis: {
     type: "datetime",
     tickAmount: 10,

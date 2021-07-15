@@ -28,15 +28,11 @@ describe("Printer Settings Update Endpoint", () => {
   }, 10000);
 
   it("should return 500 if server fails to update printer settings", async function () {
-    const res = await request
-      .post("/printers/updatePrinterSettings")
-      .send(requestBody);
+    const res = await request.post("/printers/updatePrinterSettings").send(requestBody);
 
     // Assert server failed
     expect(res.statusCode).toEqual(500);
     expect(res.body).toEqual({});
-    expect(res.res.statusMessage).toContain(
-      "The server couldn't update your printer settings!"
-    );
+    expect(res.res.statusMessage).toContain("The server couldn't update your printer settings!");
   }, 10000);
 });

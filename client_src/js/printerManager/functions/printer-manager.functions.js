@@ -22,10 +22,7 @@ export function workerEventFunction(data) {
         updateConnectionLog(data.currentTickerList);
       }
       if (data.printersInformation.length > 0) {
-        createOrUpdatePrinterTableRow(
-          data.printersInformation,
-          data.printerControlList
-        );
+        createOrUpdatePrinterTableRow(data.printersInformation, data.printerControlList);
       }
       // TODO clean up power buttons wants to be in printer-data.js
       if (powerTimer >= 5000) {
@@ -38,11 +35,7 @@ export function workerEventFunction(data) {
       }
     } else {
       if (UI.checkIfSpecificModalShown("printerManagerModal")) {
-        PrinterManager.init(
-          "",
-          data.printersInformation,
-          data.printerControlList
-        );
+        PrinterManager.init("", data.printersInformation, data.printerControlList);
       }
 
       if (UI.checkIfSpecificModalShown("printerSettingsModal")) {
@@ -61,11 +54,7 @@ export function workerEventFunction(data) {
 
 export async function scanNetworkForDevices() {
   e.target.disabled = true;
-  UI.createAlert(
-    "info",
-    "Scanning your network for new devices now... Please wait!",
-    20000
-  );
+  UI.createAlert("info", "Scanning your network for new devices now... Please wait!", 20000);
   try {
     const scannedPrinters = await OctoFarmClient.get("printers/scanNetwork");
     for (let index = 0; index < scannedPrinters.length; index++) {
@@ -109,18 +98,14 @@ export async function reSyncPrinters() {
     "success",
     "Started a background re-sync of all printers connected to OctoFarm. You may navigate away from this screen."
   );
-  searchOffline.innerHTML =
-    '<i class="fas fa-redo fa-sm fa-spin"></i> Syncing...';
+  searchOffline.innerHTML = '<i class="fas fa-redo fa-sm fa-spin"></i> Syncing...';
   try {
     const post = await OctoFarmClient.post("printers/reScanOcto", {
       id: null
     });
   } catch (e) {
     console.error(e);
-    UI.createAlert(
-      "error",
-      "There was an issue re-syncing your printers, please check the logs"
-    );
+    UI.createAlert("error", "There was an issue re-syncing your printers, please check the logs");
   }
   alert.close();
   searchOffline.innerHTML = '<i class="fas fa-redo fa-sm"></i> Re-Sync';
@@ -136,15 +121,9 @@ export async function bulkEditPrinters() {
       printerID = printerID[1];
 
       const printerURL = document.getElementById(`editInputURL-${printerID}`);
-      const printerCamURL = document.getElementById(
-        `editInputCamera-${printerID}`
-      );
-      const printerAPIKEY = document.getElementById(
-        `editInputApikey-${printerID}`
-      );
-      const printerGroup = document.getElementById(
-        `editInputGroup-${printerID}`
-      );
+      const printerCamURL = document.getElementById(`editInputCamera-${printerID}`);
+      const printerAPIKEY = document.getElementById(`editInputApikey-${printerID}`);
+      const printerGroup = document.getElementById(`editInputGroup-${printerID}`);
       const printerName = document.getElementById(`editInputName-${printerID}`);
       //Check if value updated, if not fill in the old value from placeholder
       if (
@@ -184,10 +163,7 @@ export async function bulkEditPrinters() {
 
   if (editedPrinters.length > 0) {
     try {
-      const editedPrinters = await OctoFarmClient.post(
-        "printers/update",
-        editedPrinters
-      );
+      const editedPrinters = await OctoFarmClient.post("printers/update", editedPrinters);
       const printersAdded = editedPrinters.printersAdded;
       printersAdded.forEach((printer) => {
         UI.createAlert(
@@ -199,12 +175,7 @@ export async function bulkEditPrinters() {
       });
     } catch (e) {
       console.error(e);
-      UI.createAlert(
-        "error",
-        "Something went wrong updating the Server...",
-        3000,
-        "Clicked"
-      );
+      UI.createAlert("error", "Something went wrong updating the Server...", 3000, "Clicked");
     }
   }
 }
@@ -235,12 +206,7 @@ export async function exportPrintersToJson() {
     FileOperations.download("printers.json", JSON.stringify(printersExport));
   } catch (e) {
     console.error(e);
-    UI.createAlert(
-      "error",
-      `Error exporting printers, please check logs: ${e}`,
-      3000,
-      "clicked"
-    );
+    UI.createAlert("error", `Error exporting printers, please check logs: ${e}`, 3000, "clicked");
   }
 }
 export async function importPrintersFromJsonFile() {
@@ -257,10 +223,8 @@ export async function importPrintersFromJsonFile() {
 }
 
 export function addBlankPrinterToTable() {
-  const currentPrinterCount =
-    document.getElementById("printerTable").rows.length;
-  const newPrinterCount =
-    document.getElementById("printerNewTable").rows.length;
+  const currentPrinterCount = document.getElementById("printerTable").rows.length;
+  const newPrinterCount = document.getElementById("printerNewTable").rows.length;
   if (currentPrinterCount === 1 && newPrinterCount === 1) {
     bootbox.alert({
       message: createPrinterAddInstructions(),

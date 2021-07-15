@@ -5,9 +5,7 @@ const { parse } = require("flatted/cjs");
 const dbHandler = require("../db-handler");
 const supertest = require("supertest");
 const getEndpoints = require("express-list-endpoints");
-const {
-  PrinterClean
-} = require("../../server_src/lib/dataFunctions/printerClean");
+const { PrinterClean } = require("../../server_src/state/data/printerClean");
 const { setupTestApp } = require("../../app-test");
 
 let request;

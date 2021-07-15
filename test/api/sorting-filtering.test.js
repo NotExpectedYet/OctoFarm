@@ -6,9 +6,9 @@ const getEndpoints = require("express-list-endpoints");
 const {
   defaultFilterBy,
   defaultSortBy
-} = require("../../server_src/lib/providers/filter-sorting.constants");
-const { getSorting } = require("../../server_src/lib/sorting");
-const { getFilter } = require("../../server_src/lib/sorting");
+} = require("../../server_src/constants/filter-sorting.constants");
+const { getSorting } = require("../../server_src/state/sorting.state");
+const { getFilter } = require("../../server_src/state/sorting.state");
 const { setupTestApp } = require("../../app-test");
 
 let request;

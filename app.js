@@ -7,19 +7,12 @@ try {
 
 if (!!majorVersion && majorVersion < 14) {
   // Dont require this in the normal flow (or NODE_ENV can not be fixed before start)
-  const {
-    serveNodeVersionFallback,
-    setupFallbackExpressServer
-  } = require("./app-fallbacks");
+  const { serveNodeVersionFallback, setupFallbackExpressServer } = require("./app-fallbacks");
 
   const octoFarmServer = setupFallbackExpressServer();
   serveNodeVersionFallback(octoFarmServer);
 } else {
-  const {
-    setupEnvConfig,
-    fetchMongoDBConnectionString,
-    fetchOctoFarmPort
-  } = require("./app-env");
+  const { setupEnvConfig, fetchMongoDBConnectionString, fetchOctoFarmPort } = require("./app-env");
 
   function bootAutoDiscovery() {
     require("./server_src/runners/autoDiscovery.js");
@@ -35,7 +28,7 @@ if (!!majorVersion && majorVersion < 14) {
   } = require("./app-core");
 
   const mongoose = require("mongoose");
-  const Logger = require("./server_src/lib/logger.js");
+  const Logger = require("./server_src/handlers/logger.js");
   const logger = new Logger("OctoFarm-Server");
 
   const octoFarmServer = setupExpressServer();
@@ -52,9 +45,7 @@ if (!!majorVersion && majorVersion < 14) {
     .then(async () => {
       const port = fetchOctoFarmPort();
       if (!port || Number.isNaN(parseInt(port))) {
-        throw new Error(
-          "The server database-issue mode requires a numeric port input argument"
-        );
+        throw new Error("The server database-issue mode requires a numeric port input argument");
       }
 
       const app = await serveOctoFarmNormally(octoFarmServer);
@@ -63,7 +54,7 @@ if (!!majorVersion && majorVersion < 14) {
       });
     })
     .catch(async (err) => {
-      logger.error(err);
+      logger.error(err.stack);
       const { serveDatabaseIssueFallback } = require("./app-fallbacks");
       serveDatabaseIssueFallback(octoFarmServer, fetchOctoFarmPort());
     });

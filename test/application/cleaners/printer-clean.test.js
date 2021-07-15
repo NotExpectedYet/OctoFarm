@@ -210,9 +210,7 @@ describe("PrinterClean", function () {
   });
 
   it("should call sortCurrentOperations with printerState truthy no problem", async () => {
-    await PrinterClean.sortCurrentOperations([
-      { printerState: { colour: { category: "Idle" } } }
-    ]);
+    await PrinterClean.sortCurrentOperations([{ printerState: { colour: { category: "Idle" } } }]);
     await PrinterClean.sortCurrentOperations([
       { printerState: { colour: { category: "Offline" } } }
     ]);

@@ -28,11 +28,7 @@ export function createWebWorker(view) {
       const printerControlList = event.data.printerControlList;
       setPrinterMapState(printerInfo, printerControlList);
 
-      await init(
-        event.data.printersInformation,
-        event.data.clientSettings,
-        currentView
-      );
+      await init(event.data.printersInformation, event.data.clientSettings, currentView);
       if (event.data.clientSettings.panelView.currentOp) {
         const currentOperationsData = event.data.currentOperations;
         currentOperations(

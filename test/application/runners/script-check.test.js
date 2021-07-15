@@ -1,6 +1,6 @@
 const dbHandler = require("../../db-handler");
 const Alerts = require("../../../server_src/models/Alerts");
-const { ScriptRunner } = require("../../../server_src/runners/scriptCheck");
+const { ScriptRunner } = require("../../../server_src/services/script-check.service");
 
 /**
  * Connect to a new in-memory database before running any tests.
@@ -26,9 +26,7 @@ afterAll(async () => {
 describe("scriptCheck", () => {
   it("should save ok", async () => {
     // Model validation for trigger, message and scriptLocation
-    await expect(
-      async () => await ScriptRunner.save({}, "", "", "")
-    ).rejects.toBeTruthy();
+    await expect(async () => await ScriptRunner.save({}, "", "", "")).rejects.toBeTruthy();
     await expect(async () => await ScriptRunner.save({})).rejects.toBeTruthy();
 
     // TODO Trigger, message and location validation lacking
@@ -64,20 +62,11 @@ describe("scriptCheck", () => {
   it("should convertMessage with ok message", async () => {
     // Doesnt report error back
     await ScriptRunner.convertMessage({ active: "asd" }, "null");
-    await ScriptRunner.convertMessage(
-      { job: "asd", progress: { completion: true } },
-      "null"
-    );
+    await ScriptRunner.convertMessage({ job: "asd", progress: { completion: true } }, "null");
     await ScriptRunner.convertMessage({ active: "asd" }, "[historyID]");
     await ScriptRunner.convertMessage({ active: "asd" }, "[historyID]", 123);
-    await ScriptRunner.convertMessage(
-      { progress: { printTimeLeft: 1 } },
-      "[ETA]"
-    );
-    await ScriptRunner.convertMessage(
-      { settingsApperance: { name: "asd" } },
-      "[PrinterName]"
-    );
+    await ScriptRunner.convertMessage({ progress: { printTimeLeft: 1 } }, "[ETA]");
+    await ScriptRunner.convertMessage({ settingsApperance: { name: "asd" } }, "[PrinterName]");
     await ScriptRunner.convertMessage({ active: "asd" }, "[PrinterURL]");
     await ScriptRunner.convertMessage({ active: "asd" }, "[PrinterAPIKey]");
     await ScriptRunner.convertMessage({ active: "asd" }, "[TimeRemaining]");

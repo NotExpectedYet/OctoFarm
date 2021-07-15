@@ -1,7 +1,7 @@
 const {
   getPrintCostNumeric,
   noCostSettingsMessage
-} = require("../../../server_src/lib/utils/print-cost.util");
+} = require("../../../server_src/utils/print-cost.util");
 
 const defaultCostSettings = {
   powerConsumption: 0.05,
@@ -25,9 +25,7 @@ describe("printCostUtil", function () {
   });
 
   it("should return cost estimation when providing known printTime and costSettings", async function () {
-    expect(getPrintCostNumeric(examplePrintTime, defaultCostSettings)).toBe(
-      0.04588333333333333
-    );
+    expect(getPrintCostNumeric(examplePrintTime, defaultCostSettings)).toBe(0.04588333333333333);
   });
 
   it('should return string "0.00" when printTime is 0', async function () {
@@ -39,9 +37,7 @@ describe("printCostUtil", function () {
       ...defaultCostSettings,
       estimateLifespan: null
     };
-    expect(getPrintCostNumeric(examplePrintTime, costSettings)).toBe(
-      0.025050000000000003
-    );
+    expect(getPrintCostNumeric(examplePrintTime, costSettings)).toBe(0.025050000000000003);
   });
 
   it('should return string "0.03" when estimateLifespan is zero', async function () {
@@ -49,9 +45,7 @@ describe("printCostUtil", function () {
       ...defaultCostSettings,
       estimateLifespan: "0.00"
     };
-    expect(getPrintCostNumeric(examplePrintTime, costSettings)).toBe(
-      0.025050000000000003
-    );
+    expect(getPrintCostNumeric(examplePrintTime, costSettings)).toBe(0.025050000000000003);
   });
 
   it('should tolerate illegal value estimateLifespan and return string "0.04"', async function () {

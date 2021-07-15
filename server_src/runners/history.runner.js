@@ -3,19 +3,16 @@ const fetch = require("node-fetch");
 const fs = require("fs");
 const History = require("../models/History.js");
 const ErrorLog = require("../models/ErrorLog.js");
-const Logger = require("../lib/logger.js");
+const Logger = require("../handlers/logger.js");
 const filamentProfiles = require("../models/Profiles.js");
 const ServerSettings = require("../models/ServerSettings.js");
 const Spool = require("../models/Filament.js");
 const { FilamentManagerPlugin } = require("./filamentManagerPlugin.js");
-const { ScriptRunner } = require("./scriptCheck.js");
+const { ScriptRunner } = require("../services/script-check.service.js");
 const MjpegDecoder = require("mjpeg-decoder");
-const {
-  downloadImage,
-  downloadFromOctoPrint
-} = require("../utils/download.util");
-const { getHistoryCache } = require("../cache/history.cache");
-const { writePoints } = require("../lib/influxExport.js");
+const { downloadImage, downloadFromOctoPrint } = require("../utils/download.util");
+const { getHistoryCache } = require("../state/data/history.cache");
+const { writePoints } = require("../services/influx-export.service.js");
 
 const logger = new Logger("OctoFarm-HistoryCollection");
 let counter = 0;
@@ -48,12 +45,13 @@ function ensureBaseFolderExists() {
 class HistoryCollection {
   static octoPrintService;
 
+  constructor({}) {}
+
   /**
    * Without dependency injection this is what we've got
    * @param service
-   * @returns {Promise<void>}
    */
-  static async inject(service) {
+  static inject(service) {
     this.octoPrintService = service;
   }
 
@@ -77,15 +75,12 @@ class HistoryCollection {
           if (!filamentID) {
             throw `Could not query OctoPrint FilamentManager for filament. FilamentID '${filamentID}' not found.`;
           }
-          const response =
-            await this.octoPrintService.getPluginFilamentManagerFilament(
-              printer,
-              filamentID
-            );
-
-          logger.info(
-            `${printer.printerURL}: spools fetched. Status: ${response.status}`
+          const response = await this.octoPrintService.getPluginFilamentManagerFilament(
+            printer,
+            filamentID
           );
+
+          logger.info(`${printer.printerURL}: spools fetched. Status: ${response.status}`);
           const sp = await response.json();
 
           const spoolID = printer.selectedFilament[i]._id;
@@ -102,9 +97,7 @@ class HistoryCollection {
             tempOffset: sp.spool.temp_offset,
             fmID: sp.spool.id
           };
-          logger.info(
-            `${printer.printerURL}: updating... spool status ${spoolEntity.spools}`
-          );
+          logger.info(`${printer.printerURL}: updating... spool status ${spoolEntity.spools}`);
           spoolEntity.markModified("spools");
           await spoolEntity.save();
           returnSpools.push(spoolEntity);
@@ -165,14 +158,7 @@ class HistoryCollection {
    * @param printer
    * @returns {Promise<null>}
    */
-  static async thumbnailCheck(
-    payload,
-    serverSettings,
-    files,
-    id,
-    event,
-    printer
-  ) {
+  static async thumbnailCheck(payload, serverSettings, files, id, event, printer) {
     let runCapture = async () => {
       // grab Thumbnail if available.
       const currentFileIndex = _.findIndex(files, function (o) {
@@ -195,28 +181,16 @@ class HistoryCollection {
       return base64Thumbnail;
     };
 
-    if (
-      typeof serverSettings.history === "undefined" ||
-      serverSettings.history.thumbnails[event]
-    ) {
+    if (typeof serverSettings.history === "undefined" || serverSettings.history.thumbnails[event]) {
       return await runCapture();
     } else {
       return null;
     }
   }
 
-  static async snapshotCheck(
-    event,
-    serverSettings,
-    printer,
-    saveHistory,
-    payload
-  ) {
+  static async snapshotCheck(event, serverSettings, printer, saveHistory, payload) {
     // Use default settings if not present
-    if (
-      typeof serverSettings.history === "undefined" ||
-      serverSettings.history.snapshot[event]
-    ) {
+    if (typeof serverSettings.history === "undefined" || serverSettings.history.snapshot[event]) {
       return await HistoryCollection.snapPictureOfPrinter(
         printer.camURL,
         saveHistory._id,
@@ -227,26 +201,17 @@ class HistoryCollection {
     }
   }
 
-  static async timelapseCheck(
-    printer,
-    fileName,
-    printTime,
-    serverSettings,
-    id
-  ) {
+  static async timelapseCheck(printer, fileName, printTime, serverSettings, id) {
     if (printTime >= 10) {
       let interval = false;
       const grabTimelapse = async (printer) => {
-        return await fetch(
-          `${printer.printerURL}/api/timelapse?unrendered=true`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "video/mp4",
-              "X-Api-Key": printer.apikey
-            }
+        return await fetch(`${printer.printerURL}/api/timelapse?unrendered=true`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "video/mp4",
+            "X-Api-Key": printer.apikey
           }
-        );
+        });
       };
       logger.info("Checking for timelapse...", fileName);
       if (!interval) {
@@ -254,10 +219,7 @@ class HistoryCollection {
           let timelapse = await grabTimelapse(printer);
           if (timelapse.status === 200) {
             const timelapseResponse = await timelapse.json();
-            logger.info(
-              "Successfully grabbed timelapse list... Checking for:",
-              fileName
-            );
+            logger.info("Successfully grabbed timelapse list... Checking for:", fileName);
             let unrenderedFileName = null;
             if (timelapseResponse.unrendered.length === 0) {
               let cleanName = fileName;
@@ -266,19 +228,13 @@ class HistoryCollection {
               }
               let lastTimelapse = null;
               if (unrenderedFileName === null) {
-                lastTimelapse = _.findIndex(
-                  timelapseResponse.files,
-                  function (o) {
-                    return o.name.includes(cleanName);
-                  }
-                );
+                lastTimelapse = _.findIndex(timelapseResponse.files, function (o) {
+                  return o.name.includes(cleanName);
+                });
               } else {
-                lastTimelapse = _.findIndex(
-                  timelapseResponse.files,
-                  function (o) {
-                    return o.name.includes(unrenderedFileName);
-                  }
-                );
+                lastTimelapse = _.findIndex(timelapseResponse.files, function (o) {
+                  return o.name.includes(unrenderedFileName);
+                });
               }
 
               if (
@@ -287,8 +243,7 @@ class HistoryCollection {
               ) {
                 let lapse = await HistoryCollection.grabTimeLapse(
                   timelapseResponse.files[lastTimelapse].name,
-                  printer.printerURL +
-                    timelapseResponse.files[lastTimelapse].url,
+                  printer.printerURL + timelapseResponse.files[lastTimelapse].url,
                   id,
                   printer,
                   serverSettings
@@ -313,16 +268,14 @@ class HistoryCollection {
               }
             } else {
               if (unrenderedFileName === null) {
-                let unRenderedGrab = [...timelapseResponse.unrendered].filter(
-                  function (lapse) {
-                    let lapseName = lapse.name.replace(/\s/g, "_");
-                    let checkName = fileName.replace(/\s/g, "_");
-                    if (checkName.includes(".gcode")) {
-                      checkName = fileName.replace(".gcode", "");
-                    }
-                    return lapseName.includes(checkName);
+                let unRenderedGrab = [...timelapseResponse.unrendered].filter(function (lapse) {
+                  let lapseName = lapse.name.replace(/\s/g, "_");
+                  let checkName = fileName.replace(/\s/g, "_");
+                  if (checkName.includes(".gcode")) {
+                    checkName = fileName.replace(".gcode", "");
                   }
-                );
+                  return lapseName.includes(checkName);
+                });
                 if (unRenderedGrab.length === 1) {
                   unrenderedFileName = unRenderedGrab[0].name;
                   logger.info(
@@ -336,9 +289,7 @@ class HistoryCollection {
                   );
                 }
               } else {
-                logger.info(
-                  `Awaiting ${unrenderedFileName} to finish rendering`
-                );
+                logger.info(`Awaiting ${unrenderedFileName} to finish rendering`);
               }
             }
           } else {
@@ -454,9 +405,7 @@ class HistoryCollection {
         file_size: parseInt(workingHistory.file.size),
 
         notes: workingHistory.notes,
-        job_estimated_print_time: parseFloat(
-          workingHistory.job.estimatedPrintTime
-        ),
+        job_estimated_print_time: parseFloat(workingHistory.job.estimatedPrintTime),
         job_actual_print_time: parseFloat(workingHistory.job.actualPrintTime),
 
         cost_printer: parseFloat(workingHistory.printerCost),
@@ -486,12 +435,7 @@ class HistoryCollection {
     }
   }
 
-  static async updateFilamentInfluxDB(
-    selectedFilament,
-    history,
-    previousFilament,
-    printer
-  ) {
+  static async updateFilamentInfluxDB(selectedFilament, history, previousFilament, printer) {
     for (let i = 0; i < selectedFilament.length; i++) {
       if (selectedFilament[i] !== null) {
         let currentState = " ";
@@ -521,13 +465,8 @@ class HistoryCollection {
         };
 
         let used = 0;
-        if (
-          typeof previousFilament !== "undefined" &&
-          previousFilament !== null
-        ) {
-          used = Math.abs(
-            selectedFilament[i].spools.used - previousFilament[i].spools.used
-          );
+        if (typeof previousFilament !== "undefined" && previousFilament !== null) {
+          used = Math.abs(selectedFilament[i].spools.used - previousFilament[i].spools.used);
         }
 
         let filamentData = {
@@ -540,9 +479,7 @@ class HistoryCollection {
           spool_manufacturer: selectedFilament[i].spools.profile.manufacturer,
           spool_material: selectedFilament[i].spools.profile.material,
           spool_density: parseFloat(selectedFilament[i].spools.profile.density),
-          spool_diameter: parseFloat(
-            selectedFilament[i].spools.profile.diameter
-          )
+          spool_diameter: parseFloat(selectedFilament[i].spools.profile.diameter)
         };
 
         writePoints(tags, "SpoolInformation", filamentData);
@@ -553,15 +490,10 @@ class HistoryCollection {
   static async complete(payload, printer, job, files, resends) {
     try {
       let serverSettings = await ServerSettings.find({});
-      const previousFilament = JSON.parse(
-        JSON.stringify(printer.selectedFilament)
-      );
+      const previousFilament = JSON.parse(JSON.stringify(printer.selectedFilament));
       let name = null;
       if (typeof printer.settingsApperance !== "undefined") {
-        if (
-          printer.settingsApperance.name === "" ||
-          printer.settingsApperance.name === null
-        ) {
+        if (printer.settingsApperance.name === "" || printer.settingsApperance.name === null) {
           name = printer.printerURL;
         } else {
           name = printer.settingsApperance.name;
@@ -569,17 +501,9 @@ class HistoryCollection {
       } else {
         name = printer.printerURL;
       }
-      if (
-        serverSettings[0]?.filamentManager &&
-        Array.isArray(printer?.selectedFilament)
-      ) {
-        printer.selectedFilament = await HistoryCollection.resyncFilament(
-          printer
-        );
-        logger.info(
-          "Grabbed latest filament values",
-          printer.filamentSelection
-        );
+      if (serverSettings[0]?.filamentManager && Array.isArray(printer?.selectedFilament)) {
+        printer.selectedFilament = await HistoryCollection.resyncFilament(printer);
+        logger.info("Grabbed latest filament values", printer.filamentSelection);
       }
       logger.info("Completed Print triggered", payload + printer.printerURL);
       const today = new Date();
@@ -601,36 +525,27 @@ class HistoryCollection {
       const profiles = await filamentProfiles.find({});
 
       const selectedFilament = null;
-      if (
-        printer.selectedFilament !== null &&
-        Array.isArray(printer.selectedFilament)
-      ) {
+      if (printer.selectedFilament !== null && Array.isArray(printer.selectedFilament)) {
         let profileId = [];
         printer.selectedFilament.forEach((spool, index) => {
           if (spool !== null) {
             if (serverSettings[0]?.filamentManager) {
               profileId = _.findIndex(profiles, function (o) {
-                return (
-                  o.profile.index ==
-                  printer.selectedFilament[index].spools.profile
-                );
+                return o.profile.index == printer.selectedFilament[index].spools.profile;
               });
             } else {
               profileId = _.findIndex(profiles, function (o) {
                 return o._id == printer.selectedFilament[index].spools.profile;
               });
             }
-            printer.selectedFilament[index].spools.profile =
-              profiles[profileId].profile;
+            printer.selectedFilament[index].spools.profile = profiles[profileId].profile;
           }
         });
       }
       if (historyCollection.length === 0) {
         counter = 0;
       } else {
-        counter =
-          historyCollection[historyCollection.length - 1].printHistory
-            .historyIndex + 1;
+        counter = historyCollection[historyCollection.length - 1].printHistory.historyIndex + 1;
       }
 
       const printHistory = {
@@ -708,10 +623,7 @@ class HistoryCollection {
         }, 5000);
       });
 
-      logger.info(
-        "Completed Print Captured for ",
-        payload + printer.printerURL
-      );
+      logger.info("Completed Print Captured for ", payload + printer.printerURL);
     } catch (e) {
       logger.error(e, `Failed to capture history for ${printer.printerURL}`);
     }
@@ -720,24 +632,14 @@ class HistoryCollection {
   static async failed(payload, printer, job, files, resends) {
     try {
       const serverSettings = await ServerSettings.find({});
-      const previousFilament = JSON.parse(
-        JSON.stringify(printer.selectedFilament)
-      );
+      const previousFilament = JSON.parse(JSON.stringify(printer.selectedFilament));
       if (serverSettings[0]?.filamentManager) {
-        printer.selectedFilament = await HistoryCollection.resyncFilament(
-          printer
-        );
-        logger.info(
-          "Grabbed latest filament values",
-          printer.filamentSelection
-        );
+        printer.selectedFilament = await HistoryCollection.resyncFilament(printer);
+        logger.info("Grabbed latest filament values", printer.filamentSelection);
       }
       let name = null;
       if (typeof printer.settingsApperance !== "undefined") {
-        if (
-          printer.settingsApperance.name === "" ||
-          printer.settingsApperance.name === null
-        ) {
+        if (printer.settingsApperance.name === "" || printer.settingsApperance.name === null) {
           name = printer.printerURL;
         } else {
           name = printer.settingsApperance.name;
@@ -765,36 +667,27 @@ class HistoryCollection {
       const profiles = await filamentProfiles.find({});
 
       const selectedFilament = null;
-      if (
-        printer.selectedFilament !== null &&
-        Array.isArray(printer.selectedFilament)
-      ) {
+      if (printer.selectedFilament !== null && Array.isArray(printer.selectedFilament)) {
         let profileId = [];
         printer.selectedFilament.forEach((spool, index) => {
           if (spool !== null) {
             if (serverSettings[0]?.filamentManager) {
               profileId = _.findIndex(profiles, function (o) {
-                return (
-                  o.profile.index ==
-                  printer.selectedFilament[index].spools.profile
-                );
+                return o.profile.index == printer.selectedFilament[index].spools.profile;
               });
             } else {
               profileId = _.findIndex(profiles, function (o) {
                 return o._id == printer.selectedFilament[index].spools.profile;
               });
             }
-            printer.selectedFilament[index].spools.profile =
-              profiles[profileId].profile;
+            printer.selectedFilament[index].spools.profile = profiles[profileId].profile;
           }
         });
       }
       if (historyCollection.length === 0) {
         counter = 0;
       } else {
-        counter =
-          historyCollection[historyCollection.length - 1].printHistory
-            .historyIndex + 1;
+        counter = historyCollection[historyCollection.length - 1].printHistory.historyIndex + 1;
       }
 
       const printHistory = {
@@ -884,10 +777,7 @@ class HistoryCollection {
     try {
       let name = null;
       if (typeof printer.settingsApperance !== "undefined") {
-        if (
-          printer.settingsApperance.name === "" ||
-          printer.settingsApperance.name === null
-        ) {
+        if (printer.settingsApperance.name === "" || printer.settingsApperance.name === null) {
           name = printer.printerURL;
         } else {
           name = printer.settingsApperance.name;
@@ -895,10 +785,7 @@ class HistoryCollection {
       } else {
         name = printer.printerURL;
       }
-      logger.info(
-        "Error Log Collection Triggered",
-        payload + printer.printerURL
-      );
+      logger.info("Error Log Collection Triggered", payload + printer.printerURL);
       const today = new Date();
       const errorCollection = await ErrorLog.find({});
 
@@ -919,8 +806,7 @@ class HistoryCollection {
       if (errorCollection.length === 0) {
         errorCounter = 0;
       } else {
-        errorCounter =
-          errorCollection[errorCollection.length - 1].errorLog.historyIndex + 1;
+        errorCounter = errorCollection[errorCollection.length - 1].errorLog.historyIndex + 1;
       }
       const errorLog = {
         historyIndex: errorCounter,

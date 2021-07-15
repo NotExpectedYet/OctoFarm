@@ -3,13 +3,13 @@ const express = require("express");
 const router = express.Router();
 const _ = require("lodash");
 const History = require("../models/History.js");
-const { ensureAuthenticated } = require("../config/auth");
+const { ensureAuthenticated } = require("../middleware/auth");
 const Printers = require("../models/Printer.js");
 const Spools = require("../models/Filament.js");
 const Profiles = require("../models/Profiles.js");
 const ServerSettings = require("../models/ServerSettings.js");
-const { getHistoryCache } = require("../cache/history.cache");
-const { PrinterClean } = require("../lib/dataFunctions/printerClean.js");
+const { getHistoryCache } = require("../state/data/history.cache");
+const { PrinterClean } = require("../state/data/printerClean.js");
 
 router.post("/update", ensureAuthenticated, async (req, res) => {
   // Check required fields

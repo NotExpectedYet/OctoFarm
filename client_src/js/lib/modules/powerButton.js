@@ -12,16 +12,12 @@ export default class PowerButton {
   }
 
   static async powerButtons(printer) {
-    const divider = document.getElementById(
-      "printerDropDownMaker-" + printer._id
-    );
+    const divider = document.getElementById("printerDropDownMaker-" + printer._id);
     if (printer.powerSettings.powerOffURL !== "") {
       if (divider.classList.contains("d-none")) {
         divider.classList.remove("d-none");
       }
-      const powerOffPrinter = document.getElementById(
-        "printerPowerOff-" + printer._id
-      );
+      const powerOffPrinter = document.getElementById("printerPowerOff-" + printer._id);
       if (powerOffPrinter.classList.contains("d-none")) {
         powerOffPrinter.classList.remove("d-none");
         powerOffPrinter.addEventListener("click", async (event) => {
@@ -72,9 +68,7 @@ export default class PowerButton {
       if (divider.classList.contains("d-none")) {
         divider.classList.remove("d-none");
       }
-      const powerOnnPrinter = document.getElementById(
-        "printerPowerOn-" + printer._id
-      );
+      const powerOnnPrinter = document.getElementById("printerPowerOn-" + printer._id);
       if (powerOnnPrinter.classList.contains("d-none")) {
         powerOnnPrinter.classList.remove("d-none");
         powerOnnPrinter.addEventListener("click", async (event) => {
@@ -116,22 +110,17 @@ export default class PowerButton {
       if (divider.classList.contains("d-none")) {
         divider.classList.remove("d-none");
       }
-      const powerTogglePrinter = document.getElementById(
-        "printerPower-" + printer._id
-      );
+      const powerTogglePrinter = document.getElementById("printerPower-" + printer._id);
       if (powerTogglePrinter) {
         if (powerTogglePrinter.disabled === true) {
           powerTogglePrinter.disabled = false;
           powerTogglePrinter.addEventListener("click", async (event) => {
             if (
-              document.getElementById("printerStatus-" + printer._id).style
-                .color === "green" ||
-              document.getElementById("printerStatus-" + printer._id).style
-                .color === "black"
+              document.getElementById("printerStatus-" + printer._id).style.color === "green" ||
+              document.getElementById("printerStatus-" + printer._id).style.color === "black"
             ) {
               bootbox.confirm({
-                message:
-                  "Are you sure you would like to power down your printer?",
+                message: "Are you sure you would like to power down your printer?",
                 buttons: {
                   confirm: {
                     label: "Yes",
@@ -204,16 +193,15 @@ export default class PowerButton {
     ) {
       if (
         (printer.otherSettings.system.commands.serverRestartCommand !== "" &&
-          printer.otherSettings.system.commands.serverRestartCommand !==
-            null) ||
+          printer.otherSettings.system.commands.serverRestartCommand !== null) ||
         (printer.otherSettings.system.commands.systemRestartCommand !== "" &&
-          printer.otherSettings.system.commands.systemRestartCommand !==
-            null) ||
+          printer.otherSettings.system.commands.systemRestartCommand !== null) ||
         (printer.otherSettings.system.commands.systemShutdownCommand !== "" &&
           printer.otherSettings.system.commands.systemShutdownCommand !== null)
       ) {
-        document.getElementById(element + printer._id).innerHTML =
-          PowerButton.printerPowerBtn(printer._id);
+        document.getElementById(element + printer._id).innerHTML = PowerButton.printerPowerBtn(
+          printer._id
+        );
         if (
           printer.otherSettings.system.commands.serverRestartCommand !== "" &&
           printer.otherSettings.system.commands.serverRestartCommand !== null
@@ -230,9 +218,7 @@ export default class PowerButton {
           printer.otherSettings.system.commands.systemRestartCommand !== "" &&
           printer.otherSettings.system.commands.systemRestartCommand !== null
         ) {
-          const restartHost = document.getElementById(
-            "printerRestartHost-" + printer._id
-          );
+          const restartHost = document.getElementById("printerRestartHost-" + printer._id);
           restartHost.classList.remove("d-none");
           restartHost.addEventListener("click", (event) => {
             OctoPrintClient.system(printer, "reboot");
@@ -243,9 +229,7 @@ export default class PowerButton {
           printer.otherSettings.system.commands.systemShutdownCommand !== "" &&
           printer.otherSettings.system.commands.systemShutdownCommand !== null
         ) {
-          const shutdownHost = document.getElementById(
-            "printerShutdownHost-" + printer._id
-          );
+          const shutdownHost = document.getElementById("printerShutdownHost-" + printer._id);
           shutdownHost.classList.remove("d-none");
           shutdownHost.addEventListener("click", (event) => {
             OctoPrintClient.system(printer, "shutdown");
@@ -258,8 +242,9 @@ export default class PowerButton {
       if (printer.powerSettings.powerOnURL !== "") {
         if (!document.getElementById("printerPower-" + printer._id)) {
           if (document.getElementById(element + printer._id)) {
-            document.getElementById(element + printer._id).innerHTML =
-              PowerButton.printerPowerBtn(printer._id);
+            document.getElementById(element + printer._id).innerHTML = PowerButton.printerPowerBtn(
+              printer._id
+            );
             PowerButton.powerButtons(printer);
           }
         } else {
@@ -276,16 +261,11 @@ export default class PowerButton {
           ) {
             console.log("ISSUE WITH WAKE ON LAN SETTINGS");
           } else {
-            const wakeButton = document.getElementById(
-              "printerWakeHost-" + printer._id
-            );
+            const wakeButton = document.getElementById("printerWakeHost-" + printer._id);
             if (wakeButton.classList.contains("d-none")) {
               wakeButton.classList.remove("d-none");
               wakeButton.addEventListener("click", (e) => {
-                OctoFarmclient.post(
-                  "printers/wakeHost",
-                  printer.powerSettings.wol
-                );
+                OctoFarmclient.post("printers/wakeHost", printer.powerSettings.wol);
               });
             }
           }

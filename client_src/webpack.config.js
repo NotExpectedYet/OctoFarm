@@ -28,10 +28,7 @@ const webpackEntries = _.fromPairs(
     .concat(
       dirCssContents
         .filter((file) => file.name.includes("css"))
-        .map((file) => [
-          path.parse(file.name).name,
-          clientCSSFolder + file.name
-        ])
+        .map((file) => [path.parse(file.name).name, clientCSSFolder + file.name])
     )
 );
 

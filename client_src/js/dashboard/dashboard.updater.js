@@ -1,11 +1,6 @@
 import Calc from "../lib/functions/calc";
 import { ChartsManager } from "./charts.manager";
-import {
-  humidityLabel,
-  iaqLabel,
-  pressureLabel,
-  temperatureLabel
-} from "./utils/chart.utils";
+import { humidityLabel, iaqLabel, pressureLabel, temperatureLabel } from "./utils/chart.utils";
 
 let environmentDataChartExists = false;
 
@@ -159,9 +154,7 @@ export class DashUpdate {
       let state = null;
       let impact = "";
       let suggestedActions = "";
-      const airQualityElement = document.getElementById(
-        "indoorAirQualityAlert"
-      );
+      const airQualityElement = document.getElementById("indoorAirQualityAlert");
       if (data[3].data.length > 0) {
         const lastValue = data[3].data[data[3].data.length - 1].y;
         if (airQualityElement.classList.contains("d-none")) {
@@ -178,34 +171,28 @@ export class DashUpdate {
           suggestedActions = "";
         }
         if (Calc.isBetween(lastValue, 101, 150)) {
-          state =
-            '<i class="fas fa-exclamation-triangle"></i>  Lightly Polluted';
+          state = '<i class="fas fa-exclamation-triangle"></i>  Lightly Polluted';
           impact = "Reduction of well-being possible";
           suggestedActions = "Ventilation suggested";
         }
         if (Calc.isBetween(lastValue, 151, 200)) {
-          state =
-            '<i class="fas fa-exclamation-triangle"></i>  Moderately Polluted';
+          state = '<i class="fas fa-exclamation-triangle"></i>  Moderately Polluted';
           impact = "More significant irritation possible";
           suggestedActions = "Increase ventilation with clean air";
         }
         if (Calc.isBetween(lastValue, 201, 250)) {
-          state =
-            '<i class="fas fa-exclamation-triangle"></i>  Heavily Polluted';
-          impact =
-            "Exposition might lead to effects like headache depending on type of VOCs";
+          state = '<i class="fas fa-exclamation-triangle"></i>  Heavily Polluted';
+          impact = "Exposition might lead to effects like headache depending on type of VOCs";
           suggestedActions = "Optimize ventilation";
         }
         if (Calc.isBetween(lastValue, 251, 350)) {
-          state =
-            '<i class="fas fa-exclamation-triangle"></i>  Severely Polluted';
+          state = '<i class="fas fa-exclamation-triangle"></i>  Severely Polluted';
           impact = "More severe health issue possible if harmful VOC present";
           suggestedActions =
             "Contamination should be identified if level is reached even w/o presence of people; maximize ventilation & reduce attendance";
         }
         if (Calc.isBetween(lastValue, 350, 500)) {
-          state =
-            '<i class="fas fa-exclamation-triangle"></i>  Extremely Polluted';
+          state = '<i class="fas fa-exclamation-triangle"></i>  Extremely Polluted';
           impact = "Headaches, additional neurotoxic effects possible";
           suggestedActions =
             "Contamination needs to be identified; avoid presence in room and maximize ventilation";

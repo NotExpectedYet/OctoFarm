@@ -1,7 +1,4 @@
 const mongoose = require("mongoose");
-const Schema = require("mongoose/lib/schema");
-const { arrayValidator } = require("../utils/validators");
-const { arrayLengthValidator } = require("./PrinterGroup");
 
 const PrinterSchema = new mongoose.Schema({
   category: {
@@ -42,7 +39,7 @@ const PrinterSchema = new mongoose.Schema({
   },
   apikey: {
     type: String,
-    required: true
+    required: true // !
   },
   camURL: {
     type: String,
@@ -50,11 +47,11 @@ const PrinterSchema = new mongoose.Schema({
   },
   printerURL: {
     type: String,
-    required: false
+    required: true // !
   },
   webSocketURL: {
     type: String,
-    required: false
+    required: false // !
   },
   octoPrintVersion: {
     type: String,
@@ -72,7 +69,7 @@ const PrinterSchema = new mongoose.Schema({
     type: Number,
     required: false
   },
-  settingsApperance: {
+  settingsAppearance: {
     type: Object,
     required: false
   },

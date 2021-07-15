@@ -1,8 +1,8 @@
-const filamentClean = require("../lib/dataFunctions/filamentClean.js");
+const filamentClean = require("../state/data/filamentClean.js");
 
 const { FilamentClean } = filamentClean;
 
-const Logger = require("../lib/logger.js");
+const Logger = require("../handlers/logger.js");
 
 const logger = new Logger("OctoFarm-FilamentManager");
 
@@ -12,7 +12,7 @@ const fetch = require("node-fetch");
 class FilamentManagerPlugin {
   static async filamentManagerReSync(addSpool) {
     try {
-      const { Runner } = require("./state.js");
+      const { Runner } = require("../state/octofarm.manager.js");
       const printerList = Runner.returnFarmPrinters();
       let printer = null;
       for (let i = 0; i < printerList.length; i++) {
@@ -29,26 +29,20 @@ class FilamentManagerPlugin {
       if (printer === null) {
         return "error";
       }
-      const spools = await fetch(
-        `${printer.printerURL}/plugin/filamentmanager/spools`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Api-Key": printer.apikey
-          }
+      const spools = await fetch(`${printer.printerURL}/plugin/filamentmanager/spools`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Api-Key": printer.apikey
         }
-      );
-      const profiles = await fetch(
-        `${printer.printerURL}/plugin/filamentmanager/profiles`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Api-Key": printer.apikey
-          }
+      });
+      const profiles = await fetch(`${printer.printerURL}/plugin/filamentmanager/profiles`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Api-Key": printer.apikey
         }
-      );
+      });
 
       // Make sure filament manager responds...
       if (spools.status != 200 || profiles.status != 200) {

@@ -33,9 +33,7 @@ import { returnPluginListTemplate } from "../templates/octoprint-plugin-list.tem
 // TODO this should come from printer select to save the extra call, re-iteration and matching.
 async function getCurrentlySelectedPrinterList() {
   try {
-    const currentPrinterList = await OctoFarmClient.post(
-      "printers/printerInfo"
-    );
+    const currentPrinterList = await OctoFarmClient.post("printers/printerInfo");
     const matchedPrinters = [];
     //Grab all check boxes
     const selectedPrinters = PrinterSelect.getSelected();
@@ -51,22 +49,14 @@ async function getCurrentlySelectedPrinterList() {
     return matchedPrinters;
   } catch (e) {
     console.error(e);
-    UI.createAlert(
-      "error",
-      `Couldn't get selected printer list: ${e}`,
-      0,
-      "clicked"
-    );
+    UI.createAlert("error", `Couldn't get selected printer list: ${e}`, 0, "clicked");
     return [];
   }
 }
 
 export async function bulkOctoPrintPluginUpdate() {
   try {
-    let currentPrinterList = await OctoFarmClient.post(
-      "printers/printerInfo",
-      {}
-    );
+    let currentPrinterList = await OctoFarmClient.post("printers/printerInfo", {});
     let message = "";
     let toUpdate = [];
     let pluginList = [];
@@ -79,11 +69,7 @@ export async function bulkOctoPrintPluginUpdate() {
           printerName: currentPrinter.printerName,
           apikey: currentPrinter.apikey
         });
-        for (
-          let plugin = 0;
-          plugin < currentPrinter.octoPrintPluginUpdates.length;
-          plugin++
-        ) {
+        for (let plugin = 0; plugin < currentPrinter.octoPrintPluginUpdates.length; plugin++) {
           let currentPlugin = currentPrinter.octoPrintPluginUpdates[plugin];
           pluginList.push(currentPlugin.id);
         }
@@ -259,11 +245,7 @@ export function bulkOctoPrintPreHeatCommand() {
 
           const printersToPreHeat = await getCurrentlySelectedPrinterList();
           for (let p = 0; p < printersToPreHeat.length; p++) {
-            await printerPreHeatTool(
-              printersToPreHeat[p],
-              toolTemp,
-              toolNumber
-            );
+            await printerPreHeatTool(printersToPreHeat[p], toolTemp, toolNumber);
             await printerPreHeatBed(printersToPreHeat[p], bedTemp);
             await printerPreHeatChamber(printersToPreHeat[p], chamberTemp);
           }
@@ -539,8 +521,7 @@ export async function bulkOctoPrintGcodeCommand() {
       let textArea = document.getElementsByClassName(
         "bootbox-input bootbox-input-textarea form-control"
       );
-      const customGcodeEE =
-        "<div class='mb-1' id='customGcodeCommandsArea'></div>";
+      const customGcodeEE = "<div class='mb-1' id='customGcodeCommandsArea'></div>";
       textArea[0].insertAdjacentHTML("beforebegin", customGcodeEE);
       let buttonPrinters = [];
       printersToConnect.forEach(async (printer) => {
@@ -626,11 +607,7 @@ export async function bulkOctoPrintPluginAction(action) {
                    <i class="fas fa-print"></i>${printersForPluginAction.length} / <i class="fas fa-plug"></i> ${pluginAmount}
         `;
           for (let p = 0; p < printersForPluginAction.length; p++) {
-            await octoPrintPluginInstallAction(
-              printersForPluginAction[p],
-              result,
-              action
-            );
+            await octoPrintPluginInstallAction(printersForPluginAction[p], result, action);
             trackerBtn.innerHTML = `
                 ${cleanAction} Plugins!<br>
                 <i class="fas fa-print"></i>${

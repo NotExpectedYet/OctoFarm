@@ -2,7 +2,7 @@ jest.mock("../../server_src/config/auth");
 
 const dbHandler = require("../db-handler");
 const supertest = require("supertest");
-const { Runner } = require("../../server_src/runners/state");
+const { Runner } = require("../../server_src/state/octofarm.manager");
 const { setupTestApp } = require("../../app-test");
 
 let request;

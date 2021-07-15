@@ -1,6 +1,4 @@
-const {
-  toDefinedKeyValue
-} = require("../../../server_src/lib/utils/property.util");
+const { toDefinedKeyValue } = require("../../../server_src/utils/property.util");
 
 function conditionUnderTest(prop) {
   return typeof prop !== "undefined" && prop !== null;
@@ -18,18 +16,10 @@ describe("toDefinedKeyValue", function () {
   const trueValue = true;
 
   it("unitUnderTest should return empty or non-empty object", async function () {
-    const result = unitUnderTest(
-      conditionUnderTest(undefinedValue),
-      undefinedValue,
-      key
-    );
+    const result = unitUnderTest(conditionUnderTest(undefinedValue), undefinedValue, key);
     expect(result).toEqual({});
 
-    const result2 = unitUnderTest(
-      conditionUnderTest(trueValue),
-      trueValue,
-      key
-    );
+    const result2 = unitUnderTest(conditionUnderTest(trueValue), trueValue, key);
     expect(result2).toEqual({ [key]: trueValue });
   });
 

@@ -8,9 +8,7 @@ export default class OctoFarmClient {
       }
     });
     if (get.status === 400) {
-      throw new Error(
-        `Malformed request! Status: ${get.status} - ${get.statusText}`
-      );
+      throw new Error(`Malformed request! Status: ${get.status} - ${get.statusText}`);
     } else if (get.status === 503) {
       throw new Error("Error contacting server, is it alive?");
     } else if (get.status === 204) {
@@ -28,9 +26,7 @@ export default class OctoFarmClient {
       body: JSON.stringify(data)
     });
     if (post.status === 400) {
-      throw new Error(
-        `Malformed request! Status: ${post.status} - ${post.statusText}`
-      );
+      throw new Error(`Malformed request! Status: ${post.status} - ${post.statusText}`);
     } else if (post.status === 503) {
       throw new Error("Error contacting server, is it alive?");
     } else if (post.status === 204) {

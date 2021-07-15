@@ -21,8 +21,7 @@ describe("DatabaseIssue server", () => {
     const res = await supertest(server).get("/").send();
     expect(res.statusCode).toEqual(200);
     expect(res.text).toContain(
-      "Docker mode:\n" +
-        '                    <span class="badge badge-dark">false</span>'
+      "Docker mode:\n" + '                    <span class="badge badge-dark">false</span>'
     );
     expect(res.text).toContain(
       'const defaultMongoDBString = "mongodb://127.0.0.1:27017/octofarm";'

@@ -42,22 +42,18 @@ export default class PrinterLogs {
               "beforeend",
               `
                                 <tr class="${colour}">
-                                  <th scope="row">${splitText.length - i}: ${
-                splitText[i]
-              }</th>
+                                  <th scope="row">${splitText.length - i}: ${splitText[i]}</th>
                                 </tr>
                             `
             );
           }
         }
-        octoPrintCount.innerHTML =
-          "(" + (splitText.length / 2).toFixed(0) + ")";
+        octoPrintCount.innerHTML = "(" + (splitText.length / 2).toFixed(0) + ")";
       });
   }
   static loadLogs(printer, connectionLogs) {
     currentPrinter = printer;
-    document.getElementById("printerLogsTitle").innerHTML =
-      "Printer Logs: " + printer.printerName;
+    document.getElementById("printerLogsTitle").innerHTML = "Printer Logs: " + printer.printerName;
     let printerRows = document.getElementById("printerConnectionLogRows");
     let printerErrorRows = document.getElementById("printerErrorLogRows");
     let octoprintLogsRows = document.getElementById("octoprintLogsRows");
@@ -236,11 +232,7 @@ export default class PrinterLogs {
                 weekday[5] = "Fri";
                 weekday[6] = "Sat";
                 return (
-                  weekday[date.getDay()] +
-                  " " +
-                  date.getDate() +
-                  " " +
-                  date.toLocaleTimeString()
+                  weekday[date.getDay()] + " " + date.getDate() + " " + date.toLocaleTimeString()
                 );
               }
             }
@@ -271,16 +263,14 @@ export default class PrinterLogs {
         octoPrintCount.innerHTML = '(<i class="fas fa-spinner fa-spin"></i>)';
         PrinterLogs.parseLogs(printer, e.target.value);
       });
-      document
-        .getElementById("system-refresh-list")
-        .addEventListener("click", async (e) => {
-          console.log("Refresh!", currentPrinter.printerURL);
-          let connectionLogs = await OctoFarmClient.get(
-            "printers/connectionLogs/" + currentPrinter._id
-          );
-          connectionLogs = await connectionLogs.json();
-          PrinterLogs.loadLogs(currentPrinter, connectionLogs);
-        });
+      document.getElementById("system-refresh-list").addEventListener("click", async (e) => {
+        console.log("Refresh!", currentPrinter.printerURL);
+        let connectionLogs = await OctoFarmClient.get(
+          "printers/connectionLogs/" + currentPrinter._id
+        );
+        connectionLogs = await connectionLogs.json();
+        PrinterLogs.loadLogs(currentPrinter, connectionLogs);
+      });
       eventListener = true;
     }
   }
@@ -316,37 +306,25 @@ export default class PrinterLogs {
                               <div class="row">
                                 <div class="col-md-12 col-lg-6">
                                    <small><b>OctoPrint Version:</b> ${
-                                     stats.octoPrintSystemInfo[
-                                       "octoprint.version"
-                                     ]
+                                     stats.octoPrintSystemInfo["octoprint.version"]
                                    }</small><br>
                                     <small><b>Printer Firmware:</b> ${printerFirmware}</small><br>
                                     <small><b>Python Version:</b> ${
-                                      stats.octoPrintSystemInfo[
-                                        "env.python.version"
-                                      ]
+                                      stats.octoPrintSystemInfo["env.python.version"]
                                     }</small>   <br>     
                                        <small><b>pip Version:</b> ${
-                                         stats.octoPrintSystemInfo[
-                                           "env.python.pip"
-                                         ]
+                                         stats.octoPrintSystemInfo["env.python.pip"]
                                        }</small>        <br>                          
                                 </div>
                                   <div class="col-md-12 col-lg-6">
                                    <small><b>OS Platform:</b> ${
-                                     stats.octoPrintSystemInfo[
-                                       "env.os.platform"
-                                     ]
+                                     stats.octoPrintSystemInfo["env.os.platform"]
                                    }</small><br>
                                    <small><b>OS Cores:</b> ${
-                                     stats.octoPrintSystemInfo[
-                                       "env.hardware.cores"
-                                     ]
+                                     stats.octoPrintSystemInfo["env.hardware.cores"]
                                    }</small><br>
                                     <small><b>OS ram:</b> ${Calc.bytes(
-                                      stats.octoPrintSystemInfo[
-                                        "env.hardware.ram"
-                                      ]
+                                      stats.octoPrintSystemInfo["env.hardware.ram"]
                                     )}</small><br>
                                      <small><b>Safe Mode Check:</b> ${safeModeCheck} </small><br>
                                 </div>
@@ -412,9 +390,7 @@ export default class PrinterLogs {
               <div class="card text-white bg-dark mb-3">
                 <div class="card-header">Age</div>
                 <div class="card-body">
-                  <p class="card-text">${Calc.generateTime(
-                    stats.timeTotal / 1000
-                  )}</p>
+                  <p class="card-text">${Calc.generateTime(stats.timeTotal / 1000)}</p>
                 </div>
               </div>
             </div>

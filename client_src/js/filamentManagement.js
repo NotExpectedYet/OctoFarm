@@ -1,9 +1,6 @@
 import OctoFarmclient from "./lib/octofarm.js";
 import UI from "./lib/functions/ui.js";
-import {
-  selectFilament,
-  checkFilamentManager
-} from "./lib/modules/filamentGrab.js";
+import { selectFilament, checkFilamentManager } from "./lib/modules/filamentGrab.js";
 import * as ApexCharts from "apexcharts";
 import { getLastThirtyDaysText } from "./utils/time.util";
 
@@ -92,34 +89,6 @@ const filamentStore = [
   }
 ];
 
-// export async function returnFilament() {
-//     let post = await OctoFarmclient.get("filament/get");
-//     post = await post.json();
-//     return post;
-// }
-
-// async function init() {
-//   let post = await OctoFarmclient.get("filament/get");
-//   post = await post.json();
-//
-//   let filamentKeys = Object.entries(filamentStore.filamentStore);
-//
-//   let filamentSelect = document.getElementById("filementTypeSelect");
-//   filamentKeys.forEach((e, index) => {
-//     filamentSelect.insertAdjacentHTML(
-//       "beforeend",
-//       `
-//           <option value="${e[0]}">${e[1].display}</option>
-//       `
-//     );
-//   });
-// }
-
-// export async function choose(value, i) {
-//   let id = { id: value.options[value.selectedIndex].value, index: i };
-//   let post = await OctoFarmclient.post("printers/selectFilament", id);
-//   post = await post.json();
-// }
 // Profile functions
 async function addProfile(manufacturer, material, density, diameter) {
   const errors = [];
@@ -344,9 +313,7 @@ async function addSpool(
                   }"></th>
                   <td>
                        <span class="d-none material" id="spoolsMaterialText-<%=spool._id%>"></span>
-                       <select id="spoolsProfile-${
-                         post?._id
-                       }" class="form-control" disabled>
+                       <select id="spoolsProfile-${post?._id}" class="form-control" disabled>
 
                        </select>
                    </td>
@@ -376,9 +343,7 @@ async function addSpool(
 
                        </select>
                    </td>
-                  <td><button id="edit-${
-                    post?._id
-                  }" type="button" class="btn btn-sm btn-info edit">
+                  <td><button id="edit-${post?._id}" type="button" class="btn btn-sm btn-info edit">
                     <i class="fas fa-edit editIcon"></i>
                   </button>
                   <button id="save-${
@@ -513,15 +478,9 @@ async function updateProfileDrop() {
   }
   // Generate profile assignment
   const printerDrops = document.querySelectorAll("[id^='spoolsProfile-']");
-  const printerListMaterials = document.querySelectorAll(
-    "[id^='spoolsListMaterial-']"
-  );
-  const spoolsListManufacture = document.querySelectorAll(
-    "[id^='spoolsListManufacture-']"
-  );
-  const spoolsMaterialText = document.querySelectorAll(
-    "[id^='spoolsMaterialText-']"
-  );
+  const printerListMaterials = document.querySelectorAll("[id^='spoolsListMaterial-']");
+  const spoolsListManufacture = document.querySelectorAll("[id^='spoolsListManufacture-']");
+  const spoolsMaterialText = document.querySelectorAll("[id^='spoolsMaterialText-']");
   printerDrops.forEach((drop, index) => {
     drop.innerHTML = "";
     profiles?.profiles.forEach((prof) => {
@@ -539,12 +498,8 @@ async function updateProfileDrop() {
       const profileID = _.findIndex(profiles?.profiles, function (o) {
         return o._id == fill?.Spool[spool].profile;
       });
-      drop.className = `form-control ${profiles?.profiles[
-        profileID
-      ]?.material.replace(/ /g, "_")}`;
-      spoolsMaterialText[
-        index
-      ].innerHTML = `${profiles?.profiles[profileID]?.material}`;
+      drop.className = `form-control ${profiles?.profiles[profileID]?.material.replace(/ /g, "_")}`;
+      spoolsMaterialText[index].innerHTML = `${profiles?.profiles[profileID]?.material}`;
     }
   });
   //Fix for not updating main spool list with correct information, not skipping fo shizzle
@@ -581,12 +536,8 @@ async function updatePrinterDrops() {
 
   filament = await filament.json();
 
-  const printerDrops = document.querySelectorAll(
-    "[id^='spoolsPrinterAssignment-']"
-  );
-  const printerAssignments = document.querySelectorAll(
-    "[id^='spoolsListPrinterAssignment-']"
-  );
+  const printerDrops = document.querySelectorAll("[id^='spoolsPrinterAssignment-']");
+  const printerAssignments = document.querySelectorAll("[id^='spoolsListPrinterAssignment-']");
   printerDrops.forEach((drop, index) => {
     // Left over from when Printer Assignment actually worked.
     // printerList?.printerList.forEach((printer) => {
@@ -881,17 +832,14 @@ async function init() {
     });
     if (selection != -1) {
       this.value = filamentStore[selection].display;
-      document.getElementById("profilesDensity").value =
-        filamentStore[selection].density;
+      document.getElementById("profilesDensity").value = filamentStore[selection].density;
     }
   });
   filamentStore.forEach((filament) => {
     document.getElementById("huge_list").insertAdjacentHTML(
       "beforeend",
       `
-            <option value="${filament.code.toUpperCase()}">${
-        filament.display
-      }</option>
+            <option value="${filament.code.toUpperCase()}">${filament.display}</option>
         `
     );
   });
@@ -917,12 +865,7 @@ async function init() {
     const profilesMaterial = document.getElementById("profilesMaterial");
     const profilesDensity = document.getElementById("profilesDensity");
     const profilesDiameter = document.getElementById("profilesDiameter");
-    await addProfile(
-      profilesManufactuer,
-      profilesMaterial,
-      profilesDensity,
-      profilesDiameter
-    );
+    await addProfile(profilesManufactuer, profilesMaterial, profilesDensity, profilesDiameter);
   });
   document.getElementById("addProfilesTable").addEventListener("click", (e) => {
     // Remove from UI
@@ -936,37 +879,26 @@ async function init() {
   });
 
   //    //Init Spools
-  document
-    .getElementById("addSpoolBtn")
-    .addEventListener("click", async (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      document.getElementById("addSpoolsMessage").innerHTML = "";
-      const spoolsName = document.getElementById("spoolsName");
-      const spoolsProfile = document.getElementById("spoolsProfile");
-      const spoolsPrice = document.getElementById("spoolsPrice");
-      const spoolsWeight = document.getElementById("spoolsWeight");
-      const spoolsUsed = document.getElementById("spoolsRemaining");
-      const spoolsTempOffset = document.getElementById("spoolsTempOffset");
-      addSpool(
-        spoolsName,
-        spoolsProfile,
-        spoolsPrice,
-        spoolsWeight,
-        spoolsUsed,
-        spoolsTempOffset
-      );
-    });
+  document.getElementById("addSpoolBtn").addEventListener("click", async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    document.getElementById("addSpoolsMessage").innerHTML = "";
+    const spoolsName = document.getElementById("spoolsName");
+    const spoolsProfile = document.getElementById("spoolsProfile");
+    const spoolsPrice = document.getElementById("spoolsPrice");
+    const spoolsWeight = document.getElementById("spoolsWeight");
+    const spoolsUsed = document.getElementById("spoolsRemaining");
+    const spoolsTempOffset = document.getElementById("spoolsTempOffset");
+    addSpool(spoolsName, spoolsProfile, spoolsPrice, spoolsWeight, spoolsUsed, spoolsTempOffset);
+  });
   filamentManager = await checkFilamentManager();
 
   if (filamentManager) {
     const resyncBtn = document.getElementById("resyncFilament");
     resyncBtn.addEventListener("click", async (e) => {
-      resyncBtn.innerHTML =
-        '<i class="fas fa-sync fa-spin"></i> <br> Syncing <br> Please Wait...';
+      resyncBtn.innerHTML = '<i class="fas fa-sync fa-spin"></i> <br> Syncing <br> Please Wait...';
       const post = await OctoFarmclient.post("filament/filamentManagerReSync");
-      resyncBtn.innerHTML =
-        '<i class="fas fa-sync"></i> Re-Sync Filament Manager';
+      resyncBtn.innerHTML = '<i class="fas fa-sync"></i> Re-Sync Filament Manager';
       if (post.status === 200) {
         const meta = await post.json();
         if (meta.success) {
@@ -986,10 +918,7 @@ async function init() {
         }
         resyncBtn.disabled = false;
       } else {
-        UI.createAlert(
-          "error",
-          "Could not contact server to sync, is it online?"
-        );
+        UI.createAlert("error", "Could not contact server to sync, is it online?");
         resyncBtn.disabled = false;
       }
     });
@@ -1199,14 +1128,10 @@ function updateTotals(filtered) {
   });
   const usedReduced = used.reduce((a, b) => a + b, 0).toFixed(0);
   const weightReduced = weight.reduce((a, b) => a + b, 0).toFixed(0);
-  document.getElementById("totalPrice").innerHTML = price
-    .reduce((a, b) => a + b, 0)
-    .toFixed(0);
+  document.getElementById("totalPrice").innerHTML = price.reduce((a, b) => a + b, 0).toFixed(0);
   document.getElementById("totalWeight").innerHTML = weightReduced;
   document.getElementById("totalUsed").innerHTML = usedReduced;
-  document.getElementById("totalRemaining").innerHTML = (
-    weightReduced - usedReduced
-  ).toFixed(0);
+  document.getElementById("totalRemaining").innerHTML = (weightReduced - usedReduced).toFixed(0);
   document.getElementById("totalRemainingPercent").innerHTML = (
     100 -
     (usedReduced / weightReduced) * 100

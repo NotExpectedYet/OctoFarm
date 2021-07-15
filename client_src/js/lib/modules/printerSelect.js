@@ -289,17 +289,11 @@ export default class PrinterSelect {
         document.getElementById("urlColumn").classList.remove("d-none");
 
         printerList.forEach((printer) => {
-          tableBody.insertAdjacentHTML(
-            "beforeend",
-            this.getEditableList(printer)
-          );
+          tableBody.insertAdjacentHTML("beforeend", this.getEditableList(printer));
         });
       } else {
         printerList.forEach((printer) => {
-          tableBody.insertAdjacentHTML(
-            "beforeend",
-            this.getSelectableList(printer)
-          );
+          tableBody.insertAdjacentHTML("beforeend", this.getSelectableList(printer));
         });
       }
 
@@ -312,34 +306,29 @@ export default class PrinterSelect {
       groupListUnique.forEach((group, index) => {
         printerGroupList.insertAdjacentHTML(
           "beforeend",
-          `<option value="${group.tag.toLowerCase()}" data-path=".${
-            group.tag
-          }">${group.display}</option>`
+          `<option value="${group.tag.toLowerCase()}" data-path=".${group.tag}">${
+            group.display
+          }</option>`
         );
       });
 
       // Printer group dropdown
       printers.forEach((printer) => {
-        const printerGroupAssignSelect = document.getElementById(
-          `editInputGroup-${printer._id}`
-        );
+        const printerGroupAssignSelect = document.getElementById(`editInputGroup-${printer._id}`);
         if (!printerGroupAssignSelect) return;
 
         groupListUnique.forEach((group, index) => {
           printerGroupAssignSelect.insertAdjacentHTML(
             "beforeend",
-            `<option value="${group.tag.toLowerCase()}" data-path=".${
-              group.tag
-            }">${group.display}</option>`
+            `<option value="${group.tag.toLowerCase()}" data-path=".${group.tag}">${
+              group.display
+            }</option>`
           );
         });
       });
     } else {
       const tableBody = document.getElementById("printerSelectBody");
-      tableBody.insertAdjacentHTML(
-        "beforeend",
-        "<tr><td>No Online Printers</td></tr>"
-      );
+      tableBody.insertAdjacentHTML("beforeend", "<tr><td>No Online Printers</td></tr>");
     }
     PrinterSelect.addListeners(editable, callback);
   }
@@ -351,17 +340,13 @@ export default class PrinterSelect {
                     <button id="selectNone" type="button" class="btn btn-secondary"><i class="fas fa-square"></i> Deselect All</button>
             `;
       document.getElementById("selectAll").addEventListener("click", (e) => {
-        const checkBoxes = document.querySelectorAll(
-          'input[type="checkbox"]:not(:checked)'
-        );
+        const checkBoxes = document.querySelectorAll('input[type="checkbox"]:not(:checked)');
         checkBoxes.forEach((box) => {
           box.checked = true;
         });
       });
       document.getElementById("selectNone").addEventListener("click", (e) => {
-        const checkBoxes = document.querySelectorAll(
-          'input[type="checkbox"]:checked'
-        );
+        const checkBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
         checkBoxes.forEach((box) => {
           box.checked = false;
         });
@@ -376,17 +361,13 @@ export default class PrinterSelect {
                       <button id="saveEditsBtn" class="btn btn-success" data-dismiss="modal" aria-label="Close">Action</button>
       `
       );
-      document
-        .getElementById("saveEditsBtn")
-        .addEventListener("click", callback);
+      document.getElementById("saveEditsBtn").addEventListener("click", callback);
     }
     jplist.init();
   }
 
   static getSelected() {
-    const checkedBoxes = document.querySelectorAll(
-      'input[type="checkbox"]:checked'
-    );
+    const checkedBoxes = document.querySelectorAll('input[type="checkbox"]:checked');
     const printers = [];
     checkedBoxes.forEach((box) => {
       if (box.id.includes("checkBox")) {

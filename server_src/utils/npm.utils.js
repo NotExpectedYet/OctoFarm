@@ -3,12 +3,8 @@ const exec = util.promisify(require("child_process").exec);
 
 async function returnListOfMissingPackages() {
   try {
-    const outdatedPackageJsonList = await exec(
-      "npm outdated --production --json"
-    );
-    const outdatedPackageListParsed = JSON.parse(
-      outdatedPackageJsonList.stdout
-    );
+    const outdatedPackageJsonList = await exec("npm outdated --production --json");
+    const outdatedPackageListParsed = JSON.parse(outdatedPackageJsonList.stdout);
     if (outdatedPackageListParsed) {
       const keys = Object.keys(outdatedPackageListParsed);
       const missingPackageList = [];

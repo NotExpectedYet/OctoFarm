@@ -243,21 +243,9 @@ export const temperatureLabel = getChartLabel(
   45
 );
 
-export const humidityLabel = getChartLabel(
-  "Humidity",
-  "Humidity",
-  percentageFormatter,
-  0,
-  100
-);
+export const humidityLabel = getChartLabel("Humidity", "Humidity", percentageFormatter, 0, 100);
 
-export const pressureLabel = getChartLabel(
-  "Pressure",
-  "Pressure",
-  pascalPressureFormatter,
-  0,
-  100
-);
+export const pressureLabel = getChartLabel("Pressure", "Pressure", pascalPressureFormatter, 0, 100);
 
 export const iaqLabel = getChartLabel(
   "Indoor Air Quality",

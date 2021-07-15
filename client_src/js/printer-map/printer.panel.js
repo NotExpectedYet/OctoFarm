@@ -17,17 +17,13 @@ export function constructPrinterPanelHTML(
 ) {
   const name = cleanPrinterName(printer);
   const separatorStyle =
-    realCoord[1] % 2 === 1
-      ? `border-top:2px gray solid;`
-      : `border-bottom:2px gray solid;`;
+    realCoord[1] % 2 === 1 ? `border-top:2px gray solid;` : `border-bottom:2px gray solid;`;
   const gutterStyle = isLeftOfGutter
     ? `style="margin-right:${gutterHalfSize}; margin-left:-${gutterHalfSize}; border-right:2px orange solid; ${separatorStyle}"`
     : isRightOfGutter
     ? `style="margin-right:-${gutterHalfSize}; margin-left:${gutterHalfSize}; border-left:2px orange solid; ${separatorStyle}"`
     : `style="${separatorStyle}"`;
-  const stubOrNotClass = !!printer.stub
-    ? "printer-map-tile-stub"
-    : "printer-map-tile";
+  const stubOrNotClass = !!printer.stub ? "printer-map-tile-stub" : "printer-map-tile";
   const isIdle = printer.printerState?.colour.category === "Idle";
   const printerStateColor =
     printer.printerState?.colour.category === "Idle"
@@ -41,9 +37,7 @@ export function constructPrinterPanelHTML(
     printer._id
   }">
           <div class="card-header ${printerStateColor}" style="padding:5px">
-            <span id="name-${
-              printer._id
-            }" class="badge badge-light float-left">${name}</span>
+            <span id="name-${printer._id}" class="badge badge-light float-left">${name}</span>
             <button
               title="Quick actions dialog"
               id="${quickActionsButtonIdPrefix}${printer._id}"

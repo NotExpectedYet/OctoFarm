@@ -1,7 +1,5 @@
 let tickerMessageBox = document.getElementById("printerTickerMessageBox");
-let tickerMessageBoxStatus = document.getElementById(
-  "printerManagementConnectionLogStatus"
-);
+let tickerMessageBoxStatus = document.getElementById("printerManagementConnectionLogStatus");
 
 /**
  * Checks if the ticker contains the loader element and removes it.

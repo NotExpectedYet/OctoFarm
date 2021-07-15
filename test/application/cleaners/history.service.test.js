@@ -25,14 +25,10 @@ function legacyGetFile(history) {
 }
 
 describe("getFile_unmocked", function () {
-  const realHistoryService = jest.requireActual(
-    "../../../server_src/services/history.service"
-  );
+  const realHistoryService = jest.requireActual("../../../server_src/services/history.service");
   it("should tolerate on empty input or props as input", () => {
     const testInput = {};
-    expect(
-      realHistoryService.getFileFromHistoricJob(testInput).path
-    ).toBeUndefined();
+    expect(realHistoryService.getFileFromHistoricJob(testInput).path).toBeUndefined();
     expect(legacyGetFile(testInput).path).toBeUndefined();
   });
   it("should throw non-friendly exception for non-object input", () => {
@@ -42,8 +38,7 @@ describe("getFile_unmocked", function () {
   });
   it("should be fine for any 'filePath' and 'fileName' property input", () => {
     const inputUnderTest = { fileName: null };
-    const resultUnderSpec =
-      realHistoryService.getFileFromHistoricJob(inputUnderTest);
+    const resultUnderSpec = realHistoryService.getFileFromHistoricJob(inputUnderTest);
     const resultLegacyUnderSpec = legacyGetFile({ fileName: null });
     expect(resultUnderSpec).toBeTruthy();
     expect(resultLegacyUnderSpec).toBeTruthy();
@@ -51,8 +46,7 @@ describe("getFile_unmocked", function () {
   });
   it("", () => {
     const inputUnderTest = { fileName: null, filePath: null };
-    const resultUnderSpec =
-      realHistoryService.getFileFromHistoricJob(inputUnderTest);
+    const resultUnderSpec = realHistoryService.getFileFromHistoricJob(inputUnderTest);
     Object.entries(resultUnderSpec).forEach((e) => {
       // TODO fileName and filePath are not nullified!
       expect(e[1]).toBeNull();

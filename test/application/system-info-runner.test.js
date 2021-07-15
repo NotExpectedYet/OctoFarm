@@ -1,16 +1,6 @@
-const { SystemRunner } = require("../../server_src/runners/systemInfo");
+const { SystemRunner } = require("../../server_src/state/system-info.store");
 
-const diskFormats = [
-  "NTFS",
-  "exFAT",
-  "ext4",
-  "ext3",
-  "ext2",
-  "FAT32",
-  "FAT16",
-  "FAT8",
-  "FAT"
-];
+const diskFormats = ["NTFS", "exFAT", "ext4", "ext3", "ext2", "FAT32", "FAT16", "FAT8", "FAT"];
 
 function clientCPUCalc(systemInfo) {
   const currentProc = systemInfo?.currentProcess;
