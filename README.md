@@ -48,21 +48,28 @@ it will scan and keep you up to date on the status of your printers.
 
 In order to have OctoFarm running using a local installation of NodeJS and MongoDB as database, please be aware of the following minimum version requirements:
 - [MongoDB](https://www.mongodb.com/) - v3.6+
-- [NodeJS](https://nodejs.org/) - v14.0.0 (Latest tested: v14.16.0)
-- [NPM](https://www.npmjs.com/) - v6.10.0+ (Latest tested: v7.6.3)
+- [NodeJS](https://nodejs.org/) - v14.0.0 (Latest tested: v14.16.1)
+- [NPM](https://www.npmjs.com/) - v6.10.0+ (Latest tested: v7.17.0)
 - [OctoPrint](https://octoprint.org) - v1.3.9+
 
 ### OS / Platform for OctoFarm
 Confirmed working on:
+- Windows 10/11 (direct or with chocolatey)
+> Find the chocolatey package here: https://community.chocolatey.org/packages/octofarm 
+> This will install all dependencies NodeJS, MongoDB and OctoFarm with pm2  
 - Linux (Ubuntu, Debian)
-- RaspberryPi (Rasbian, Raspberry Pi Lite OS)
-- Windows 10
+- FarmPi (Raspberry Pi 3A+ or newer)
+> Find the FarmPi image for Raspberry Pi 3A+ or newer here: https://github.com/mkevenaar/FarmPi
+> Please make sure to NOT install OctoPrint(s) on the same system and limit yourself to amount of printers in the table https://github.com/mkevenaar/FarmPi#supported-printers 
 
 Should also work on but not tested:
 - MacOS
 - _Anything else NodeJS 14+ will run on._
 
-_Note_: Raspberry Pi's Raspbian is 32 bits. In that case choose to upgrade to 64-bits Raspberry Pi Lite OS or find yourself a 32 bits MongoDB installation. Alternatively you can choose to run MongoDB on another machine.
+Avoid the following, known to be tough to get working: 
+- Raspberry Pi OS - go for the **FarmPi Ubuntu** image instead (https://github.com/mkevenaar/FarmPi/releases/latest)!
+
+_Note_: Raspberry Pi's OS is 32 bits, although 64 bits is available but harder to find. Both the docker containers as well as direct install is hard to get working. The docker containers seem to fail on wrong architecture and direct install fails on a 64 bits MongoDB requirement. 
 
 ### Important note OctoPrint 1.4.1+
 
@@ -141,13 +148,13 @@ npm run dev
 The awesome project OctoFarm needs extra contributors to move even faster! If you feel like you have what it takes, and want to join the fun please head over to discord with
 the following link: [Discord](https://discord.gg/vjabMUn) and speak to us in Developer Discussions. Thanks!
 
-### Work on version 1.1.x
-Version 1.1.x is our current OctoFarm release on the `development` branch. This has the following specs:
+### Work on version 1.2.x-rc2
+Version 1.2.x-rc2 is our current OctoFarm release on the `development` branch. This has the following specs:
 - NodeJS 14+ (version 12 was dropped to support better syntax like the optional chaining operator `?`)
 - ExpressJS with `ejs` and `ejs-express-layouts`
 - Mongoose and MongoDB
 
-We are working hard to prepare version 1.1.x for the upgrade to a newer Typescripty OctoFarm in version 2.0! Continue reading for that version below.
+We are working hard to prepare version 1.2.x for the upgrade to a newer Typescripty OctoFarm in version 2.0! Continue reading for that version below.
 
 ### Work on version 2.0
 Version 2.0 is underway on the `alpha-2x` branch. This will have the following specs:

@@ -24,15 +24,13 @@ async function optionalInfluxDatabaseSetup() {
       password: serverSettings.influxExport.password,
       host: serverSettings.influxExport.host,
       port: serverSettings.influxExport.port,
-      database: serverSettings.influxExport.database,
+      database: serverSettings.influxExport.database
     };
 
     db = new Influx.InfluxDB(options);
     await checkDatabase(options);
 
-    return "Setup";
-  } else {
-    logger.info("No settings or disabled for influxdb export");
+    logger.info("Influx database enabled by settings");
   }
 }
 
@@ -56,8 +54,8 @@ function writePoints(tags, measurement, dataPoints) {
       {
         measurement: measurement,
         tags: tags,
-        fields: dataPoints,
-      },
+        fields: dataPoints
+      }
     ]).catch((err) => {
       logger.error(`Error saving data to InfluxDB! ${err.stack}`);
     });
@@ -69,5 +67,5 @@ function writePoints(tags, measurement, dataPoints) {
 module.exports = {
   optionalInfluxDatabaseSetup,
   checkDatabase,
-  writePoints,
+  writePoints
 };

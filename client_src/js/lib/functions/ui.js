@@ -1,3 +1,24 @@
+import Noty from "noty";
+
+const printerSettingsModal = document.getElementById("printerSettingsModal");
+const printerManagerModal = document.getElementById("printerManagerModal");
+const printerLogsModal = document.getElementById("printerLogsModal");
+const printerStatisticsModal = document.getElementById("printerStatistics");
+const printerCustomGcodeScriptsModal = document.getElementById(
+  "printerCustomGcodeScriptsModal"
+);
+const printerSelectModal = document.getElementById(
+  "printerCustomGcodeScriptsModal"
+);
+const currentModals = [
+  printerSettingsModal,
+  printerManagerModal,
+  printerLogsModal,
+  printerStatisticsModal,
+  printerCustomGcodeScriptsModal,
+  printerSelectModal
+];
+
 export default class UI {
   //Colour function
   static getColour(state) {
@@ -46,7 +67,7 @@ export default class UI {
     } else {
       click = [];
     }
-    //This needs a more elegant solution, I think noty is keeping the elements I remove with remove() from the DOM in memory somewhere...
+    //This needs a more elegant solution, I think Noty is keeping the elements I remove with remove() from the DOM in memory somewhere...
     Noty.setMaxVisible(50);
     let alert = new Noty({
       type: type,
@@ -54,7 +75,7 @@ export default class UI {
       closeWith: click,
       timeout: delay,
       layout: "bottomRight",
-      text: message,
+      text: message
     });
     alert.show();
     return alert;
@@ -68,12 +89,14 @@ export default class UI {
       }
     }
   }
+
   static clearSelect(elementValue) {
     let inputBoxes = document.querySelectorAll("*[id^=" + elementValue + "]");
     inputBoxes.forEach((input) => {
       input.value = "";
     });
   }
+
   static addSelectListeners(elementValue) {
     let inputBoxes = document.querySelectorAll("*[id^=" + elementValue + "]");
     inputBoxes.forEach((input) => {
@@ -88,5 +111,42 @@ export default class UI {
         }
       });
     });
+  }
+  static removeLoaderFromElementInnerHTML(element) {
+    if (element.innerHTML.includes("spinner")) {
+      element.innerHTML = element.innerHTML.replace(
+        '<i class="fas fa-spinner fa-spin"></i>',
+        ""
+      );
+    }
+  }
+  static addLoaderToElementsInnerHTML(element) {
+    if (!element.innerHTML.includes("spinner")) {
+      element.innerHTML += ' <i class="fas fa-spinner fa-spin"></i>';
+    }
+  }
+  static checkIfAnyModalShown() {
+    const modalArray = currentModals.map((modal) => {
+      return modal.classList.contains("show");
+    });
+    return modalArray.includes(true);
+  }
+  static checkIfSpecificModalShown(modalToCheck) {
+    const currentModal = currentModals.filter(
+      (modal) => modal.id === modalToCheck
+    );
+    if (currentModal[0]) {
+      return currentModal[0].classList.contains("show");
+    } else {
+      return false;
+    }
+  }
+  static async delay(ms) {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  }
+  static removeLine(element) {
+    element.remove();
   }
 }

@@ -1,0 +1,69 @@
+<% if(typeof printers[0].fileList != 'undefined' && typeof printers[0].fileList.files != 'undefined'){%>
+  <% for(let i=0;i <
+    printers[0].fileList.files.length;i++){%>
+      <% let sorted = printers[0].fileList.files.sort((a, b) => (a.display > b.display) ? 1 : -1) %>
+
+      <% if(sorted[i].path === "local") {%>
+        
+        <a
+        id="file-<%=printers[0].fileList.files[i].fullPath%>"
+        href="#"
+        class="list-group-item list-group-item-action flex-column align-items-start bg-secondary"
+        style="display: block;
+        padding: 0.7rem 0.1rem;"
+      >
+        <div class="row">
+          <div
+            class="col-lg-1"
+            style="display:flex; justify-content:center; align-items:center;"
+          >
+            <center><i class="fas fa-file-code fa-2x"></i></center>
+          </div>
+          <div class="col-lg-11">
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1"><%= printers[0].fileList.files[i].display %></h5>
+              <small><i class="fas fa-stopwatch"></i> <%= helpers.generateTime(printers[0].fileList.files[i].time) %></small>
+            </div>
+            <p class="mb-1 float-left">
+              <i class="fas fa-hdd"></i> <%= helpers.generateBytes(printers[0].fileList.files[i].size) %>
+            </p>
+              <p class="mb-1 float-left">
+                  <i class="fas fa-hdd"></i> Loading... %>
+              </p>
+            <div
+  class="float-right btn-group flex-wrap btn-group-sm"
+  role="group"
+  aria-label="Basic example"
+>
+              <button
+                id="<%= printers[0].index %>*fileActionUpdate*<%= printers[0].fileList.files[i].fullPath %>"
+                role="button"
+                class="btn btn-dark"
+              >
+                <i class="fas fa-sync"></i> Refresh
+              </button>
+              <button id="<%= printers[0].index %>*fileActionStart*<%= printers[0].fileList.files[i].fullPath %>" type="button" class="btn btn-success">
+                <i class="fas fa-play"></i> Start
+              </button>
+              <button id="<%= printers[0].index %>*fileActionSelect*<%= printers[0].fileList.files[i].fullPath %>" type="button" class="btn btn-info">
+                <i class="fas fa-file-upload"></i> Select
+              </button>
+              <button id="<%= printers[0].index %>*fileActionMove*<%= printers[0].fileList.files[i].fullPath %>" type="button" class="btn btn-warning">
+                <i class="fas fa-people-carry"></i> Move
+              </button>
+              <button onclick="window.location.href='http://<%= printers[0].ip %>:<%= printers[0].port %>/downloads/files/local/<%= printers[0].fileList.files[i].fullPath %>'" role="button" class="btn btn-dark">
+                <i class="fas fa-download"></i> Download
+              </button>
+              <button id="<%= printers[0].index %>*fileActionDelete*<%= printers[0].fileList.files[i].fullPath %>" type="button" class="btn btn-danger">
+                <i class="fas fa-trash-alt"></i> Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </a>
+      </a>
+      <% }%>
+  
+    <%}%>
+    
+  <% } %>

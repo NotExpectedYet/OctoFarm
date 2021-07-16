@@ -1,0 +1,43 @@
+<% if(typeof printerCount != 'undefined' && printerCount > 0 ) {%>
+  <div id="listView" class="row">
+    <% if(clientSettings.panelView.currentOp){%> <%-
+    include('./partials/currentOperations.ejs') %> <% }%>
+    <div class="col-lg-12 table-responsive-sm table-responsive-md">
+      <table class=" table table-dark text-center table-hover">
+        <thead>
+        <tr>
+          <th class="sticky-table table-dark" scope="col" style="min-width:50px;">Name</th>
+          <th class="sticky-table table-dark" scope="col" style="min-width:50px;">Status</th>
+          <th class="sticky-table table-dark" scope="col" style="min-width:300px;">
+            Actions
+          </th>
+          <th class="sticky-table table-dark" scope="col" style="min-width:100px;">
+            Control
+          </th>
+          <th class="sticky-table table-dark" scope="col" style="min-width:300px; max-width:300px;">Current File</th>
+          <th class="sticky-table table-dark printerTimeElapsed" scope="col" style="min-width:150px;">
+            Print Time Elapsed
+          </th>
+          <th class="sticky-table table-dark printerTimeElapsed" scope="col" style="min-width:75px;">
+            Progress
+          </th>
+          <th class="sticky-table table-dark printerRemainingTime" scope="col" style="min-width:150px;">
+            Remaining Print Time
+          </th>
+          <th class="sticky-table table-dark" scope="col" style="min-width:350px;">
+            Tools
+          </th>
+          <th class="sticky-table table-dark" scope="col" style="min-width:170px;">Bed / Chamber</th>
+        </tr>
+        </thead>
+        <tbody id="printerArea">
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+<% }else{ %>
+  <%- include('./addPrinters.ejs') %>
+<% } %>
+<script src="/assets/js/listViewRunner.min.js" type="module"></script>

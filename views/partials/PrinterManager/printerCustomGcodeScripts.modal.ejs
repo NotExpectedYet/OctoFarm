@@ -1,0 +1,39 @@
+<div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-2">
+    <div class="form-group">
+        <label for="gcodeScriptName">Name</label>
+        <input type="text" class="form-control" id="gcodeScriptName"
+               placeholder="New script name">
+    </div>
+    <div class="form-group">
+        <label for="gcodeScriptDescription">Description</label>
+        <input type="text" class="form-control" id="gcodeScriptDescription"
+               placeholder="New script description">
+    </div>
+    <div class="form-group">
+        <label for="gcodeScriptScript">Script</label>
+        <textarea class="form-control" id="gcodeScriptScript" rows="3"></textarea>
+        <small class="form-text text-muted">New lines will be treated as seperate
+            commands</small>
+    </div>
+    <button id="createNewScriptBtn" type="submit" class="btn btn-success">Create Script</button>
+</div>
+<div id="wrapper"
+     class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-10 table-responsive-sm table-responsive-md">
+    <table id="historyTableTop" class="table table-dark mx-auto w-auto text-center">
+        <thead>
+        <tr>
+            <th class="table-dark sticky-table table-dark d-none" scope="col"></th>
+            <th class="table-dark sticky-table table-dark" scope="col">Name</th>
+            <th class="table-dark sticky-table table-dark" scope="col">Description</th>
+            <th class="table-dark sticky-table table-dark" scope="col" width="400px">Script</th>
+            <th class="table-dark sticky-table table-dark" scope="col" min-width="100px">
+                Actions
+            </th>
+        </tr>
+        </thead>
+        <tbody id="gcodeScriptTable" data-jplist-group="history">
+
+        </tbody>
+
+    </table>
+</div>

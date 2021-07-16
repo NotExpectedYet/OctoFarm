@@ -1,0 +1,703 @@
+<% if(typeof printerCount != 'undefined' && printerCount > 0 ) {%>
+<%let filamentManager = false;%>
+<% let displayNone = "d-none" %>
+<% if(typeof serverSettings != 'undefined'){ %>
+    <%filamentManager = serverSettings.filamentManager%>
+<% } %>
+<% if(filamentManager){ %>
+<% displayNone = ""; %>
+<% } %>
+<% let filamentTotals = statistics %>
+<div class="row">
+    <div class="col-lg-2">
+        <div class="card text-white bg-dark h-100">
+            <div class="card-header dashHeader p-0">
+                <button
+                        type="button"
+                        class="btn btn-secondary float-left d-block ml-1 mr-1 p-1"
+                        href="#"
+                        aria-expanded="false"
+                        disabled
+                >
+                    <i class="fas fa-toilet-paper"></i>  Filament Manager
+                </button>
+
+            </div>
+            <div class="card-body text-center">
+                <b>Profiles:</b> <span class="badge badge-info"><%= filamentTotals.profileCount %></span>
+                <b>Spools:</b> <span class="badge badge-info"><%= filamentTotals.spoolCount %></span>
+                <b>Active:</b> <span class="badge badge-warning"><%= filamentTotals.activeSpoolCount %></span>
+                <button title="Setup and edit your filament profiles."
+                        type="button" class="btn btn-secondary m-2" data-toggle="modal" data-target="#profileManagerModal">
+                    <i class="far fa-id-card"></i> Profile Manager
+                </button>
+                <button title="Setup and manage your filament spools."
+                        type="button" class="btn btn-secondary m-2" data-toggle="modal" data-target="#spoolManagerModal">
+                    <i class="fas fa-toilet-paper"></i> Spool Manager
+                </button>
+                <button title="Updates OctoFarms Spools and Profiles database with the filament manager plugin."
+                        id="resyncFilament"
+                        type="button"
+                        class="btn btn-primary m-2 <%= displayNone %>">
+                    <i class="fas fa-sync"></i> Re-Sync Filament Manager
+                </button>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-10">
+        <div class="card text-white bg-dark h-100">
+            <div class="card-header dashHeader p-0">
+                <button
+                        type="button"
+                        class="btn btn-secondary float-left d-block ml-1 mr-1 p-1"
+                        href="#"
+                        aria-expanded="false"
+                        disabled
+                >
+                    <i class="fas fa-chart-area"></i>  Filament Statistics
+                </button>
+
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12  <%= displayNone %>">
+                        <center>
+                            <div class="progress mt-0 mb-2 ">
+                                <div
+                                        id="fsUsedProgress"
+                                        class="progress-bar progress-bar-striped bg-warning"
+                                        role="progressbar"
+                                        style="width: <%= (filamentTotals.used / filamentTotals.total) * 100%>% "
+                                        aria-valuenow="<%= (filamentTotals.used / filamentTotals.total) * 100%>%"
+                                        aria-valuemin="0"
+                                        aria-valuemax="100"
+                                >
+                                    <%= ((filamentTotals.used / filamentTotals.total) * 100).toFixed(0)%> %
+                                </div>
+                                <div
+                                        id="fsRemainingProgress"
+                                        class="progress-bar progress-bar-striped bg-success"
+                                        role="progressbar"
+                                        style="width: <%= ( (filamentTotals.total - filamentTotals.used) / filamentTotals.total) * 100%>% "
+                                        aria-valuenow="<%= ( (filamentTotals.total - filamentTotals.used) / filamentTotals.total) * 100%>%"
+                                        aria-valuemin="0"
+                                        aria-valuemax="100"
+                                >
+                                    <%= (( (filamentTotals.total - filamentTotals.used) / filamentTotals.total) * 100).toFixed(0)%>%
+                                </div>
+
+                            </div>
+                        </center>
+                        <b class="mb-0 d-inline"><i class="fas fa-square text-warning d-inline"></i> Used: </b>
+                        <p id="fsUsed" class="mb-1 d-inline"><%= filamentTotals.used.toFixed(0) %>g</p> /
+                        <b class="mb-0 d-inline"><i class="fas fa-square text-success"></i> Remaining: </b>
+                        <p id="fsRemain" class="mb-1 d-inline"><%= (filamentTotals.total - filamentTotals.used).toFixed(0) %>g</p> /
+                        <b class="mb-0 d-inline"><i class="fas fa-square"></i> Total: </b>
+                        <p id="fsTotal" class="mb-1 d-inline"><%= filamentTotals.total.toFixed(0) %>g</p>
+                    </div>
+                    <div class="col-lg-2">
+                        <p><b>Weight:</b> <span class="badge badge-info ml-2"><%= filamentTotals.total.toFixed(0) %>g</span> </p>
+                        <p class=" <%= displayNone %>"><b>Used:</b> <span class="badge badge-info ml-2"><%= filamentTotals.used.toFixed(0) %>g</span> </p>
+                        <p class=" <%= displayNone %>"><b>Remaining:</b> <span class="badge badge-info ml-2"><%=  filamentTotals.total.toFixed(0) - filamentTotals.used.toFixed(0) %>g</span> </p>
+                        <p><b>Price:</b> <span class="badge badge-info ml-2"><%= filamentTotals.price.toFixed(2) %></span></p>
+                    </div>
+                    <div class="col-lg-9 table-responsive">
+
+                        <table class="table-hover table table-dark table-hover">
+                            <thead>
+                            <tr>
+                                <td scope="row">Material Overview:</td>
+                                <% filamentTotals.materialBreakDown.forEach(used => { %>
+                                    <th scope="col"><%= used.name %></th>
+                                <%   }) %>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td scope="row">Used</td>
+                                <% filamentTotals.materialBreakDown.forEach(used => { %>
+                                    <th scope="col"><%= used.used.toFixed(2) %>g</th>
+
+                                <%   }) %>
+                            </tr>
+                            <tr>
+                                <td scope="row">Remaining</td>
+                                <% filamentTotals.materialBreakDown.forEach(used => { %>
+                                    <th scope="col"><%= (used.total - used.used).toFixed(2) %>g</th>
+
+                                <%   }) %>
+                            </tr>
+                            <tr>
+                                <th scope="row">Weight</th>
+                                <% filamentTotals.materialBreakDown.forEach(used => { %>
+                                    <th scope="col"> <%= used.total.toFixed(2) %>g</th>
+                                <%   }) %>
+                            </tr>
+
+                            <tr>
+                                <th scope="row">Price</th>
+                                <% filamentTotals.materialBreakDown.forEach(used => { %>
+                                    <th scope="col"><%= used.price.toFixed(2) %></th>
+                                <%   }) %>
+                            </tr>
+                            </tbody>
+                        </table>
+
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<% if(typeof historyStats !== "undefined" && typeof historyStats.totalByDay[0] !== "undefined") {%>
+
+    <div class="col-lg-12">
+        <div class="card text-white bg-dark  h-100">
+            <div class="card-header dashHeader p-0">
+                <button
+                        type="button"
+                        class="btn btn-secondary d-block ml-1 mr-1 p-1 float-left"
+                        href="#"
+                        aria-expanded="false"
+                        disabled
+                >
+                    <i class="fas fa-star-half-alt"></i> Filament Usage By Day
+                </button>
+
+
+
+            </div>
+            <div class="card-body pb-0 text-center">
+                <div id="usageOverTime"></div>
+            </div>
+        </div>
+    </div>
+<% } %>
+<% if(typeof historyStats !== "undefined" && typeof historyStats.usageOverTime[0] !== "undefined") {%>
+    <div class="col-lg-12">
+        <div class="card text-white bg-dark  h-100">
+            <div class="card-header dashHeader p-0">
+                <button
+                        type="button"
+                        class="btn btn-secondary d-block ml-1 mr-1 p-1 float-left"
+                        href="#"
+                        aria-expanded="false"
+                        disabled
+                >
+                    <i class="fas fa-star-half-alt"></i> Filament Usage Over Time
+                </button>
+
+
+
+            </div>
+            <div class="card-body pb-0 text-center">
+                <div id="usageOverFilamentTime"></div>
+            </div>
+        </div>
+    </div>
+
+<% } %>
+
+
+<% if(profiles.length !== 0 && spools.length !== 0) {%>
+    <div class="row">
+        <div class="col-lg-12 table-responsive-sm table-responsive-md" >
+            <table class="table table-dark table-striped text-center">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th scope="col" class=" sticky-table table-dark" style="min-width:50px;">Spool Name</th>
+                    <th class=" sticky-table table-dark text-wrap">Material</th>
+                    <th scope="col" class=" sticky-table table-dark" style="min-width:300px;">Manufacturer</th>
+                    <th scope="col" class=" sticky-table table-dark " style="min-width:200px;">Spool Weight</th>
+                    <th scope="col" class="sticky-table table-dark  <%=displayNone %>" style="min-width:50px;">Remaining</th>
+                    <th scope="col" class=" sticky-table table-dark" style="min-width:150px;">Tool Offset</th>
+                    <th scope="col"  class=" sticky-table table-dark" style="min-width:10px;">Assigned Printer</th>
+                </tr>
+                </thead>
+                <tbody style="height:100%; overflow-y:auto;">
+                <% spools.forEach(spool => { %>
+                    <tr>
+                        <th style="display: none;"> </th>
+                        <th><i class="fas fa-toilet-paper"></i></th>
+                        <th scope="row"><%=spool.name%></th>
+                        <td id="spoolsListMaterial-<%=spool._id%>">
+
+                        </td>
+                        <td id="spoolsListManufacture-<%=spool._id%>">
+
+                        </td>
+                        <td><%=(spool.weight / 1000)%>KG</td>
+                        <td class="<%= displayNone %>"><%=(spool.weight - spool.used).toFixed(0)%></td>
+                        <td><%= spool.tempOffset %></td>
+                        <td id="spoolsListPrinterAssignment-<%=spool._id%>"></td>
+                    </tr>
+                <%   }) %>
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+
+<% } %>
+    </div>
+
+
+<!-- Spool Modal -->
+<div class="modal fade" id="profileManagerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Profile Manager</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12">
+                        <div id="profilesMessage"></div>
+                        <form>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="profilesManufactuer">Manufacturer</label>
+                                    <input type="text" class="form-control" id="profilesManufactuer">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="profilesMaterial">Material</label>
+                                    <input autocomplete="off" list="huge_list" type="text" class="form-control" id="profilesMaterial">
+                                    <datalist id="huge_list" class="bg-secondary">
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="profilesDensity">Density</label>
+                                    <div class="input-group mb-3">
+                                        <input id="profilesDensity" type="number" class="form-control" value="1.25" step="0.01" aria-label="profilesDansity" aria-describedby="basic-addon2">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="basic-addon2">g/cm3</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="profilesDiameter">Diameter</label>
+                                    <div class="input-group mb-3">
+                                        <input id="profilesDiameter" type="number" class="form-control" value="1.75" step="0.01" aria-label="" aria-describedby="profilesDiameter">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text" id="basic-addon2">mm</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button id="addProfilesBtn" type="submit" class="btn btn-success">Add</button>
+                        </form>
+
+                        <br>
+                        <hr>
+                        <br>
+                    </div>
+                    <div class="col-12 text-center">
+                            <nav
+                                    id="listenerProfiles"
+                                    data-jplist-control="pagination"
+                                    data-group="profiles"
+                                    data-items-per-page="5"
+                                    data-current-page="0"
+                                    data-disabled-class="disabled"
+                                    data-selected-class="active"
+                                    data-name="pagination"
+                                    data-id="profiles-pagination">
+
+                                <!-- first and previous buttons -->
+                                <div class="btn-group pagination d-inline-flex" role="group" aria-label="Basic example">
+                                    <button type="button" class="btn btn-secondary" data-type="first">First</button>
+                                    <button type="button" class="btn btn-secondary" data-type="prev">Previous</button>
+                                </div>
+
+
+                                <div class="btn-group pagination d-inline-flex" data-type="pages">
+                                    <button type="button" class="btn btn-secondary" data-type="page">{pageNumber}</button>
+
+                                </div>
+
+                                <div class="btn-group pagination d-inline-flex" role="group" aria-label="Basic example">
+                                    <button type="button" class="btn btn-secondary" data-type="next">Next</button>
+                                    <button type="button" class="btn btn-secondary" data-type="lase">Last</button>
+                                </div>
+
+                                <!-- items per page dropdown -->
+                                <div class="input-group mt-1 d-inline-flex">
+                                    <div class="input-group-prepend">
+                                        <label class="input-group-text" for="inputGroupSelect01">Items per page: </label>
+                                    </div>
+                                    <select data-type="items-per-page" class="custom-select" id="inputGroupSelect01">
+                                        <option value="5">5</option>
+                                        <option value="10">10</option>
+                                        <option value="15">15</option>
+                                        <option value="20">20</option>
+                                        <option value="0">All</option>
+                                    </select>
+                                </div>
+
+                                <!-- information labels -->
+                                <span data-type="info" class="badge badge-secondary ml-3 p-2">
+                                        Page {pageNumber} of {pagesNumber}
+                                </span>
+
+                            </nav>
+                    </div>
+                    <div class="col-12">
+                        <table class="table-hover table table-responsive-sm table-responsive-md">
+                            <thead>
+                            <tr>
+                                <th scope="col">Manufacturer</th>
+                                <th scope="col">Material</th>
+                                <th scope="col">Density</th>
+                                <th scope="col">Diameter</th>
+                                <th scope="col" width="200px"></th>
+                            </tr>
+                            </thead>
+                            <tbody id="addProfilesTable" data-jplist-group="profiles">
+                            <% profiles.forEach(profile => { %>
+                                <% let profileID = profile._id  %>
+                                <tr data-jplist-item>
+                                    <td class="d-none" scope="row">
+                                        <%= profileID %>
+                                    </td>
+                                    <td scope="row">
+                                        <input class="form-control"  type="text" placeholder="<%=profile.manufacturer%>" disabled>
+                                    </td>
+                                    <td>
+                                        <input class="form-control"  type="text" placeholder="<%=profile.material%>" disabled>
+                                    </td>
+                                    <td>
+                                        <input class="form-control"  type="number" step="0.01" placeholder="<%=profile.density%>" disabled>
+                                    </td>
+                                    <td>
+                                        <input class="form-control"  type="number" step="0.01" placeholder="<%=profile.diameter%>" disabled>
+                                    </td>
+                                    <td>
+                                        <button id="edit-<%=profileID%>" type="button" class="btn btn-sm btn-info edit bg-colour-1">
+                                            <i class="fas fa-edit editIcon"></i>
+                                        </button>
+                                        <button id="save-<%=profileID%>" type="button" class="btn d-none btn-sm btn-success save bg-colour-2">
+                                            <i class="fas fa-save saveIcon"></i>
+                                        </button>
+                                        <button id="delete-<%=profileID%>" type="button" class="btn btn-sm btn-danger delete">
+                                            <i class="fas fa-trash deleteIcon"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            <%  }) %>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Spool Modal -->
+<div class="modal fade" id="spoolManagerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Spool Manager</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                    <div id="addSpoolsMessage"></div>
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="spoolsName">Name</label>
+                                <input type="text" class="form-control" id="spoolsName">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="spoolsProfile">Profile</label>
+                                <select id="spoolsProfile" class="form-control">
+
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="spoolsPrice">Price</label>
+                                <input type="number" class="form-control" id="spoolsPrice" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="spoolsWeight">Weight</label>
+                                <div class="input-group mb-3">
+                                    <input id="spoolsWeight" type="number" class="form-control" value="1000" step="1" aria-label="" aria-describedby="profilesDiameter">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" id="basic-addon2">g</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4   <%= displayNone %>">
+                                <label for="spoolsRemaining">Used</label>
+                                <div class="input-group mb-3">
+                                    <input id="spoolsRemaining" type="number" class="form-control" value="0" step="1" aria-label="" aria-describedby="profilesDiameter">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" id="basic-addon2">g</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="spoolsTempOffset">Temperature Offset</label>
+                                <div class="input-group mb-3">
+                                    <input id="spoolsTempOffset" type="number" class="form-control" placeholder="Recipient's username" value="0" step="1" aria-label="" aria-describedby="basic-addon2">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text" id="basic-addon2">°C</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="addSpoolBtn" type="submit" class="btn btn-success">Add</button>
+                    </form>
+
+                    <br>
+                    <hr>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">Default Sort: </label>
+                                </div>
+                                <select class="custom-select" id="inputGroupSelect01"
+                                        data-jplist-control="select-sort"
+                                        data-group="spools"
+                                        data-name="default-sort"
+                                        data-id="default-sort"
+                                >
+                                    <option
+                                            value="0"
+                                            data-path="default">Sort by</option>
+                                    <option             value="1"
+                                                        data-path=".name"
+                                                        data-order="asc"
+                                                        data-type="text">Name (&uarr;)</option>
+                                    <option             value="2"
+                                                        data-path=".name"
+                                                        data-order="desc"
+                                                        data-type="text">Name (&darr;)</option>
+                                    <option             value="3"
+                                                        data-path=".price"
+                                                        data-order="asc"
+                                                        data-type="number">Price (&uarr;)</option>
+                                    <option             value="4"
+                                                        data-path=".price"
+                                                        data-order="desc"
+                                                        data-type="number">Price (&darr;)</option>
+                                    <option             value="5"
+                                                        data-path=".grams"
+                                                        data-order="asc"
+                                                        data-type="number"
+                                                        class="<%= displayNone %>">Remaining (&uarr;)</option>
+                                    <option             value="6"
+                                                        data-path=".grams"
+                                                        data-order="desc"
+                                                        data-type="number"
+                                                        class="<%= displayNone %>">Remaining (&darr;)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="materialsList">Material: </label>
+                                </div>
+                                <select class="custom-select" id="materialsList"
+                                        data-jplist-control="select-filter"
+                                        data-group="spools"
+                                        data-name="spoolName"
+                                >
+                                    <option selected
+                                            href="#"
+                                            data-value="0"
+                                            data-path="default"
+                                    >Filter</option>
+                                    <% if(profiles.length !== 0) {%>
+                                        <% filamentTotals.materialList.forEach(mat => { %>
+                                            <option href="#"
+                                                    data-path=".<%= mat %>"><%= mat.replace(/_/g, " ") %></option>
+                                        <%  }) %>
+                                    <%  } %>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">Spool Search</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                                       data-jplist-control="textbox-filter"
+                                       data-group="spools"
+                                       data-name="fileNameSearch"
+                                       data-path=".name"
+                                       type="text"
+                                       value=""
+                                       placeholder="Search...">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <center>
+                                <nav
+                                        id="listenerSpools"
+                                        data-jplist-control="pagination"
+                                        data-group="spools"
+                                        data-items-per-page="5"
+                                        data-current-page="0"
+                                        data-disabled-class="disabled"
+                                        data-selected-class="active"
+                                        data-name="pagination"
+                                        data-id="spools-pagination">
+
+                                    <!-- first and previous buttons -->
+                                    <div class="btn-group pagination d-inline-flex" role="group" aria-label="Basic example">
+                                        <button type="button" class="btn btn-secondary" data-type="first">First</button>
+                                        <button type="button" class="btn btn-secondary" data-type="prev">Previous</button>
+                                    </div>
+
+
+                                    <div class="btn-group pagination d-inline-flex" data-type="pages">
+                                        <button type="button" class="btn btn-secondary" data-type="page">{pageNumber}</button>
+
+                                    </div>
+
+                                    <div class="btn-group pagination d-inline-flex" role="group" aria-label="Basic example">
+                                        <button type="button" class="btn btn-secondary" data-type="next">Next</button>
+                                        <button type="button" class="btn btn-secondary" data-type="lase">Last</button>
+                                    </div>
+
+                                    <!-- items per page dropdown -->
+                                    <div class="input-group mb-3 d-inline-flex w-25">
+                                        <div class="input-group-prepend">
+                                            <label class="input-group-text" for="inputGroupSelect01">Items per page: </label>
+                                        </div>
+                                        <select data-type="items-per-page" class="custom-select" id="inputGroupSelect01">
+                                            <option value="5">5</option>
+                                            <option value="20">20</option>
+                                            <option value="50">50</option>
+                                            <option value="100">100</option>
+                                            <option value="0"> All </option>
+                                        </select>
+                                    </div>
+                                    <br>
+                                    <!-- information labels -->
+                                    <span data-type="info" class="badge badge-secondary ml-3 p-2">
+                                        Page {pageNumber} of {pagesNumber}
+                                  </span>
+
+                                </nav>
+                            </center>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table-hover table table-responsive-sm table-responsive-md col-lg-12">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Total Price</th>
+                                    <th scope="col">Total Weight (g)</th>
+                                    <th scope="col" class="  <%= displayNone %>">Total Used (g)</th>
+                                    <th scope="col" class="  <%= displayNone %>">Total Remaining (g)</th>
+                                    <th scope="col" class="  <%= displayNone %>">Total Remaining (%)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td id="totalPrice"></td>
+                                    <td id="totalWeight"></td>
+                                    <td id="totalUsed" class="  <%= displayNone %>"></td>
+                                    <td id="totalRemaining" class="  <%= displayNone %>"></td>
+                                    <td id="totalRemainingPercent" class="  <%= displayNone %>"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <table class="table-hover table table-responsive-sm table-responsive-md col-lg-12">
+                        <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col" width="200px">Profile</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Weight (g)</th>
+                            <th scope="col" class="  <%= displayNone %>">Used (g)</th>
+                            <th scope="col" class="  <%= displayNone %>">Remaining (g)</th>
+                            <th scope="col" class="  <%= displayNone %>">Remaining (%)</th>
+                            <th scope="col">Temperature Offset (°C)</th>
+                            <th scope="col" width="200px">Printer Assignment</th>
+                            <th scope="col" width="150px"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="addSpoolsTable" data-jplist-group="spools">
+
+                        <% spools.forEach(spool => { %>
+                            <tr data-jplist-item>
+                                <th style="display: none;"><%= spool._id %></th>
+                                <th scope="row"><input class="form-control name" type="text" placeholder="<%=spool.name%>" disabled></th>
+                                <td>
+                                    <span class="d-none material" id="spoolsMaterialText-<%=spool._id%>"></span>
+                                    <select id="spoolsProfile-<%=spool._id%>" class="form-control" disabled>
+
+                                    </select>
+                                </td>
+                                <td><span class="d-none price"><%=spool.price%></span><input class="form-control" type="number" step="0.01" placeholder="<%=spool.price%>" disabled></td>
+                                <td><span class="d-none weight"><%=spool.weight%></span><input class="form-control" type="number" step="1" placeholder="<%=spool.weight%>" disabled></td>
+                                <td class=" <%= displayNone %>"><span class="d-none used"><%=spool.used%></span><input class="form-control" type="number" step="1" placeholder="<%=spool.used%>" disabled></td>
+                                <td class="grams <%= displayNone %>"><%=(spool.weight - spool.used).toFixed(0)%></td>
+                                <td class="percent <%= displayNone %>"><%=(100 - spool.used / spool.weight * 100).toFixed(0)%></td>
+                                <td><input class="form-control" type="number" step="any" placeholder="<%= spool.tempOffset %>" disabled></td>
+                                <td>
+                                    <select id="spoolsPrinterAssignment-<%=spool._id%>" class="form-control" disabled>
+
+                                    </select>
+                                </td>
+                                <td><button id="edit-<%=spool._id%>" type="button" class="btn btn-sm btn-info edit bg-colour-1">
+                                        <i class="fas fa-edit editIcon"></i>
+                                    </button>
+                                    <button id="save-<%=spool._id%>" type="button" class="btn btn-sm d-none btn-success save bg-colour-2">
+                                        <i class="fas fa-save saveIcon"></i>
+                                    </button>
+                                    <button id="delete-<%=spool._id%>" type="button" class="btn btn-sm btn-danger delete">
+                                        <i class="fas fa-trash deleteIcon"></i>
+                                    </button></td>
+                            </tr>
+                        <%   }) %>
+                        </tbody>
+                    </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/assets/js/filamentManagement.min.js" type="module"></script>
+
+</div>
+<% }else{ %>
+    <%- include('./addPrinters.ejs') %>
+<% } %>
+

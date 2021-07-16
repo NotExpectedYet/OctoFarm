@@ -5,7 +5,7 @@ const { lookpath } = require("lookpath");
 
 const {
   returnListOfMissingPackages,
-  installNpmDependency,
+  installNpmDependency
 } = require("../utils/npm.utils.js");
 const {
   returnCurrentGitStatus,
@@ -14,7 +14,7 @@ const {
   getListOfModifiedFiles,
   pullLatestRepository,
   checkIfWereInAGitRepo,
-  makeSureBranchIsUpToDateWithRemote,
+  makeSureBranchIsUpToDateWithRemote
 } = require("../utils/git.utils.js");
 
 class SystemCommands {

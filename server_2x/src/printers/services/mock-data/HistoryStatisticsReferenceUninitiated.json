@@ -1,0 +1,28 @@
+{
+  "history": {
+    "completed": 0,
+    "cancelled": 0,
+    "failed": 0,
+    "completedPercent": "NaN",
+    "cancelledPercent": "NaN",
+    "failedPercent": "NaN",
+    "longestPrintTime": "-Infinity",
+    "shortestPrintTime": "Infinity",
+    "averagePrintTime": "NaN",
+    "mostPrintedFile": "No Files",
+    "printerMost": "No Printers",
+    "printerLoad": "No Printers",
+    "totalFilamentUsage": "0.00g / 0.00m",
+    "averageFilamentUsage": "NaNg / NaNm",
+    "highestFilamentUsage": "-Infinityg / -Infinitym",
+    "lowestFilamentUsage": "Infinityg / Infinitym",
+    "totalSpoolCost": "0.00",
+    "highestSpoolCost": "-Infinity",
+    "totalPrinterCost": "0.00",
+    "highestPrinterCost": "-Infinity",
+    "currentFailed": 0,
+    "totalByDay": [],
+    "usageOverTime": [],
+    "historyByDay": []
+  }
+}

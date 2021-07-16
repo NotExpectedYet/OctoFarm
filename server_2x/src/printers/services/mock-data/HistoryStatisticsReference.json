@@ -1,0 +1,123 @@
+{
+  "history": {
+    "completed": 862,
+    "cancelled": 112,
+    "failed": 15,
+    "completedPercent": "87.16",
+    "cancelledPercent": "11.32",
+    "failedPercent": "1.52",
+    "longestPrintTime": "166046.00",
+    "shortestPrintTime": "46.00",
+    "averagePrintTime": "15701.21",
+    "mostPrintedFile": "Classic v1 0.2mm PLA MK3S 5h17m.gcode",
+    "printerMost": "GOOFY",
+    "printerLoad": "Prusa Minii",
+    "totalFilamentUsage": "34942.53g / 11662.13m",
+    "averageFilamentUsage": "40.54g / 13.53m",
+    "highestFilamentUsage": "294.82g / 98.85m",
+    "lowestFilamentUsage": "0.00g / 0.00m",
+    "totalSpoolCost": "201.49",
+    "highestSpoolCost": "7.78",
+    "totalPrinterCost": "633.75",
+    "highestPrinterCost": "8.42",
+    "currentFailed": 304859,
+    "totalByDay": [
+      {
+        "name": "PETG",
+        "data": []
+      },
+      {
+        "name": "PLA",
+        "data": [
+          {
+            "x": "2021-02-26T23:00:00.000Z",
+            "y": 52.87000000000002
+          },
+          {
+            "x": "2021-03-16T23:00:00.000Z",
+            "y": 112.48
+          },
+          {
+            "x": "2021-03-23T23:00:00.000Z",
+            "y": 227.45000000000002
+          },
+          {
+            "x": "2021-03-25T23:00:00.000Z",
+            "y": 20.950000000000003
+          }
+        ]
+      }
+    ],
+    "usageOverTime": [
+      {
+        "name": "PETG",
+        "data": []
+      },
+      {
+        "name": "PLA",
+        "data": [
+          {
+            "x": "2021-02-26T23:00:00.000Z",
+            "y": 52.87000000000002
+          },
+          {
+            "x": "2021-03-16T23:00:00.000Z",
+            "y": 165.35000000000002
+          },
+          {
+            "x": "2021-03-23T23:00:00.000Z",
+            "y": 392.80000000000007
+          },
+          {
+            "x": "2021-03-25T23:00:00.000Z",
+            "y": 413.75000000000006
+          }
+        ]
+      }
+    ],
+    "historyByDay": [
+      {
+        "name": "Success",
+        "data": [
+          {
+            "x": "2021-02-26T23:00:00.000Z",
+            "y": 1
+          },
+          {
+            "x": "2021-03-16T23:00:00.000Z",
+            "y": 1
+          },
+          {
+            "x": "2021-03-23T23:00:00.000Z",
+            "y": 3
+          },
+          {
+            "x": "2021-03-25T23:00:00.000Z",
+            "y": 10
+          }
+        ]
+      },
+      {
+        "name": "Cancelled",
+        "data": [
+          {
+            "x": "2021-02-26T23:00:00.000Z",
+            "y": 7
+          },
+          {
+            "x": "2021-03-23T23:00:00.000Z",
+            "y": 2
+          },
+          {
+            "x": "2021-03-25T23:00:00.000Z",
+            "y": 4
+          }
+        ]
+      },
+      {
+        "name": "Failed",
+        "data": []
+      }
+    ]
+  }
+}

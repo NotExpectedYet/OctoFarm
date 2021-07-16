@@ -86,7 +86,7 @@ const historyTotals = function (history) {
     }),
     spools: historySpools.filter(function (item, i, ar) {
       return ar.indexOf(item) === i;
-    }),
+    })
   };
 };
 
@@ -94,5 +94,5 @@ module.exports = {
   generateBytes: bytes,
   generateTime: generateTime,
   calculatePercent: calculatePercent,
-  historyTotals: historyTotals,
+  historyTotals: historyTotals
 };

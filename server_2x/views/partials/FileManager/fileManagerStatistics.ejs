@@ -1,0 +1,64 @@
+<div class="col-12">
+        <center>
+
+            <div class="progress mt-0 mb-2 ">
+                <div
+                        id="fsUsedProgress"
+                        class="progress-bar progress-bar-striped bg-warning"
+                        role="progressbar"
+                        style="width:<%= (fileStatistics.storageUsed / fileStatistics.storageTotal) * 100%>% "
+                        aria-valuenow="<%= (fileStatistics.storageUsed / fileStatistics.storageTotal) * 100%>%"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                >
+                    <%= ((fileStatistics.storageUsed  / fileStatistics.storageTotal) * 100).toFixed(2)%> %
+                </div>
+                <div
+                        id="fsRemainingProgress"
+                        class="progress-bar progress-bar-striped bg-success"
+                        role="progressbar"
+                        style="width: <%= ( (fileStatistics.storageTotal - fileStatistics.storageUsed ) / fileStatistics.storageTotal) * 100%>% "
+                        aria-valuenow="<%= ( (fileStatistics.storageTotal - fileStatistics.storageUsed ) / fileStatistics.storageTotal) * 100%>%"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                >
+                    <%= (( (fileStatistics.storageTotal - fileStatistics.storageUsed ) / fileStatistics.storageTotal) * 100).toFixed(2)%>%
+                </div>
+
+            </div>
+        </center>
+        <b class="mb-0 d-inline"><i class="fas fa-square text-warning d-inline"></i> Used: </b>
+        <p id="fsUsed" class="mb-1 d-inline"><%= helpers.generateBytes(fileStatistics.storageUsed) %></p> /
+        <b class="mb-0 d-inline"><i class="fas fa-square text-success"></i> Remaining: </b>
+        <p id="fsRemain" class="mb-1 d-inline"><%= helpers.generateBytes((fileStatistics.storageTotal - fileStatistics.storageUsed)) %></p> /
+        <b class="mb-0 d-inline"><i class="fas fa-square"></i> Total: </b>
+        <p id="fsTotal" class="mb-1 d-inline"><%=helpers.generateBytes( fileStatistics.storageTotal) %></p>
+    </div>
+<div class="col-12">
+    <div class="row">
+        <div class="col-lg-3">
+            <h6>Counts</h6>
+            <hr>
+            <i class="fas fa-file"></i> Files: <%= fileStatistics.fileCount %> <br><i class="fas fa-folder"></i> Folders: <%= fileStatistics.folderCount %>
+        </div>
+        <div class="col-lg-3">
+            <h6>Largest</h6>
+            <hr>
+            <b>Size: </b><%=helpers.generateBytes( fileStatistics.biggestFile) %><br>
+            <b>Length: </b><%= (fileStatistics.biggestLength).toFixed(2)  %>m
+
+        </div>
+        <div class="col-lg-3">
+            <h6>Smallest</h6>
+            <hr>
+            <b>Size: </b><%=helpers.generateBytes( fileStatistics.smallestFile) %><br>
+            <b>Length: </b><%= (fileStatistics.smallestLength).toFixed(2) %>m
+        </div>
+        <div class="col-lg-3">
+            <h6>Average</h6>
+            <hr>
+            <b>Size: </b><%=helpers.generateBytes( fileStatistics.averageFile) %><br>
+            <b>Length: </b><%= (fileStatistics.averageLength).toFixed(2)%>m
+        </div>
+    </div>
+</div>

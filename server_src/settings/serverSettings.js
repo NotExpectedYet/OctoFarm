@@ -1,39 +1,38 @@
 const ServerSettingsDB = require("../models/ServerSettings.js");
-const settingsClean = require("../lib/dataFunctions/settingsClean.js");
+const { SettingsClean } = require("../lib/dataFunctions/settingsClean.js");
 const { AppConstants } = require("../app.constants");
-
-const { SettingsClean } = settingsClean;
 
 // Default Settings
 const onlinePolling = {
-  seconds: 0.5,
+  seconds: 0.5
 };
 const server = {
   port: AppConstants.defaultOctoFarmPort,
   registration: true,
-  loginRequired: true,
+  loginRequired: true
 };
 const timeout = {
   apiTimeout: 1000,
   apiRetryCutoff: 10000,
   apiRetry: 30000,
-  webSocketRetry: 5000,
+  webSocketRetry: 5000
 };
+// TODO rename to filamentManagerEnabled
 const filamentManager = false;
 const history = {
   snapshots: {
     onFailure: true,
-    onComplete: true,
+    onComplete: true
   },
   thumbnails: {
     onFailure: true,
-    onComplete: true,
+    onComplete: true
   },
   timelapse: {
     onFailure: false,
     onComplete: false,
-    deleteAfter: false,
-  },
+    deleteAfter: false
+  }
 };
 const influxExport = {
   active: false,
@@ -45,8 +44,8 @@ const influxExport = {
   retentionPolicy: {
     duration: "365d",
     replication: 1,
-    defaultRet: true,
-  },
+    defaultRet: true
+  }
 };
 
 class ServerSettings {
@@ -59,7 +58,7 @@ class ServerSettings {
         timeout,
         filamentManager,
         history,
-        influxExport,
+        influxExport
       });
       await defaultSystemSettings.save().then((ret) => {
         SettingsClean.start();
@@ -87,7 +86,6 @@ class ServerSettings {
       await settings[0].save().then((ret) => {
         SettingsClean.start();
       });
-      return "Server settings already exist, loaded existing values...";
     }
   }
 

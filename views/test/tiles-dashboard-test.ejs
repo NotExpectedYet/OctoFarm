@@ -1,0 +1,22 @@
+<% let base = './partials/dashboard' %>
+<% let itemPath = base + '/grid-stack-item.ejs' %>
+
+<% if(typeof printerCount != 'undefined' && printerCount > 0 ) { %>
+    <link rel="stylesheet" href="/assets/dist/dashboardRunner.css"/>
+
+    <div class="grid-stack">
+        <!--        Tile with bodyId-->
+        <%- include(itemPath, {
+        tile:{w:2,h:5,mw:2,mh:5,id:"currentUtil",bodyId:"currentUtilisation",title:"Current Utilisation",i:"fa-star"},
+        bodyFile:'./farm-utilisation.ejs'
+        })
+        %>
+
+        <!--        Tile without bodyId, with bodyFile-->
+        <%- include(itemPath, {
+        tile:{w:2,h:5,mw:2,mh:5,id:"currentUtil",title:"Current Utilisation",i:"fa-star"},
+        bodyFile:'./farm-utilisation.ejs'
+        })
+        %>
+    </div>
+<% } %>

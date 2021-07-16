@@ -12,7 +12,7 @@ describe("printer group", function () {
 
   it("should be valid if printers array is empty", function (done) {
     const m = new PrinterGroup({
-      name: "TestPrinterGroup",
+      name: "TestPrinterGroup"
     });
 
     m.validate(function (err) {

@@ -1,0 +1,11 @@
+{
+  "globalSetup": "./base/test-setup.global.ts",
+  "globalTeardown": "./base/test-teardown.global.ts",
+  "moduleFileExtensions": ["js", "json", "ts"],
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".e2e-spec.ts$",
+  "transform": {
+    "^.+\\.(t)s$": "ts-jest"
+  }
+}

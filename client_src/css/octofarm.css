@@ -3,7 +3,9 @@ html {
   height: 100%;
 }
 
-
+.dropdown-menu {
+  z-index: 9999;
+}
 
 .bg-colour-1 {
   background-color: #375a7f;
@@ -116,6 +118,11 @@ body {
   background-size: cover;
   background-position: center;
   color: grey;
+  height:100%;
+}
+.flex-stretch-octofarm {
+  display: flex;
+  align-items: stretch;
 }
 button > * {
   pointer-events: none;
@@ -275,17 +282,19 @@ a.notyet {
 .fileBody {
   padding: 5px;
   overflow-y: scroll;
-  min-height: 65vh;
+  /*min-height: 40vh;*/
   max-height: 65vh;
 }
-
 .fileBody p {
   margin-bottom: 0px !important;
 }
-
+.printerSelected {
+  border-left: #f39c12 4px solid;
+}
 .fileFooter {
   padding: 5px;
 }
+
 .search-control:focus {
   border-width: 0;
   border-bottom-width: 1px;
@@ -424,13 +433,21 @@ a.notyet {
 }
 /* PRINTER MAP TILES */
 .printer-map-tile:hover {
-  opacity: 0.7;
+  border: 1px dashed lime;
+  /*opacity: 0.8;*/
+  /*border: 2px solid red;*/
+  /*margin: -2px;*/
 }
 .printer-map-tile-selected {
-  background-color: rgba(0, 132, 255, 0.8);
+  border: 1px solid lime !important;
+  margin: -5px;
 }
 .printer-map-tile-stub {
+  /*background: rgba(0, 0, 0, .3);*/
   opacity: 0.3;
+}
+.printer-map-idle {
+  background-color: #262626;
 }
 /*PRINTER MANAGER*/
 .terminal-window {
@@ -546,11 +563,6 @@ label {
     top: 40px;
     z-index: 1000;
   }
-
-}
-
-.bootbox-input-checkbox{
-
 }
 
 .carousel-item {

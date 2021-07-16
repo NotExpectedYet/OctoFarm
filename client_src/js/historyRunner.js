@@ -1,9 +1,9 @@
-import "@babel/polyfill";
 import OctoFarmClient from "./lib/octofarm.js";
 import Calc from "./lib/functions/calc.js";
 import UI from "./lib/functions/ui.js";
 import { returnDropDown } from "./lib/modules/filamentGrab.js";
 import OctoFarmclient from "./lib/octofarm.js";
+import * as ApexCharts from "apexcharts";
 
 // Setup history listeners
 document.getElementById("historyTable").addEventListener("click", (e) => {
@@ -29,7 +29,7 @@ export default class History {
     historyList = await newHistory.json();
     jplist.init({
       storage: "localStorage", // 'localStorage', 'sessionStorage' or 'cookies'
-      storageName: "history-sorting", // the same storage name can be used to share storage between multiple pages
+      storageName: "history-sorting" // the same storage name can be used to share storage between multiple pages
     });
     document.getElementById("loading").style.display = "none";
     document.getElementById("wrapper").classList.remove("d-none");
@@ -45,15 +45,15 @@ export default class History {
         width: "100%",
         height: "250px",
         animations: {
-          enabled: true,
+          enabled: true
         },
         toolbar: {
-          show: false,
+          show: false
         },
         zoom: {
-          enabled: false,
+          enabled: false
         },
-        background: "#303030",
+        background: "#303030"
       },
       colors: ["#00bc8c", "#f39c12", "#e74c3c"],
       dataLabels: {
@@ -65,28 +65,28 @@ export default class History {
           borderRadius: 2,
           borderWidth: 1,
           borderColor: "#fff",
-          opacity: 0.9,
-        },
+          opacity: 0.9
+        }
       },
       // colors: ["#295efc", "#37ff00", "#ff7700", "#ff1800", "#37ff00", "#ff1800"],
       toolbar: {
-        show: false,
+        show: false
       },
       stroke: {
         width: 4,
-        curve: "smooth",
+        curve: "smooth"
       },
       theme: {
-        mode: "dark",
+        mode: "dark"
       },
       noData: {
-        text: "Loading...",
+        text: "Loading..."
       },
       series: [],
       yaxis: [
         {
           title: {
-            text: "Count",
+            text: "Count"
           },
           seriesName: "Success",
           labels: {
@@ -94,12 +94,12 @@ export default class History {
               if (val !== null) {
                 return val.toFixed(0);
               }
-            },
-          },
+            }
+          }
         },
         {
           title: {
-            text: "Count",
+            text: "Count"
           },
           seriesName: "Success",
           labels: {
@@ -107,13 +107,13 @@ export default class History {
               if (val !== null) {
                 return val.toFixed(0);
               }
-            },
+            }
           },
-          show: false,
+          show: false
         },
         {
           title: {
-            text: "Count",
+            text: "Count"
           },
           seriesName: "Success",
           labels: {
@@ -121,10 +121,10 @@ export default class History {
               if (val !== null) {
                 return val.toFixed(0);
               }
-            },
+            }
           },
-          show: false,
-        },
+          show: false
+        }
       ],
       xaxis: {
         type: "datetime",
@@ -133,9 +133,9 @@ export default class History {
           formatter: function (value, timestamp) {
             let dae = new Date(timestamp);
             return dae.toLocaleDateString(); // The formatter function overrides format property
-          },
-        },
-      },
+          }
+        }
+      }
     };
     let historyGraph = new ApexCharts(
       document.querySelector("#printCompletionByDay"),
@@ -470,7 +470,7 @@ export default class History {
 
   static async updateCost(id) {
     const update = {
-      id,
+      id
     };
     let post = await OctoFarmClient.post("history/updateCostMatch", update);
     post = await post.json();
@@ -481,9 +481,8 @@ export default class History {
         3000,
         "clicked"
       );
-      document.getElementById(
-        `printerCost-${id}`
-      ).innerHTML = Calc.returnPrintCost(post.costSettings, post.printTime);
+      document.getElementById(`printerCost-${id}`).innerHTML =
+        Calc.returnPrintCost(post.costSettings, post.printTime);
     } else {
       UI.createAlert(
         "warning",
@@ -491,9 +490,8 @@ export default class History {
         3000,
         "clicked"
       );
-      document.getElementById(
-        `printerCost-${id}`
-      ).innerHTML = Calc.returnPrintCost(post.costSettings, post.printTime);
+      document.getElementById(`printerCost-${id}`).innerHTML =
+        Calc.returnPrintCost(post.costSettings, post.printTime);
     }
   }
 
@@ -507,7 +505,7 @@ export default class History {
     const update = {
       id,
       note: document.getElementById("notes").value,
-      filamentId: filamentID,
+      filamentId: filamentID
     };
 
     const post = await OctoFarmClient.post("history/update", update);
@@ -532,17 +530,17 @@ export default class History {
         buttons: {
           confirm: {
             label: "Yes",
-            className: "btn-success",
+            className: "btn-success"
           },
           cancel: {
             label: "No",
-            className: "btn-danger",
-          },
+            className: "btn-danger"
+          }
         },
         async callback(result) {
           if (result) {
             const histID = {
-              id: e.target.id,
+              id: e.target.id
             };
             const post = await OctoFarmClient.post("history/delete", histID);
             if (post.status === 200) {
@@ -565,7 +563,7 @@ export default class History {
               );
             }
           }
-        },
+        }
       });
     }
   }
@@ -653,18 +651,15 @@ export default class History {
     document.getElementById("totalCost").innerHTML = cost
       .reduce((a, b) => a + b, 0)
       .toFixed(2);
-    document.getElementById(
-      "totalFilament"
-    ).innerHTML = `${totalUsageMeter
+    document.getElementById("totalFilament").innerHTML = `${totalUsageMeter
       .reduce((a, b) => a + b, 0)
       .toFixed(2)}m / ${totalUsageGrams
       .reduce((a, b) => a + b, 0)
       .toFixed(2)}g`;
     const totalTimes = times.reduce((a, b) => a + b, 0);
 
-    document.getElementById("totalPrintTime").innerHTML = Calc.generateTime(
-      totalTimes
-    );
+    document.getElementById("totalPrintTime").innerHTML =
+      Calc.generateTime(totalTimes);
     document.getElementById("printerTotalCost").innerHTML = printerCost
       .reduce((a, b) => a + b, 0)
       .toFixed(2);
@@ -672,9 +667,8 @@ export default class History {
       parseFloat(printerCost.reduce((a, b) => a + b, 0).toFixed(2)) +
       parseFloat(cost.reduce((a, b) => a + b, 0).toFixed(2))
     ).toFixed(2);
-    document.getElementById(
-      "averageCostPerHour"
-    ).innerHTML = avgHourCost.toFixed(2);
+    document.getElementById("averageCostPerHour").innerHTML =
+      avgHourCost.toFixed(2);
   }
 }
 const element = document.getElementById("listenerHistory");

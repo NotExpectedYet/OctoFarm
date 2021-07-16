@@ -13,7 +13,8 @@ module.exports.connect = async () => {
 
   const mongooseOpts = {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
   };
 
   await mongoose.connect(uri, mongooseOpts);

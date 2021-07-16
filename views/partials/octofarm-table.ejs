@@ -1,0 +1,17 @@
+<% let hideTable = "" %>
+<% if(table.hide) {%>
+    <% hideTable = " d-none" %>
+<% } %>
+<div class="col-lg-12 mt-2 table-responsive-sm table-responsive-md">
+    <table id="<%= table.id %>" class="table table-dark table-striped text-center <%= hideTable %>">
+        <thead>
+        <tr>
+            <% table.headers.forEach(header => { %>
+                <th scope="col" class="sticky-table table-dark" style="<%= header.style %>"><%- header.title %></th>
+            <% }) %>
+        </tr>
+        </thead>
+        <tbody id="<%= table.contentId %>" style="height:100%; overflow-y:auto;">
+        </tbody>
+    </table>
+</div>

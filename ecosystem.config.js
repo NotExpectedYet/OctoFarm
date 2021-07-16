@@ -6,8 +6,8 @@ module.exports = {
       listen_timeout: 10000,
       exp_backoff_restart_delay: 1500,
       restart_delay: 1000,
-      watch: ".",
-    },
+      watch: "."
+    }
   ],
   deploy: {
     production: {
@@ -19,7 +19,7 @@ module.exports = {
       "pre-deploy-local": "",
       "post-deploy":
         "npm install && pm2 reload ecosystem.config.js --env production",
-      "pre-setup": "",
-    },
-  },
+      "pre-setup": ""
+    }
+  }
 };

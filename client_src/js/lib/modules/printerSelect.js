@@ -201,7 +201,7 @@ export default class PrinterSelect {
       saveEditsBtn.remove();
     }
     if (action) {
-      document.getElementById("printerEditLabel").innerHTML = action;
+      document.getElementById("printerSelectTitle").innerHTML = action;
     }
     //Setup elements
     element.innerHTML = "";
@@ -262,14 +262,14 @@ export default class PrinterSelect {
           group: printer.group,
           spool: spoolName,
           cameraURL: printer.cameraURL,
-          apikey: printer.apikey,
+          apikey: printer.apikey
         };
         printerList.push(forList);
       }
       if (printer.group !== "") {
         const group = {
           display: printer.group,
-          tag: printer.group.replace(/\s/g, "_"),
+          tag: printer.group.replace(/\s/g, "_")
         };
         groupList.push(group);
       }
@@ -352,7 +352,7 @@ export default class PrinterSelect {
             `;
       document.getElementById("selectAll").addEventListener("click", (e) => {
         const checkBoxes = document.querySelectorAll(
-          "input[type=\"checkbox\"]:not(:checked)"
+          'input[type="checkbox"]:not(:checked)'
         );
         checkBoxes.forEach((box) => {
           box.checked = true;
@@ -385,7 +385,7 @@ export default class PrinterSelect {
 
   static getSelected() {
     const checkedBoxes = document.querySelectorAll(
-      "input[type=\"checkbox\"]:checked"
+      'input[type="checkbox"]:checked'
     );
     const printers = [];
     checkedBoxes.forEach((box) => {

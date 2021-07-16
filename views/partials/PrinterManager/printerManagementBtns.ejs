@@ -1,0 +1,67 @@
+<div class="text-center mt-1">
+    <div class="btn-group">
+        <button type="button" class="btn bg-colour-1 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-print"></i> Printer Management
+        </button>
+        <div class="dropdown-menu">
+            <button
+                    title="Add Printer to your Farm"
+                    id="addPrinterBtn"
+                    type="button"
+                    class="dropdown-item"
+                    href="#"
+                    aria-expanded="false"
+            >
+                <i class="fas fa-plus fa-sm"></i> Add
+            </button>
+            <button id="editPrinterBtn" type="button" class="dropdown-item"
+                    data-toggle="modal" data-target="#printerSelectModal">
+                <i class="fas fa-edit"></i> Edit
+            </button>
+            <form id="uploadFileModalContentForm" class="dropdown-item">
+                <input
+
+                        class="fileElem"
+                        type="file"
+                        id="importPrinterBtn"
+                        accept=".json"
+                /><label
+                        title="Import printers from a json file"
+                        for="importPrinterBtn"
+                ><i class="fas fa-file-import"></i> Import</label
+                >
+            </form>
+            <button
+                    title="Export printers from OctoFarm"
+                    id="exportPrinterBtn"
+                    type="button"
+                    class="dropdown-item"
+                    href="#"
+                    aria-expanded="false"
+            >
+                <i class="fas fa-file-export"></i> Export
+            </button>
+            <button
+                    title="Delete Printers from your farm"
+                    id="deletePrintersBtn"
+                    type="button"
+                    class="dropdown-item"
+                    href="#"
+                    aria-expanded="false"
+                    data-toggle="modal" data-target="#printerSelectModal"
+            >
+                <i class="fas fa-trash"></i> Delete
+            </button>
+            <button
+                    title="Add printers by scanning your network for online OctoPrint instances."
+                    id="scanNetworkBtn"
+                    type="button"
+                    class="dropdown-item"
+                    href="#"
+                    aria-expanded="false"
+            >
+                <i class="fas fa-wifi"></i> Scan
+            </button>
+        </div>
+    </div>
+</div>

@@ -23,29 +23,31 @@ afterAll(async () => {
 
 describe("DownloadUtil", () => {
   const errorOnDownload = "Download was rejected";
-  jest.mock("node-fetch", () => () =>
-    Promise.resolve({
-      body: {
-        pipe: () => null,
-        on: (type, reject) => reject(errorOnDownload),
-      },
-    })
+  jest.mock(
+    "node-fetch",
+    () => () =>
+      Promise.resolve({
+        body: {
+          pipe: () => null,
+          on: (type, reject) => reject(errorOnDownload)
+        }
+      })
   );
   jest.mock("fs", () => {
     return {
       createWriteStream: () => {
         return {
-          on: (type, cb) => cb(),
+          on: (type, cb) => cb()
         };
       },
       existsSync: () => true,
-      stat: () => true,
+      stat: () => true
     };
   });
 
   it("should be able to catch download errors (mocked)", async () => {
     const {
-      downloadFromOctoPrint,
+      downloadFromOctoPrint
     } = require("../../server_src/utils/download.util");
 
     const testPath = "test.file";

@@ -1,0 +1,21 @@
+<div class="row mt-5">
+    <div class="col-md-6 m-auto">
+        <div class="card card-body text-center">
+            <h1>Welcome to OctoFarm</h1>
+            <p>
+                The all in one monitoring and management solution for multiple Octoprint instances.
+            </p>
+            <h1><img width="500px" src="images/logo.png" /></h1>
+            <p>
+                Welcome <% if(typeof name != 'undefined'){ %>
+                    <%= name %> <% }%>. To get started though, we need some printers in your
+                farm!
+            </p>
+            <a
+                    class="btn btn-primary btn-block mb-2"
+                    href="/printers"
+            >Setup Printers</a
+            >
+        </div>
+    </div>
+</div>

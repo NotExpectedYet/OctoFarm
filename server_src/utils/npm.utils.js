@@ -35,5 +35,5 @@ async function installNpmDependency(dependency) {
 
 module.exports = {
   returnListOfMissingPackages,
-  installNpmDependency,
+  installNpmDependency
 };

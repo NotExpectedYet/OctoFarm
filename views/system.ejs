@@ -58,7 +58,7 @@
                                             <p class=""><i class="fas fa-microchip"></i> CPU: <br><span
                                                         class="text-light" id="systemArch"
                                                         style="font-size:0.8rem;"></span>
-                                                <% systemInformation.cpuInfo.speed.cores.forEach((core, index) => { %>
+                                                <% systemInformation.cpuCurrentSpeed.cores.forEach((core, index) => { %>
                                                     <small class="text-light">  <%= index; %>:</small>
                                                     <code><%= core; %>Ghz</code>
                                                 <% }); %>
@@ -74,13 +74,14 @@
                                             </p>
                                         </div>
                                         <div class="col-4">
-                                            <p class=""><i class="fas fa-hdd"></i> Main Disk:
-                                                <b><%= systemInformation.systemDisk.mount; %></b><br><b>Disk
-                                                    Patrtition: </b><%= systemInformation.systemDisk.fs; %><br><span
-                                                        class="text-light" id="systemHardDrive"
-                                                        style="font-size:0.8rem;">
-                                                              <%= helpers.generateBytes(systemInformation.systemDisk.used); %>  /  <%= helpers.generateBytes(systemInformation.systemDisk.size); %> |  <%= systemInformation.systemDisk.use.toFixed(2); %>%
-                                                    </span>
+                                            <p class="">
+                                                <i class="fas fa-hdd"></i> Main Disk:
+                                                <b><%= systemInformation.systemDisk.mount; %></b><br>
+                                                <b>Disk Partition: </b>
+                                                <%= systemInformation.systemDisk.fs; %><br>
+                                                <span class="text-light" id="systemHardDrive" style="font-size:0.8rem;">
+                                                      <%= helpers.generateBytes(systemInformation.systemDisk.used); %>  /  <%= helpers.generateBytes(systemInformation.systemDisk.size); %> |  <%= systemInformation.systemDisk.use.toFixed(2); %>%
+                                                </span>
                                             </p>
                                         </div>
                                     </div>
@@ -98,27 +99,29 @@
                                                         title="OctoFarm current version, will take you to github releases page"
                                                         class="text-light"
                                                         href="https://github.com/NotExpectedYet/OctoFarm/releases"
-                                                        target="_blank"><br><%= serviceInformation?.update?.current_version; %></a></p>
+                                                        target="_blank"><br><%= serviceInformation?.update?.current_version; %>
+                                                </a></p>
 
                                             <% if(!serviceInformation?.update?.latestReleaseKnown){ %>
 
                                                 <p><i class="fas fa-code-branch"></i> Latest Version: <a
-                                                        title="OctoFarm latest version, will take you to github releases page"
-                                                        class="text-light"
-                                                        href="https://github.com/NotExpectedYet/OctoFarm/releases"
-                                                        target="_blank"><br><%= serviceInformation?.update?.current_version; %></a></p>
+                                                            title="OctoFarm latest version, will take you to github releases page"
+                                                            class="text-light"
+                                                            href="https://github.com/NotExpectedYet/OctoFarm/releases"
+                                                            target="_blank"><br><%= serviceInformation?.update?.current_version; %>
+                                                    </a></p>
 
-                                           <% }else{ %>
+                                            <% }else{ %>
 
-                                            <p><i class="fas fa-code-branch"></i> Latest Version:
+                                                <p><i class="fas fa-code-branch"></i> Latest Version:
                                                     <a
-                                                    title="OctoFarm latest version, will take you to github releases page"
-                                                    class="text-light"
-                                                    href="<%= serviceInformation?.update?.latestReleaseKnown.html_url;  %>"
-                                            target="_blank"><br><%= serviceInformation?.update?.latestReleaseKnown.name; %>
-                                            <br><%= serviceInformation?.update?.latestReleaseKnown.tag_name; %>
-                                            </a></p>
-                                           <% } %>
+                                                            title="OctoFarm latest version, will take you to github releases page"
+                                                            class="text-light"
+                                                            href="<%= serviceInformation?.update?.latestReleaseKnown.html_url; %>"
+                                                            target="_blank"><br><%= serviceInformation?.update?.latestReleaseKnown.name; %>
+                                                        <br><%= serviceInformation?.update?.latestReleaseKnown.tag_name; %>
+                                                    </a></p>
+                                            <% } %>
 
                                             <p class=""><i class="far fa-clock"></i> Timezone: <br><span
                                                         class="text-light" id="timeZone" style="font-size:0.8rem;">
@@ -395,7 +398,7 @@
                                                                   enctype="multipart/form-data" method="POST">
                                                                 <input class="btn bg-secondary" type="file"
                                                                        name="myFile"
-                                                                       accept="image/jpeg,image/png,image/jpg" />
+                                                                       accept="image/jpeg,image/png,image/jpg"/>
                                                                 <input id="backgroundSubmit" class="btn btn-primary"
                                                                        type="submit" value="Upload"
                                                                        accept="image/jpeg,image/png">
@@ -854,7 +857,8 @@
                                                             Docker having it's own update mechanism
                                                             Please check the <a
                                                                     href="https://octofarm.net/installation">Installation
-                                                                Instructions</a> for more information on how to update your docker container.
+                                                                Instructions</a> for more information on how to update
+                                                            your docker container.
                                                             up.
                                                         </div>
                                                         <% systemButtonsDisabled = true; %>
@@ -2075,14 +2079,15 @@
                                                             <li class="list-group-item">Josheua R Mascote<i
                                                                         style="color:gold;" class="fas fa-trophy"></i>
                                                             </li>
+                                                            <li class="list-group-item">Feldherr<i
+                                                                        style="color:gold;" class="fas fa-trophy"></i>
+                                                            </li>
                                                         </ul>
                                                     </div>
                                                 </div>
                                             </center>
                                         </div>
                                     </div>
-
-
                                 </div>
                             </div>
                         </div>
@@ -2090,10 +2095,7 @@
                 </div>
             </div>
         </div>
-
     </div>
-
-
 </div>
-<script src="/assets/js/settings.min.js" type="module"></script>
+<script src="/assets/dist/settings.min.js" type="module"></script>
 

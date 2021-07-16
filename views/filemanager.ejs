@@ -1,281 +1,282 @@
-<% if(typeof printerCount != 'undefined' && printerCount > 0 ) {%>
-  <% if(typeof currentOperationsCount != 'undefined' && currentOperationsCount.idle > 0 || currentOperationsCount.active > 0 || currentOperationsCount.disconnected > 0 || currentOperationsCount.complete > 0) {%>
+<% if(typeof printerCount != 'undefined' && printerCount > 0 ) { %>
+    <% if(typeof currentOperationsCount != 'undefined' && currentOperationsCount.idle > 0 || currentOperationsCount.active > 0 || currentOperationsCount.disconnected > 0 || currentOperationsCount.complete > 0) { %>
 
-    <div class="row">
-      <div id="dashboardInfo" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-        <div class="card text-white bg-dark h-100">
-          <div class="card-header dashHeader p-0">
-            <button
-                    type="button"
-                    class="btn btn-secondary d-block ml-1 mr-1 p-1"
-                    href="#"
-                    aria-expanded="false"
-                    disabled
-            >
-              <i class="fas fa-chart-bar"></i> File Manager Statistics
-            </button>
-
-
-          </div>
-          <div class="card-body pt-2 pb-0">
-            <%- include('./partials/FileManager/fileManagerStatistics.ejs') %>
-
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-      <div id="dashboardInfo" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
-        <div class="card text-white bg-dark h-100">
-          <div class="card-header dashHeader p-0">
-            <button
-                    type="button"
-                    class="btn btn-secondary d-block ml-1 mr-1 p-1"
-                    href="#"
-                    aria-expanded="false"
-                    disabled
-            >
-              <i class="fas fa-chart-bar"></i> Management
-            </button>
+        <div class="row">
+            <div id="dashboardInfo" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                <div class="card text-white bg-dark h-100">
+                    <div class="card-header dashHeader p-0">
+                        <button
+                                type="button"
+                                class="btn btn-secondary d-block ml-1 mr-1 p-1"
+                                href="#"
+                                aria-expanded="false"
+                                disabled
+                        >
+                            <i class="fas fa-chart-bar"></i> File Manager Statistics
+                        </button>
 
 
-          </div>
-          <div class="card-body pt-2 pb-0">
-            <div class="row">
-              <div class="col-lg-4">
-                <h5>Printers</h5>
-                <hr>
-                <div class="row">
-                  <div class="col-12">
-                    <button
-                            id="multUploadBtn"
-                            type="button"
-                            class="btn btn-info d-inline bg-colour-3"
-                            data-toggle="modal"
-                            data-target="#multiUploadModal"
-                    >
-                      <i class="fas fa-layer-group"></i> Multi-Upload
-                    </button>
-<!--                    <div class="input-group mb-3 w-50 float-right">-->
-<!--                      <div class="input-group-prepend">-->
-<!--                        <label class="input-group-text" for="inputGroupSelect01">State: </label>-->
-<!--                      </div>-->
-<!--                      <select class="custom-select " id="inputGroupSelect01"-->
-<!--                              data-jplist-control="select-filter"-->
-<!--                              data-group="printers"-->
-<!--                              data-name="printerNames"-->
-<!--                      >-->
-<!--                        <option selected-->
-<!--                                href="#"-->
-<!--                                data-value="0"-->
-<!--                                data-path="default"-->
-<!--                        >Filter</option>-->
-<!--                        <option href="#"-->
-<!--                                data-path=".Idle">Idle</option>-->
-<!--                        <option href="#"-->
-<!--                                data-path=".Active">Active</option>-->
-<!--                        <option href="#"-->
-<!--                                data-path=".Disconnected">Disconnected</option>-->
-
-<!--                      </select>-->
-<!--                    </div>-->
-                    <!--  <button
-                         type="button"
-                         class="btn btn-info m-3"
-                         data-toggle="modal"
-                         data-target="#fileReplaceModal" disabled
-                       >
-                         <i class="fas fa-exchange-alt"></i> File Replace
-                       </button>-->
-                  </div>
-                </div>
-              </div>
-              <div class="col-lg-8">
-                <h5>Files</h5>
-                <hr>
-                <div id="fileManagerManagement">
-
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </div>
-    <div id="filemanager" class="row">
-      <div id="filePrinters" class="col-12 col-sm-12 col-md-4 col-lg-3 col-xl-3 ">
-        <div class="card text-white bg-dark">
-          <div class="card-header fileHeader">
-            <h5 class="float-left">
-              <button
-                      type="button"
-                      class="btn btn-secondary float-right d-block"
-                      href="#"
-                      aria-expanded="false"
-                      disabled
-              >
-                <i class="fas fa-print"></i> Printers
-              </button>
-            </h5>
-            <button
-                    type="button"
-                    class="btn btn-secondary float-right d-block"
-                    href="#"
-                    aria-expanded="false"
-                    disabled
-            >
-              <i id="fileUploadCountSpinner" class="fas fa-spinner"></i></span> <span id="fileUploadCount"> File Queue: 0</span>
-            </button>
-          </div>
-          <div class="card-body fileBody">
-            <div id="printerList" class="list-group">
-
-            </div>
-          </div>
-          <div class="card-footer fileFooter text-muted"></div>
-        </div>
-      </div>
-      <div class="col-12 col-sm-12 col-md-8 col-lg-9 col-xl-9">
-        <div class="card text-white bg-dark">
-          <div class="card-header fileHeader">
-            <div class="col-12">
-              <h5 class="float-left  mb-0">
-                <button id="printerFileCount" type="button" class="btn btn-secondary float-right d-block" href="#" aria-expanded="false" disabled="">
-                  <i class="fas fa-file"></i>  <i class="fas fa-spinner fa-spin"></i> <i class="fas fa-folder"></i>  <i class="fas fa-spinner fa-spin"></i>
-                </button>
-                <button id="printerStorage" type="button" class="btn btn-secondary float-right d-block" href="#" aria-expanded="false" disabled="">
-
-                  <i class="fas fa-hdd"></i> <i class="fas fa-spinner fa-spin"></i> /  <i class="fas fa-spinner fa-spin"></i>
-                </button>
-                <button id="currentPrinter" type="button" class="btn btn-secondary float-right d-block" href="#" aria-expanded="false" disabled="">
-                  <i class="fas fa-print"></i> <i class="fas fa-spinner fa-spin"></i>
-                </button>
-              </h5>
-              <h5 class="float-left mb-0">
-                <button type="button" class="btn btn-secondary float-right d-block" href="#" aria-expanded="false" disabled="">
-                  <i class="fas fa-file-code"></i> Files: <span id="currentFolder">local</span>/
-                </button>
-              </h5>
-              <div class="float-right">
-                <div id="backBtn" class="float-right"></div>
-                <!-- Split dropright button -->
-                <div class="float-right mr-3 btn-group">
-                  <div id="fileSortDropdownMenu" class="btn bg-dark">Sort</div>
-                  <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="sr-only">Toggle Dropdown</span>
-                  </button>
-                  <div class="dropdown-menu">
-
-                    <a class="dropdown-item" id="sortFileNameDown"><i class="fas fa-sort-alpha-down"></i> File Name</a>
-
-                    <a class="dropdown-item" id="sortFileNameUp"><i class="fas fa-sort-alpha-up"></i> File Name</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" id="sortPrintTimeDown"><i class="fas fa-sort-numeric-down"></i> Print Time</a>
-
-                    <a class="dropdown-item" id="sortPrintTimeUp"><i class="fas fa-sort-numeric-up"></i> Print Time</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" id="sortDateDown"><i class="fas fa-sort-numeric-down"></i> Upload Date</a>
-
-                    <a class="dropdown-item" id="sortDateUp"><i class="fas fa-sort-numeric-up"></i> Upload Date</a>
-                  </div>
-                </div>
-              </div>
-              <div class="btn btn-secondary form-group float-right  mb-0">
-                <form class="form-inline">
-                  <div class="form-group">
-                    <label for="searchFiles">
-                      <i class="fas fa-search pr-1"></i>
-                    </label>
-                    <input id="searchFiles" type="text" placeholder="File Search..." class="search-control search-control-underlined">
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-          <div id="fileBody" class="card-body fileBody">
-
-
-          </div>
-          <div class="card-footer fileFooter text-muted"></div>
-        </div>
-      </div>
-    </div>
-
-  <% }else{ %>
-    <div class="row mt-5">
-      <div class="col-md-6 m-auto">
-        <div class="card card-body text-center">
-          <p>
-            To use file manager you need at least 1 idle or active printer in your farm... Please turn your printer on and connect.
-          </p>
-        </div>
-      </div>
-    </div>
-  <% } %>
-  <script src="/assets/js/fileManagerRunner.min.js" type="module"></script>
-  <div class="modal fade" id="multiUploadModal" tabindex="0" role="dialog" aria-labelledby="multiUploadLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 class="modal-title" id="systemSettingsLabel">Multi-Upload</h3>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span class="text-white" aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12  text-center">
-                <div class="btn-group" role="group" aria-label="Basic example">
-                  <button id="multiPrinterBtn" class="btn btn-danger">1. Choose your printers..</button>
-                  <button id="multiFolder" class="btn btn-warning hidden" disabled>2. Choose your folder path..</button>
-                  <button id="multiFile" class="btn btn-success" disabled>3. Select your files..</button>
-                </div>
-
-              </div>
-              <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                <div id="multiPrintersSection" class="col-lg-12">
-
-
-                </div>
-                <div id="multiFolderSection" class="col-lg-12 hidden">
-                  <p id="multiSelectedPrinters"></p>
-                  <p>Would you like to create a folder too?</p>
-                  <p><b>Note:</b> Leaving blank will create the files in local, otherwise they will be put inside your newly created folder...</p>
-                  <input id="multiNewFolder" class="form-control bg-dark text-light" type="text" placeholder="Please type your new folder name here..." aria-label="NewFolder">
-                </div>
-                <div id="multiFileSection" class="col-lg-12 hidden">
-                  <p id="multiSelectedPrinters2"></p>
-                  <form class="was-validated form-check-inline form-check">
-                    <div class="custom-control custom-checkbox mb-2 pr-2">
-                      <input type="checkbox" class="custom-control-input" id="printOnLoadBtn" required>
-                      <label class="custom-control-label" for="printOnLoadBtn">Would you like to print after upload? (Global Effect...)</label>
-                      <div class="invalid-feedback">Do not print after upload...</div>
-                      <div class="valid-feedback">
-                        Print after upload...
-                      </div>
                     </div>
-                  </form>
-                  <p><b>Note:</b> If the print on successful upload action is enabled above, you may only upload a single file to your printers.</p>
-                  <label id="multiFileUploadBtnLabel" class="btn btn-success m-3 float-left" for="multiFileUploadBtn"><i class="fas fa-file-import"></i> Upload File's</label>
-                  <input id="multiFileUploadBtn" multiple accept=".gcode,.gco,.g" type="file" class="btn btn-success float-left">
-                  <br>
-                  <p id="multiFileSelectedNow"></p>
+                    <div class="card-body pt-2 pb-0">
+                        <%- include('./partials/FileManager/fileManagerStatistics.ejs') %>
+
+                    </div>
                 </div>
-
-
-              </div>
             </div>
-          </div>
         </div>
-        <div id="multiUploadFooter" class="modal-footer">
 
+        <div class="row">
+            <div id="dashboardInfo" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 mb-2">
+                <div class="card text-white bg-dark h-100">
+                    <div class="card-header dashHeader p-0">
+                        <button
+                                type="button"
+                                class="btn btn-secondary d-block ml-1 mr-1 p-1"
+                                href="#"
+                                aria-expanded="false"
+                                disabled
+                        >
+                            <i class="fas fa-chart-bar"></i> Management
+                        </button>
+
+
+                    </div>
+                    <div class="card-body pt-2 pb-0">
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <h5>Printers</h5>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <button
+                                                id="multUploadBtn"
+                                                type="button"
+                                                class="btn btn-info d-inline bg-colour-3"
+                                                data-toggle="modal"
+                                                data-target="#multiUploadModal"
+                                        >
+                                            <i class="fas fa-layer-group"></i> Multi-Upload
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <h5>Files</h5>
+                                <hr>
+                                <div id="fileManagerManagement">
+
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
+
+        <div id="filemanager" class="row">
+            <div id="filePrinters" class="col-3 col-sm-12 col-md-6 col-lg-3">
+                <div class="card text-white bg-dark">
+                    <div class="card-header fileHeader">
+                        <h5 class="float-left">
+                            <button
+                                    type="button"
+                                    class="btn btn-secondary float-right d-block"
+                                    href="#"
+                                    aria-expanded="false"
+                                    disabled
+                            >
+                                <i class="fas fa-print"></i> Printers
+                            </button>
+                        </h5>
+                        <button
+                                type="button"
+                                class="btn btn-secondary float-right d-block"
+                                href="#"
+                                aria-expanded="false"
+                                disabled
+                        >
+                            <i id="fileUploadCountSpinner" class="fas fa-spinner"></i></span> <span
+                                    id="fileUploadCount"> File Queue: 0</span>
+                        </button>
+                    </div>
+                    <div class="card-body fileBody">
+                        <div id="printerList" class="list-group">
+                        </div>
+                    </div>
+                    <div class="card-footer fileFooter text-muted"></div>
+                </div>
+            </div>
+            <div class="col-9 col-sm-12 col-md-6 col-lg-9 flex-stretch-octofarm">
+                <div class="card text-white bg-dark flex-fill">
+                    <div class="card-header fileHeader">
+                        <div class="col-12">
+                            <h5 class="float-left  mb-0">
+                                <button id="printerFileCount" type="button"
+                                        class="btn btn-secondary float-right d-block" href="#" aria-expanded="false"
+                                        disabled="">
+                                    <i class="fas fa-file"></i> <i class="fas fa-spinner fa-spin"></i> <i
+                                            class="fas fa-folder"></i> <i class="fas fa-spinner fa-spin"></i>
+                                </button>
+                                <button id="printerStorage" type="button"
+                                        class="btn btn-secondary float-right d-block"
+                                        href="#" aria-expanded="false" disabled="">
+
+                                    <i class="fas fa-hdd"></i> <i class="fas fa-spinner fa-spin"></i> / <i
+                                            class="fas fa-spinner fa-spin"></i>
+                                </button>
+                                <button type="button" class="btn btn-secondary float-right d-block"
+                                        href="#" aria-expanded="false" disabled="">
+                                <span id="currentPrinter">
+                                    <i class="fas fa-print"></i> <i class="fas fa-spinner fa-spin"></i>
+                                </span>
+                                </button>
+                            </h5>
+                            <h5 class="float-left mb-0">
+                                <button type="button" class="btn btn-secondary float-right d-block" href="#"
+                                        aria-expanded="false" disabled="">
+                                    <i class="fas fa-file-code"></i> Files: <span id="currentFolder">local</span>/
+                                </button>
+                            </h5>
+                            <div class="float-right">
+                                <div id="backBtn" class="float-right" disabled></div>
+                                <!-- Split dropright button -->
+                                <div class="float-right mr-3 btn-group">
+                                    <div id="fileSortDropdownMenu" class="btn bg-dark">Sort</div>
+                                    <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" id="sortFileNameDown"><i
+                                                    class="fas fa-sort-alpha-down"></i> File Name</a>
+
+                                        <a class="dropdown-item" id="sortFileNameUp"><i
+                                                    class="fas fa-sort-alpha-up"></i> File Name</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" id="sortPrintTimeDown"><i
+                                                    class="fas fa-sort-numeric-down"></i> Print Time</a>
+
+                                        <a class="dropdown-item" id="sortPrintTimeUp"><i
+                                                    class="fas fa-sort-numeric-up"></i> Print Time</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" id="sortDateDown"><i
+                                                    class="fas fa-sort-numeric-down"></i> Upload Date</a>
+                                        <a class="dropdown-item" id="sortDateUp"><i
+                                                    class="fas fa-sort-numeric-up"></i>
+                                            Upload Date</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="btn btn-secondary form-group float-right  mb-0">
+                                <form class="form-inline">
+                                    <div class="form-group">
+                                        <label for="searchFiles">
+                                            <i class="fas fa-search pr-1"></i>
+                                        </label>
+                                        <input id="searchFiles" type="text" placeholder="File Search..."
+                                               class="search-control search-control-underlined">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="fileBody" class="card-body fileBody">
+                    </div>
+                    <div class="card-footer fileFooter text-muted"></div>
+                </div>
+            </div>
+        </div>
+    <% }else{ %>
+        <div class="row mt-5">
+            <div class="col-md-6 m-auto">
+                <div class="card card-body text-center">
+                    <p>
+                        To use file manager you need at least 1 idle or active printer in your farm... Please turn your
+                        printer on and connect.
+                    </p>
+                </div>
+            </div>
+        </div>
+    <% } %>
+
+    <div class="modal fade" id="multiUploadModal" tabindex="0" role="dialog" aria-labelledby="multiUploadLabel"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="systemSettingsLabel">Multi-Upload</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-white" aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12  text-center">
+                                <div class="btn-group" role="group" aria-label="Basic example">
+                                    <button id="multiPrinterBtn" class="btn btn-danger">1. Choose your printers..
+                                    </button>
+                                    <button id="multiFolder" class="btn btn-warning hidden" disabled>2. Choose your
+                                        folder path..
+                                    </button>
+                                    <button id="multiFile" class="btn btn-success" disabled>3. Select your files..
+                                    </button>
+                                </div>
+
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div id="multiPrintersSection" class="col-lg-12">
+
+
+                                </div>
+                                <div id="multiFolderSection" class="col-lg-12 hidden">
+                                    <p id="multiSelectedPrinters"></p>
+                                    <p>Would you like to create a folder too?</p>
+                                    <p><b>Note:</b> Leaving blank will create the files in local, otherwise they will be
+                                        put inside your newly created folder...</p>
+                                    <input id="multiNewFolder" class="form-control bg-dark text-light" type="text"
+                                           placeholder="Please type your new folder name here..."
+                                           aria-label="NewFolder">
+                                </div>
+                                <div id="multiFileSection" class="col-lg-12 hidden">
+                                    <p id="multiSelectedPrinters2"></p>
+                                    <form class="was-validated form-check-inline form-check">
+                                        <div class="custom-control custom-checkbox mb-2 pr-2">
+                                            <input type="checkbox" class="custom-control-input" id="printOnLoadBtn"
+                                                   required>
+                                            <label class="custom-control-label" for="printOnLoadBtn">Would you like to
+                                                print after upload? (Global Effect...)</label>
+                                            <div class="invalid-feedback">Do not print after upload...</div>
+                                            <div class="valid-feedback">
+                                                Print after upload...
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <p><b>Note:</b> If the print on successful upload action is enabled above, you may
+                                        only upload a single file to your printers.</p>
+                                    <label id="multiFileUploadBtnLabel" class="btn btn-success m-3 float-left"
+                                           for="multiFileUploadBtn"><i class="fas fa-file-import"></i> Upload
+                                        File's</label>
+                                    <input id="multiFileUploadBtn" multiple accept=".gcode,.gco,.g" type="file"
+                                           class="btn btn-success float-left">
+                                    <br>
+                                    <p id="multiFileSelectedNow"></p>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="multiUploadFooter" class="modal-footer">
+
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+    <script src="/assets/dist/fileManagerRunner.min.js" type="module"></script>
 <% }else{ %>
-  <%- include('./addPrinters.ejs') %>
+    <%- include('./addPrinters.ejs') %>
 <% } %>
 

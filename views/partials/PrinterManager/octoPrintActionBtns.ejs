@@ -1,0 +1,82 @@
+<% const disable_btn_air_gapped = (air_gapped) ? "disabled" : "" %>
+
+<div class="text-center mt-1">
+    <div class="btn-group">
+        <button type="button" class="btn bg-colour-3 dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" <%= disable_btn_air_gapped %>>
+            <i class="fas fa-sitemap"></i> OctoPrint Management
+        </button>
+        <div class="dropdown-menu">
+            <button
+                    title="Install multiple plugins at once."
+                    id="blkPluginsInstallBtn"
+                    type="button"
+                    class="dropdown-item"
+                    href="#"
+                    aria-expanded="false"
+                    data-toggle="modal" data-target="#printerSelectModal"
+            >
+                <i class="fas fa-plug"></i> Install Plugins
+            </button>
+            <button
+                    title="Uninstall multiple plugins at once."
+                    id="blkPluginsUnInstallBtn"
+                    type="button"
+                    class="dropdown-item"
+                    href="#"
+                    aria-expanded="false"
+                    data-toggle="modal" data-target="#printerSelectModal"
+            >
+
+
+                <i class="fas fa-plug"></i> Uninstall Plugins
+            </button>
+            <button
+                    title="Enable multiple plugins at once"
+                    id="blkPluginsEnableBtn"
+                    type="button"
+                    class="dropdown-item"
+                    href="#"
+                    aria-expanded="false"
+                    data-toggle="modal" data-target="#printerSelectModal"
+            >
+                <i class="fas fa-plug"></i> Enable Plugin
+            </button>
+            <button
+                    title="Disable multiple plugins at once"
+                    id="blkPluginsDisableBtn"
+                    type="button"
+                    class="dropdown-item"
+                    href="#"
+                    aria-expanded="false"
+                    data-toggle="modal" data-target="#printerSelectModal"
+            >
+                <i class="fas fa-plug"></i> Disable Plugin
+            </button>
+            <button
+                    title="Install multiple plugins at once."
+                    id="blkOctoPrintBackupBtn"
+                    type="button"
+                    class="dropdown-item d-none"
+                    href="#"
+                    aria-expanded="false"
+                    data-toggle="modal" data-target="#printerSelectModal"
+                    disabled
+            >
+                <i class="fas fa-plug"></i> Backup OctoPrint
+            </button>
+            <button
+                    title="Install multiple plugins at once."
+                    id="blkOctoPrintRestoreBtn"
+                    type="button"
+                    class="dropdown-item d-none"
+                    href="#"
+                    aria-expanded="false"
+                    data-toggle="modal" data-target="#printerSelectModal"
+                    disabled
+            >
+                <i class="fas fa-plug"></i> Restore OctoPrint
+            </button>
+        </div>
+    </div>
+
+</div>

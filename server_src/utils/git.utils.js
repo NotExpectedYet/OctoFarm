@@ -41,5 +41,5 @@ module.exports = {
   getListOfModifiedFiles,
   pullLatestRepository,
   checkIfWereInAGitRepo,
-  makeSureBranchIsUpToDateWithRemote,
+  makeSureBranchIsUpToDateWithRemote
 };

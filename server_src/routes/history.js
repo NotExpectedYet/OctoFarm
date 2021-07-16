@@ -8,14 +8,11 @@ const Printers = require("../models/Printer.js");
 const Spools = require("../models/Filament.js");
 const Profiles = require("../models/Profiles.js");
 const ServerSettings = require("../models/ServerSettings.js");
-const historyClean = require("../lib/dataFunctions/historyClean.js");
-const printerClean = require("../lib/dataFunctions/printerClean.js");
-
-const { HistoryClean } = historyClean;
-const { PrinterClean } = printerClean;
+const { getHistoryCache } = require("../cache/history.cache");
+const { PrinterClean } = require("../lib/dataFunctions/printerClean.js");
 
 router.post("/update", ensureAuthenticated, async (req, res) => {
-  //Check required fields
+  // Check required fields
   const latest = req.body;
   const { note } = latest;
   const { filamentId } = latest;
@@ -88,7 +85,7 @@ router.post("/update", ensureAuthenticated, async (req, res) => {
   }
   history.markModified("printHistory");
   history.save().then(() => {
-    HistoryClean.start();
+    getHistoryCache().initCache();
   });
   res.send("success");
 });
@@ -97,89 +94,63 @@ router.post("/delete", ensureAuthenticated, async (req, res) => {
   //Check required fields
   const deleteHistory = req.body;
   await History.findOneAndDelete({ _id: deleteHistory.id }).then(() => {
-    HistoryClean.start();
+    getHistoryCache().initCache();
   });
   res.send("success");
 });
 router.get("/get", ensureAuthenticated, async (req, res) => {
-  const sorted = await HistoryClean.returnHistory();
-
-  res.send({ history: sorted });
+  const historyCache = getHistoryCache();
+  res.send({ history: historyCache.historyClean });
 });
 router.get("/statisticsData", ensureAuthenticated, async (req, res) => {
-  const sorted = await HistoryClean.returnHistory();
-  const stats = await HistoryClean.getStatistics(sorted);
+  const historyCache = getHistoryCache();
+  const stats = historyCache.generateStatistics();
 
   res.send({ history: stats });
 });
 router.post("/updateCostMatch", ensureAuthenticated, async (req, res) => {
-  //Check required fields
   const latest = req.body;
 
-  //Find history
-  const history = await History.findOne({ _id: latest.id });
-  //match history name to printer ID
+  // Find history and matching printer ID
+  const historyEntity = await History.findOne({ _id: latest.id });
   const printers = await Printers.find({});
   const printer = _.findIndex(printers, function (o) {
-    return o.settingsApperance.name == history.printHistory.printerName;
+    return o.settingsApperance.name == historyEntity.printHistory.printerName;
   });
   if (printer > -1) {
-    history.printHistory.costSettings = printers[printer].costSettings;
-    history.markModified("printHistory");
-    history.save();
+    historyEntity.printHistory.costSettings = printers[printer].costSettings;
+    historyEntity.markModified("printHistory");
+    historyEntity.save();
     const send = {
       status: 200,
-      printTime: history.printHistory.printTime,
-      costSettings: printers[printer].costSettings,
+      printTime: historyEntity.printHistory.printTime,
+      costSettings: printers[printer].costSettings
     };
     res.send(send);
   } else {
-    history.printHistory.costSettings = {
+    historyEntity.printHistory.costSettings = {
       powerConsumption: 0.5,
       electricityCosts: 0.15,
       purchasePrice: 500,
       estimateLifespan: 43800,
-      maintenanceCosts: 0.25,
+      maintenanceCosts: 0.25
     };
     const send = {
       status: 400,
-      printTime: history.printHistory.printTime,
-      costSettings: history.printHistory.costSettings,
+      printTime: historyEntity.printHistory.printTime,
+      costSettings: historyEntity.printHistory.costSettings
     };
-    history.markModified("printHistory");
-    history.save().then(() => {
-      HistoryClean.start();
+    historyEntity.markModified("printHistory");
+    historyEntity.save().then(() => {
+      getHistoryCache().initCache();
     });
 
     res.send(send);
   }
 });
-router.get("/statistics/:id", ensureAuthenticated, async function(req, res) {
+router.get("/statistics/:id", ensureAuthenticated, async function (req, res) {
   const printerID = req.params.id;
   let stats = await PrinterClean.generatePrinterStatistics(printerID);
-  res.send(stats)
+  res.send(stats);
 });
-// router.get("/info/", ensureAuthenticated, function(req, res) {
-//   //req.socket.setTimeout(Number.MAX_VALUE);
-//   res.writeHead(200, {
-//     "Content-Type": "text/event-stream", // <- Important headers
-//     "Cache-Control": "no-cache",
-//     Connection: "keep-alive"
-//   });
-//   res.write("\n");
-//   (function(clientId) {
-//     clients[clientId] = res; // <- Add this client to those we consider "attached"
-//     req.on("close", function() {
-//       delete clients[clientId];
-//     }); // <- Remove this client when he disconnects
-//   })(++clientId);
-//   //console.log("Client: " + Object.keys(clients));
-// });
-// setInterval(async function() {
-//   for (clientId in clients) {
-//     for (clientId in clients) {
-//       clients[clientId].write("data: " + historyTable + "\n\n"); // <- Push a message to a single attached client
-//     }
-//   }
-// }, 10000);
 module.exports = router;

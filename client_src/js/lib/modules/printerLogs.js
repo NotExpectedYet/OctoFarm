@@ -1,6 +1,7 @@
 import Calc from "../functions/calc.js";
 import OctoFarmClient from "../octofarm.js";
 import OctoPrintClient from "../octoprint.js";
+import ApexCharts from "apexcharts";
 
 let chart = null;
 let historyBarChart = null;
@@ -15,8 +16,8 @@ export default class PrinterLogs {
       headers: {
         "Content-Type": "application/json",
         "X-Api-Key": printer.apikey,
-        Range: "bytes=-500000",
-      },
+        Range: "bytes=-500000"
+      }
     })
       .then(async (resp) => resp.blob())
       .then(async (blob) => blob.text())
@@ -55,7 +56,7 @@ export default class PrinterLogs {
   }
   static loadLogs(printer, connectionLogs) {
     currentPrinter = printer;
-    document.getElementById("printerLogsLabel").innerHTML =
+    document.getElementById("printerLogsTitle").innerHTML =
       "Printer Logs: " + printer.printerName;
     let printerRows = document.getElementById("printerConnectionLogRows");
     let printerErrorRows = document.getElementById("printerErrorLogRows");
@@ -70,10 +71,10 @@ export default class PrinterLogs {
     let logSelect = document.getElementById("octoPrintLogsSelect");
 
     logCount.innerHTML = '(<i class="fas fa-spinner fa-spin"></i>)';
-    errorCount.innerHTML = "(<i class=\"fas fa-spinner fa-spin\"></i>)";
-    tempCount.innerHTML = "(<i class=\"fas fa-spinner fa-spin\"></i>)";
-    octoCount.innerHTML = "(<i class=\"fas fa-spinner fa-spin\"></i>)";
-    octoPrintCount.innerHTML = "(<i class=\"fas fa-spinner fa-spin\"></i>)";
+    errorCount.innerHTML = '(<i class="fas fa-spinner fa-spin"></i>)';
+    tempCount.innerHTML = '(<i class="fas fa-spinner fa-spin"></i>)';
+    octoCount.innerHTML = '(<i class="fas fa-spinner fa-spin"></i>)';
+    octoPrintCount.innerHTML = '(<i class="fas fa-spinner fa-spin"></i>)';
 
     printerRows.innerHTML = "";
     printerErrorRows.innerHTML = "";
@@ -89,7 +90,7 @@ export default class PrinterLogs {
         let orderedSelect = _.sortBy(res.files, [
           function (o) {
             return o.name;
-          },
+          }
         ]);
         logSelect.innerHTML = "";
         for (let i = 0; i < orderedSelect.length; i++) {
@@ -165,15 +166,15 @@ export default class PrinterLogs {
             width: "100%",
             height: "500px",
             animations: {
-              enabled: false,
+              enabled: false
             },
             toolbar: {
-              show: false,
+              show: false
             },
             zoom: {
-              enabled: false,
+              enabled: false
             },
-            background: "#303030",
+            background: "#303030"
           },
           colors: [
             "#fc2929",
@@ -191,34 +192,34 @@ export default class PrinterLogs {
             "#93fc29",
             "#2d4c0d",
             "#ff0084",
-            "#450124",
+            "#450124"
           ],
           stroke: {
-            curve: "smooth",
+            curve: "smooth"
           },
           toolbar: {
-            show: false,
+            show: false
           },
           theme: {
-            mode: "dark",
+            mode: "dark"
           },
           noData: {
-            text: "Loading...",
+            text: "Loading..."
           },
           series: [],
           yaxis: [
             {
               title: {
-                text: "Temperature",
+                text: "Temperature"
               },
               labels: {
                 formatter(value) {
                   if (value !== null) {
                     return `${value}°C`;
                   }
-                },
-              },
-            },
+                }
+              }
+            }
           ],
           xaxis: {
             //tickAmount: "dataPoints",
@@ -241,9 +242,9 @@ export default class PrinterLogs {
                   " " +
                   date.toLocaleTimeString()
                 );
-              },
-            },
-          },
+              }
+            }
+          }
         };
         if (connectionLogs.currentTempLogs.length === 0) {
           tempChart.innerHTML = "<div class=''>No Records to Show</div>";
@@ -267,7 +268,7 @@ export default class PrinterLogs {
       logSelect.addEventListener("change", (e) => {
         octologsLogsRows.innerHTML = "";
 
-        octoPrintCount.innerHTML = "(<i class=\"fas fa-spinner fa-spin\"></i>)";
+        octoPrintCount.innerHTML = '(<i class="fas fa-spinner fa-spin"></i>)';
         PrinterLogs.parseLogs(printer, e.target.value);
       });
       document
@@ -632,23 +633,23 @@ export default class PrinterLogs {
           curve: "smooth",
           lineCap: "butt",
           width: 1,
-          dashArray: 0,
+          dashArray: 0
         },
         animations: {
-          enabled: true,
+          enabled: true
         },
         plotOptions: {
           bar: {
-            horizontal: false,
-          },
+            horizontal: false
+          }
         },
         toolbar: {
-          show: false,
+          show: false
         },
         zoom: {
-          enabled: false,
+          enabled: false
         },
-        background: "#303030",
+        background: "#303030"
       },
       dataLabels: {
         enabled: false,
@@ -659,13 +660,13 @@ export default class PrinterLogs {
           borderRadius: 2,
           borderWidth: 1,
           borderColor: "#fff",
-          opacity: 0.9,
+          opacity: 0.9
         },
         formatter: function (val, opts) {
           if (val !== null) {
             return val.toFixed(0) + "g";
           }
-        },
+        }
       },
       colors: [
         "#00bc8c",
@@ -676,22 +677,22 @@ export default class PrinterLogs {
         "#00b7ff",
         "#4400ff",
         "#8000ff",
-        "#ff00f2",
+        "#ff00f2"
       ],
       toolbar: {
-        show: false,
+        show: false
       },
       theme: {
-        mode: "dark",
+        mode: "dark"
       },
       noData: {
-        text: "Loading...",
+        text: "Loading..."
       },
       series: [],
       yaxis: [
         {
           title: {
-            text: "Count",
+            text: "Count"
           },
           seriesName: "Success",
           labels: {
@@ -699,12 +700,12 @@ export default class PrinterLogs {
               if (val !== null) {
                 return val.toFixed(0);
               }
-            },
-          },
+            }
+          }
         },
         {
           title: {
-            text: "Count",
+            text: "Count"
           },
           seriesName: "Success",
           labels: {
@@ -712,13 +713,13 @@ export default class PrinterLogs {
               if (val !== null) {
                 return val.toFixed(0);
               }
-            },
+            }
           },
-          show: false,
+          show: false
         },
         {
           title: {
-            text: "Count",
+            text: "Count"
           },
           seriesName: "Success",
           labels: {
@@ -726,10 +727,10 @@ export default class PrinterLogs {
               if (val !== null) {
                 return val.toFixed(0);
               }
-            },
+            }
           },
-          show: false,
-        },
+          show: false
+        }
       ],
       xaxis: {
         type: "datetime",
@@ -738,9 +739,9 @@ export default class PrinterLogs {
           formatter: function (value, timestamp) {
             let dae = new Date(timestamp);
             return dae.toLocaleDateString(); // The formatter function overrides format property
-          },
-        },
-      },
+          }
+        }
+      }
     };
     if (historyBarChart !== null) {
       historyBarChart.destroy();
@@ -762,37 +763,37 @@ export default class PrinterLogs {
         width: "100%",
         height: "100%",
         animations: {
-          enabled: true,
+          enabled: true
         },
-        background: "#303030",
+        background: "#303030"
       },
       theme: {
-        mode: "dark",
+        mode: "dark"
       },
       plotOptions: {
         pie: {
           expandOnClick: false,
           dataLabels: {
             offset: 10,
-            minAngleToShowLabel: 15,
-          },
-        },
+            minAngleToShowLabel: 15
+          }
+        }
       },
       stroke: {
-        show: false,
+        show: false
       },
       tooltip: {
         y: {
           formatter(val) {
             return `${Math.round(val * 10) / 10}%`;
-          },
-        },
+          }
+        }
       },
       noData: {
-        text: "Loading...",
+        text: "Loading..."
       },
       dataLabels: {
-        enabled: false,
+        enabled: false
       },
       series: [],
       labels: ["Active", "Idle", "Offline"],
@@ -817,7 +818,7 @@ export default class PrinterLogs {
         offsetY: 0,
         labels: {
           colors: undefined,
-          useSeriesColors: false,
+          useSeriesColors: false
         },
         markers: {
           width: 9,
@@ -829,19 +830,19 @@ export default class PrinterLogs {
           customHTML: undefined,
           onClick: undefined,
           offsetX: 0,
-          offsetY: 0,
+          offsetY: 0
         },
         itemMargin: {
           horizontal: 1,
-          vertical: 0,
+          vertical: 0
         },
         onItemClick: {
-          toggleDataSeries: false,
+          toggleDataSeries: false
         },
         onItemHover: {
-          highlightDataSeries: false,
-        },
-      },
+          highlightDataSeries: false
+        }
+      }
     };
     if (historyPieChart !== null) {
       historyPieChart.destroy();

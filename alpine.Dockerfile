@@ -1,6 +1,6 @@
 # https://pkgs.alpinelinux.org/packages?name=nodejs&branch=v3.13
-# Results in NodeJS 14.16.1-r1
-FROM alpine:3.13 as base
+# Results in NodeJS 14.17.0
+FROM alpine:3.14 as base
 
 RUN apk add --no-cache --virtual .base-deps \
     nodejs \

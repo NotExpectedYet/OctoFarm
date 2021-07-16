@@ -1,10 +1,11 @@
-import "@babel/polyfill";
 import OctoFarmclient from "./lib/octofarm.js";
 import UI from "./lib/functions/ui.js";
 import {
   selectFilament,
-  checkFilamentManager,
+  checkFilamentManager
 } from "./lib/modules/filamentGrab.js";
+import * as ApexCharts from "apexcharts";
+import { getLastThirtyDaysText } from "./utils/time.util";
 
 const jpInit = false;
 let filamentManager = false;
@@ -12,83 +13,83 @@ const filamentStore = [
   {
     code: "pla",
     display: "PLA",
-    density: "1.24",
+    density: "1.24"
   },
   {
     code: "abs",
     display: "ABS",
-    density: "1.04",
+    density: "1.04"
   },
   {
     code: "petg",
     display: "PETG",
-    density: "1.27",
+    density: "1.27"
   },
   {
     code: "nylon",
     display: "NYLON",
-    density: "1.52",
+    density: "1.52"
   },
   {
     code: "tpu",
     display: "TPU",
-    density: "1.21",
+    density: "1.21"
   },
   {
     code: "pc",
     display: "Polycarbonate (PC)",
-    density: "1.3",
+    density: "1.3"
   },
   {
     code: "wood",
     display: "Wood Fill",
-    density: "1.28",
+    density: "1.28"
   },
   {
     code: "carbon",
     display: "Carbon Fibre",
-    density: "1.3",
+    density: "1.3"
   },
   {
     code: "pcabs",
     display: "PC/ABS",
-    density: "1.19",
+    density: "1.19"
   },
   {
     code: "hips",
     display: "HIPS",
-    density: "1.03",
+    density: "1.03"
   },
   {
     code: "pva",
     display: "PVA",
-    density: "1.23",
+    density: "1.23"
   },
   {
     code: "asa",
     display: "ASA",
-    density: "1.05",
+    density: "1.05"
   },
   {
     code: "pp",
     display: "Polypropylene (PP)",
-    density: "0.9",
+    density: "0.9"
   },
   {
     code: "acetal",
     display: "Acetal (POM)",
-    density: "1.4",
+    density: "1.4"
   },
   {
     code: "pmma",
     display: "PMMA",
-    density: "1.18",
+    density: "1.18"
   },
   {
     code: "fpe",
     display: "Semi Flexible FPE",
-    density: "2.16",
-  },
+    density: "2.16"
+  }
 ];
 
 // export async function returnFilament() {
@@ -145,14 +146,14 @@ async function addProfile(manufacturer, material, density, diameter) {
     manufacturer: manufacturer.value,
     material: material.value,
     density: density.value,
-    diameter: diameter.value,
+    diameter: diameter.value
   };
   let post = await OctoFarmclient.post("filament/save/profile", opts);
   if (post.status === 200) {
     UI.createMessage(
       {
         type: "success",
-        msg: "Successfully added new profile to the database...",
+        msg: "Successfully added new profile to the database..."
       },
       "profilesMessage"
     );
@@ -195,7 +196,7 @@ async function addProfile(manufacturer, material, density, diameter) {
     UI.createMessage(
       {
         type: "error",
-        msg: "Could not add roll to database... is it alive?",
+        msg: "Could not add roll to database... is it alive?"
       },
       "profilesMessage"
     );
@@ -225,7 +226,7 @@ async function saveProfile(e) {
   });
   const data = {
     id,
-    profile,
+    profile
   };
   let post = await OctoFarmclient.post("filament/edit/profile", data);
   if (post.status === 200) {
@@ -240,7 +241,7 @@ async function deleteProfile(e) {
   document.getElementById("profilesMessage").innerHTML = "";
   if (e.classList.contains("delete") || e.classList.contains("deleteIcon")) {
     let post = await OctoFarmclient.post("filament/delete/profile", {
-      id: e.parentElement.parentElement.firstElementChild.innerHTML.trim(),
+      id: e.parentElement.parentElement.firstElementChild.innerHTML.trim()
     });
     if (post.status === 200) {
       if (e.classList.contains("deleteIcon")) {
@@ -260,8 +261,7 @@ async function deleteProfile(e) {
       UI.createMessage(
         {
           type: "danger",
-          msg:
-            "Error: Could not delete roll from database, check connection...",
+          msg: "Error: Could not delete roll from database, check connection..."
         },
         "filamentMessage"
       );
@@ -308,7 +308,7 @@ async function addSpool(
     spoolsPrice: spoolsPrice.value,
     spoolsWeight: spoolsWeight.value,
     spoolsUsed: spoolsUsed.value,
-    spoolsTempOffset: spoolsTempOffset.value,
+    spoolsTempOffset: spoolsTempOffset.value
   };
   let post = await OctoFarmclient.post("filament/save/filament", opts);
 
@@ -316,7 +316,7 @@ async function addSpool(
     UI.createMessage(
       {
         type: "success",
-        msg: "Successfully added new roll to the database...",
+        msg: "Successfully added new roll to the database..."
       },
       "addSpoolsMessage"
     );
@@ -400,7 +400,7 @@ async function addSpool(
     UI.createMessage(
       {
         type: "error",
-        msg: "Could not add roll to database... is it alive?",
+        msg: "Could not add roll to database... is it alive?"
       },
       "addSpoolsMessage"
     );
@@ -436,7 +436,7 @@ async function deleteSpool(e) {
   document.getElementById("profilesMessage").innerHTML = "";
   if (e.classList.contains("delete") || e.classList.contains("deleteIcon")) {
     let post = await OctoFarmclient.post("filament/delete/filament", {
-      id: e.parentElement.parentElement.firstElementChild.innerHTML.trim(),
+      id: e.parentElement.parentElement.firstElementChild.innerHTML.trim()
     });
     if (post.status === 200) {
       if (e.classList.contains("deleteIcon")) {
@@ -455,8 +455,7 @@ async function deleteSpool(e) {
       UI.createMessage(
         {
           type: "danger",
-          msg:
-            "Error: Could not delete roll from database, check connection...",
+          msg: "Error: Could not delete roll from database, check connection..."
         },
         "filamentMessage"
       );
@@ -478,7 +477,7 @@ async function saveSpool(e) {
   spool.push(document.getElementById(`spoolsProfile-${id}`).value);
   const data = {
     id,
-    spool,
+    spool
   };
   let post = await OctoFarmclient.post("filament/edit/filament", data);
   if (post.status === 200) {
@@ -540,12 +539,16 @@ async function updateProfileDrop() {
       const profileID = _.findIndex(profiles?.profiles, function (o) {
         return o._id == fill?.Spool[spool].profile;
       });
-      drop.className = `form-control ${profiles?.profiles[profileID]?.material.replace(/ /g, "_")}`;
-      spoolsMaterialText[index].innerHTML = `${profiles?.profiles[profileID]?.material}`;
+      drop.className = `form-control ${profiles?.profiles[
+        profileID
+      ]?.material.replace(/ /g, "_")}`;
+      spoolsMaterialText[
+        index
+      ].innerHTML = `${profiles?.profiles[profileID]?.material}`;
     }
   });
   //Fix for not updating main spool list with correct information, not skipping fo shizzle
-  spoolsListManufacture.forEach(text => {
+  spoolsListManufacture.forEach((text) => {
     const spoolID = text.id.split("-");
     const spool = _.findIndex(fill?.Spool, function (o) {
       return o._id == spoolID[1];
@@ -556,8 +559,8 @@ async function updateProfileDrop() {
       });
       text.innerHTML = `${profiles?.profiles[profileID]?.manufacturer}`;
     }
-  })
-  printerListMaterials.forEach(text => {
+  });
+  printerListMaterials.forEach((text) => {
     const spoolID = text.id.split("-");
     const spool = _.findIndex(fill?.Spool, function (o) {
       return o._id == spoolID[1];
@@ -568,8 +571,7 @@ async function updateProfileDrop() {
       });
       text.innerHTML = `${profiles?.profiles[profileID]?.material}`;
     }
-  })
-
+  });
 }
 async function updatePrinterDrops() {
   let printerList = await OctoFarmclient.get("filament/get/printerList");
@@ -602,10 +604,9 @@ async function updatePrinterDrops() {
     });
     if (typeof filament.Spool[spool] !== "undefined") {
       if (filament?.Spool[spool]?.printerAssignment.length > 0) {
-        drop.innerHTML =
-          `<option>${filament?.Spool[spool]?.printerAssignment[0]?.name}: Tool ${filament?.Spool[spool]?.printerAssignment[0]?.tool}</option>`;
+        drop.innerHTML = `<option>${filament?.Spool[spool]?.printerAssignment[0]?.name}: Tool ${filament?.Spool[spool]?.printerAssignment[0]?.tool}</option>`;
       } else {
-        drop.innerHTML = `<option>Not Assigned</option>`
+        drop.innerHTML = `<option>Not Assigned</option>`;
       }
     }
     // Not needed until bring back selecting spool function server side
@@ -626,9 +627,9 @@ async function updatePrinterDrops() {
     if (typeof filament?.Spool[spool] !== "undefined") {
       if (filament?.Spool[spool]?.printerAssignment.length > 0) {
         text.innerHTML =
-            filament?.Spool[spool]?.printerAssignment[0]?.name +
-            ": Tool" +
-            filament?.Spool[spool]?.printerAssignment[0]?.tool;
+          filament?.Spool[spool]?.printerAssignment[0]?.name +
+          ": Tool" +
+          filament?.Spool[spool]?.printerAssignment[0]?.tool;
       } else {
         text.innerHTML = "Not Assigned";
       }
@@ -644,29 +645,9 @@ async function updatePrinterDrops() {
   });
 }
 async function init() {
-  //Load Graph
-  let today = new Date();
-  today = new Date(today);
+  let lastThirtyDaysText = getLastThirtyDaysText();
 
-  let lastThirtyDays = [];
-  for (let i = 0; i < 30; i++) {
-    let day = (i + 1) * 1000;
-    let previousDay = new Date(today - day * 60 * 60 * 24 * 2);
-    previousDay = await previousDay;
-    // previousDay = previousDay.split("/");
-    // lastThirtyDays.push(
-    //   `${previousDay[0]}/${previousDay[1]}/${previousDay[2]}`
-    // );
-    lastThirtyDays.push(previousDay);
-  }
-
-  lastThirtyDays.sort();
-  let lastThirtyDaysText = [];
-  lastThirtyDays.forEach((day) => {
-    lastThirtyDaysText.push(day.getTime());
-  });
-  let historyStatistics = await OctoFarmclient.get("history/statisticsData");
-  historyStatistics = await historyStatistics.json();
+  let historyStatistics = await OctoFarmclient.getHistoryStatistics();
   let usageByDay = historyStatistics.history.totalByDay;
   let usageOverTime = historyStatistics.history.usageOverTime;
 
@@ -676,7 +657,7 @@ async function init() {
     if (index === 0) {
       obj = {
         title: {
-          text: "Weight",
+          text: "Weight"
         },
         seriesName: usageOverTime[0].name,
         labels: {
@@ -684,8 +665,8 @@ async function init() {
             if (val !== null) {
               return val.toFixed(0) + "g";
             }
-          },
-        },
+          }
+        }
       };
     } else {
       obj = {
@@ -696,8 +677,8 @@ async function init() {
             if (val !== null) {
               return val.toFixed(0) + "g";
             }
-          },
-        },
+          }
+        }
       };
     }
 
@@ -716,23 +697,23 @@ async function init() {
           curve: "smooth",
           lineCap: "butt",
           width: 1,
-          dashArray: 0,
+          dashArray: 0
         },
         animations: {
-          enabled: true,
+          enabled: true
         },
         plotOptions: {
           bar: {
-            horizontal: false,
-          },
+            horizontal: false
+          }
         },
         toolbar: {
-          show: false,
+          show: false
         },
         zoom: {
-          enabled: false,
+          enabled: false
         },
-        background: "#303030",
+        background: "#303030"
       },
       dataLabels: {
         enabled: false,
@@ -743,13 +724,13 @@ async function init() {
           borderRadius: 2,
           borderWidth: 1,
           borderColor: "#fff",
-          opacity: 0.9,
+          opacity: 0.9
         },
         formatter: function (val, opts) {
           if (val !== null) {
             return val.toFixed(0) + "g";
           }
-        },
+        }
       },
       colors: [
         "#ff0000",
@@ -760,22 +741,22 @@ async function init() {
         "#00b7ff",
         "#4400ff",
         "#8000ff",
-        "#ff00f2",
+        "#ff00f2"
       ],
       toolbar: {
-        show: false,
+        show: false
       },
       theme: {
-        mode: "dark",
+        mode: "dark"
       },
       noData: {
-        text: "Loading...",
+        text: "Loading..."
       },
       series: [],
       yaxis: [
         {
           title: {
-            text: "Weight",
+            text: "Weight"
           },
           seriesName: usageOverTime[0].name,
           labels: {
@@ -783,9 +764,9 @@ async function init() {
               if (val !== null) {
                 return val.toFixed(0) + "g";
               }
-            },
-          },
-        },
+            }
+          }
+        }
       ],
       xaxis: {
         type: "category",
@@ -796,9 +777,9 @@ async function init() {
             let dae = new Date(value).toLocaleDateString();
 
             return dae; // The formatter function overrides format property
-          },
-        },
-      },
+          }
+        }
+      }
     };
     let systemFarmTemp = new ApexCharts(
       document.querySelector("#usageOverTime"),
@@ -813,15 +794,15 @@ async function init() {
         height: "250px",
         stacked: true,
         animations: {
-          enabled: true,
+          enabled: true
         },
         toolbar: {
-          show: false,
+          show: false
         },
         zoom: {
-          enabled: false,
+          enabled: false
         },
-        background: "#303030",
+        background: "#303030"
       },
       dataLabels: {
         enabled: true,
@@ -832,13 +813,13 @@ async function init() {
           borderRadius: 2,
           borderWidth: 1,
           borderColor: "#fff",
-          opacity: 0.9,
+          opacity: 0.9
         },
         formatter: function (val, opts) {
           if (val !== null) {
             return val.toFixed(0) + "g";
           }
-        },
+        }
       },
       colors: [
         "#ff0000",
@@ -849,20 +830,20 @@ async function init() {
         "#00b7ff",
         "#4400ff",
         "#8000ff",
-        "#ff00f2",
+        "#ff00f2"
       ],
       toolbar: {
-        show: false,
+        show: false
       },
       stroke: {
         width: 2,
-        curve: "smooth",
+        curve: "smooth"
       },
       theme: {
-        mode: "dark",
+        mode: "dark"
       },
       noData: {
-        text: "Loading...",
+        text: "Loading..."
       },
       series: [],
       yaxis: yAxisSeries,
@@ -875,9 +856,9 @@ async function init() {
             let dae = new Date(value).toLocaleDateString();
 
             return dae; // The formatter function overrides format property
-          },
-        },
-      },
+          }
+        }
+      }
     };
     let usageOverFilamentTime = new ApexCharts(
       document.querySelector("#usageOverFilamentTime"),
@@ -1151,7 +1132,7 @@ async function init() {
 
   jplist.init({
     storage: "localStorage", // 'localStorage', 'sessionStorage' or 'cookies'
-    storageName: "spools-sorting", // the same storage name can be used to share storage between multiple pages
+    storageName: "spools-sorting" // the same storage name can be used to share storage between multiple pages
   });
 
   //   //Update Profiles Spools Dropdown.

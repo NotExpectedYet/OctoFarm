@@ -1,0 +1,15 @@
+/.github
+/.idea
+.git
+.env
+.gitignore
+*Dockerfile
+*.md
+*.txt
+*docker-compose.yml
+*.env
+/.build
+/.cache
+/screenshots
+Makefile
+/node_modules

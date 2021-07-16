@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { ensureAuthenticated } = require("../config/auth");
-const { parse, stringify } = require("flatted/cjs");
+const { parse, stringify } = require("flatted");
 const _ = require("lodash");
 const Logger = require("../lib/logger.js");
 
@@ -129,7 +129,7 @@ if (interval === false) {
   interval = setInterval(async function () {
     const currentOperations = await PrinterClean.returnCurrentOperations();
 
-    let printersInformation = await PrinterClean.returnPrintersInformation();
+    let printersInformation = await PrinterClean.listPrintersInformation();
 
     printersInformation = await filterMe(printersInformation);
     printersInformation = await sortMe(printersInformation);
@@ -145,7 +145,7 @@ if (interval === false) {
       await SettingsClean.start();
       serverSettings = await SettingsClean.returnSystemSettings();
     }
-    if (serverSettings.influxExport.active) {
+    if (!!serverSettings.influxExport?.active) {
       if (influxCounter >= 2000) {
         sendToInflux(printersInformation);
         influxCounter = 0;
@@ -158,7 +158,7 @@ if (interval === false) {
       printersInformation: printersInformation,
       currentOperations: currentOperations,
       printerControlList: printerControlList,
-      clientSettings: clientSettings,
+      clientSettings: clientSettings
     };
     clientInformation = await stringify(infoDrop);
     clients.forEach((c, index) => {
@@ -175,7 +175,7 @@ router.get("/get/", ensureAuthenticated, function (req, res) {
     "Cache-Control": "no-cache, no-store, must-revalidate",
     Pragma: "no-cache",
     Expires: 0,
-    Connection: "keep-alive",
+    Connection: "keep-alive"
   };
   res.writeHead(200, headers);
   // After client opens connection send all nests as string
@@ -187,7 +187,7 @@ router.get("/get/", ensureAuthenticated, function (req, res) {
   const clientId = Date.now();
   const newClient = {
     id: clientId,
-    res,
+    res
   };
   clients.push(newClient);
   logger.info(`${clientId} Connection opened`);
@@ -218,7 +218,7 @@ function sendToInflux(printersInformation) {
       stateCategory: printer.printerState.colour.category,
       host_state: printer.hostState.state,
       websocket_state: printer.webSocketState.colour,
-      octoprint_version: printer.octoPrintVersion,
+      octoprint_version: printer.octoPrintVersion
     };
     const printerData = {
       name: printer.printerName,
@@ -236,7 +236,7 @@ function sendToInflux(printersInformation) {
       date_added: parseFloat(printer.dateAdded),
       storage_free: parseFloat(printer.storage.free),
       storage_total: parseFloat(printer.storage.total),
-      timestamp: date,
+      timestamp: date
     };
     if (typeof printer.resends !== "undefined") {
       printerData["job_resends"] = `${printer.resends.count} / ${

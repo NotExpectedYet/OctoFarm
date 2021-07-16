@@ -23,22 +23,25 @@ function validateMongoURL(mongoURL) {
   return {
     hasMongoPrefix,
     hasOctoFarmTable,
-    isValid: hasOctoFarmTable || hasMongoPrefix,
+    isValid: hasOctoFarmTable || hasMongoPrefix
   };
 }
 
 router.get("/", (req, res) =>
   res.render("databaseIssue", {
     page: "Database Warning",
-    octoFarmPageTitle: process.env[AppConstants.OCTOFARM_SITE_TITLE_KEY],
+    octoFarmPageTitle:
+      process.env[AppConstants.OCTOFARM_SITE_TITLE_KEY] ||
+      AppConstants.defaultOctoFarmPageTitle,
     isDocker: isDocker(),
     isPm2: envUtils.isPm2(),
-    defaultMongoConnectionString: AppConstants.defaultMongoStringUnauthenticated,
+    defaultMongoConnectionString:
+      AppConstants.defaultMongoStringUnauthenticated,
     isNodemon: envUtils.isNodemon(),
     os: process.env.OS,
     npmPackageJson: process.env[AppConstants.VERSION_KEY],
     nodeVersion: process.version,
-    mongoURL: fetchMongoDBConnectionString(),
+    mongoURL: fetchMongoDBConnectionString()
   })
 );
 
@@ -51,7 +54,7 @@ router.post("/test-connection", async (req, res) => {
     return res.send({
       connectionURL,
       reason: "Not a valid connection string",
-      succeeded: false,
+      succeeded: false
     });
   }
 
@@ -63,7 +66,7 @@ router.post("/test-connection", async (req, res) => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
-      serverSelectionTimeoutMS: 2500,
+      serverSelectionTimeoutMS: 2500
     })
     .then((r) => {
       connSucceeded = !!r;
@@ -77,7 +80,7 @@ router.post("/test-connection", async (req, res) => {
     return res.send({
       connectionURL,
       reason: "Could not connect",
-      succeeded: connSucceeded,
+      succeeded: connSucceeded
     });
   }
 
@@ -85,7 +88,7 @@ router.post("/test-connection", async (req, res) => {
     .then((r) => {
       return res.send({
         connectionURL,
-        succeeded: connSucceeded,
+        succeeded: connSucceeded
       });
     })
     .catch((e) => {
@@ -95,13 +98,13 @@ router.post("/test-connection", async (req, res) => {
           connectionURL,
           reason:
             "MongoDB connected just fine, but you should check your authentication (username/password)",
-          succeeded: connSucceeded,
+          succeeded: connSucceeded
         });
       } else {
         return res.send({
           connectionURL,
           reason: e.message,
-          succeeded: connSucceeded,
+          succeeded: connSucceeded
         });
       }
     });
@@ -112,7 +115,7 @@ router.post("/save-connection-env", async (req, res) => {
     res.statusCode = 500;
     return res.send({
       reason: `The OctoFarm docker container cannot change this setting. Change the ${AppConstants.MONGO_KEY} variable yourself.`,
-      succeeded: false,
+      succeeded: false
     });
   }
 
@@ -123,17 +126,21 @@ router.post("/save-connection-env", async (req, res) => {
     return res.send({
       connectionURL,
       reason: "Not a valid connection string",
-      succeeded: false,
+      succeeded: false
     });
   }
 
   try {
-    envUtils.writeVariableToEnvFile(path.join(__dirname, "../../.env"), AppConstants.MONGO_KEY, connectionURL);
+    envUtils.writeVariableToEnvFile(
+      path.join(__dirname, "../../.env"),
+      AppConstants.MONGO_KEY,
+      connectionURL
+    );
   } catch (e) {
     res.statusCode = 500;
     return res.send({
       reason: e.message,
-      succeeded: false,
+      succeeded: false
     });
   }
 
@@ -142,12 +149,12 @@ router.post("/save-connection-env", async (req, res) => {
   if (envUtils.isNodemon()) {
     res.send({
       reason: `Succesfully saved ${AppConstants.MONGO_KEY} environment variable to .env file. Please restart OctoFarm manually!`,
-      succeeded: true,
+      succeeded: true
     });
   } else {
     res.send({
       reason: `Succesfully saved ${AppConstants.MONGO_KEY} environment variable to .env file. Restarting OctoFarm service, please start it again if that fails!`,
-      succeeded: true,
+      succeeded: true
     });
   }
 });

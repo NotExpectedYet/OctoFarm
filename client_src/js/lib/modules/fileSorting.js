@@ -4,37 +4,38 @@ export default class FileSorting {
   static saveSort(meta, reverse) {
     localStorage.setItem("fileSort", JSON.stringify({ meta, reverse }));
   }
+
   static loadSort(printer, recursive) {
     const fileSortStorage = JSON.parse(localStorage.getItem("fileSort"));
     if (fileSortStorage !== null) {
       const reverse = fileSortStorage.reverse;
       if (fileSortStorage.meta === "file") {
-        if(typeof recursive !== "undefined"){
+        if (typeof recursive !== "undefined") {
           this.sortFileName(printer, reverse, recursive);
-        }else{
+        } else {
           this.sortFileName(printer, reverse);
         }
       }
       if (fileSortStorage.meta === "date") {
-        if(typeof recursive !== "undefined"){
+        if (typeof recursive !== "undefined") {
           this.sortUploadDate(printer, reverse, recursive);
-        }else{
+        } else {
           this.sortUploadDate(printer, reverse);
         }
       }
       if (fileSortStorage.meta === "time") {
-        if(typeof recursive !== "undefined"){
+        if (typeof recursive !== "undefined") {
           this.sortPrintTime(printer, reverse, recursive);
-        }else{
+        } else {
           this.sortPrintTime(printer, reverse);
         }
-
       }
     } else {
       this.sortUploadDate(printer, true);
     }
     this.setListeners(printer);
   }
+
   static setListeners(printer) {
     document.getElementById("sortFileNameUp").addEventListener("click", (e) => {
       this.sortFileName(printer, true);
@@ -67,12 +68,12 @@ export default class FileSorting {
     printer.fileList.fileList = _.sortBy(printer.fileList.fileList, [
       function (o) {
         return o.display;
-      },
+      }
     ]);
     printer.fileList.folderList = _.sortBy(printer.fileList.folderList, [
       function (o) {
         return o.name;
-      },
+      }
     ]);
     if (reverse) {
       printer.fileList.fileList = printer.fileList.fileList.reverse();
@@ -85,17 +86,18 @@ export default class FileSorting {
     }
     FileManager.drawFiles(printer, recursive);
   }
-  static sortUploadDate(printer, reverse, recursive){
+
+  static sortUploadDate(printer, reverse, recursive) {
     const sortHeader = document.getElementById("fileSortDropdownMenu");
     printer.fileList.fileList = _.sortBy(printer.fileList.fileList, [
       function (o) {
         return o.uploadDate;
-      },
+      }
     ]);
     printer.fileList.folderList = _.sortBy(printer.fileList.folderList, [
       function (o) {
         return o.name;
-      },
+      }
     ]);
     if (reverse) {
       printer.fileList.fileList = printer.fileList.fileList.reverse();
@@ -110,17 +112,18 @@ export default class FileSorting {
     }
     FileManager.drawFiles(printer, recursive);
   }
-  static sortPrintTime(printer, reverse, recursive){
+
+  static sortPrintTime(printer, reverse, recursive) {
     const sortHeader = document.getElementById("fileSortDropdownMenu");
     printer.fileList.fileList = _.sortBy(printer.fileList.fileList, [
       function (o) {
         return o.expectedPrintTime;
-      },
+      }
     ]);
     printer.fileList.folderList = _.sortBy(printer.fileList.folderList, [
       function (o) {
         return o.name;
-      },
+      }
     ]);
     if (reverse) {
       printer.fileList.fileList = printer.fileList.fileList.reverse();

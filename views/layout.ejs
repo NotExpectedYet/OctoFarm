@@ -14,18 +14,24 @@
     <link rel="stylesheet" href="/assets/css/vendor/font-awesome.css"/>
     <link rel="stylesheet" href="/assets/css/vendor/bootstrap-v4.css"/>
     <link rel="stylesheet" href="/assets/css/vendor/slate.css"/>
-    <link rel="stylesheet" href="/assets/css/octofarm.css"/>
     <link rel="stylesheet" href="/assets/css/vendor/noty.css"/>
     <link rel="stylesheet" href="/assets/css/vendor/balloon.css"/>
     <link rel="stylesheet" href="/assets/css/vendor/jplist.css"/>
     <link rel="stylesheet" href="/assets/css/vendor/font-awesome.css"/>
+    <link rel="stylesheet" href="/assets/dist/octofarm.css"/>
     <title><%= octoFarmPageTitle %>: <%= page %></title>
+    <!-- Avoid trouble -->
+    <script src="/assets/jquery.min.js"></script>
+    <script src="/assets/bootbox.min.js"></script>
+    <script src="/assets/dist/bootstrap.min.js"></script>
+    <script src="/assets/dist/vendor.min.js"></script>
+    <script src="/assets/dist/serverAliveCheck.min.js"></script>
 </head>
 
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top p-1">
     <a class="navbar-brand notyet" href="#">
-        <img src="favicon.ico" width="40px" class="pl-2" alt="favicon">
+        <img src="/favicon.ico" width="40px" class="pl-2" alt="favicon">
     </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,7 +99,6 @@
                         </select>
                     </div>
                 </li>
-
             <% } %>
             <li class="nav-item">
                 <span title="Panel Layout Monitoring View"
@@ -144,8 +149,9 @@
                             class="fas fa-toilet-paper"></i> Filament</a>
             </li>
             <li class="nav-item">
-                <a title="Filament Management" class="nav-link text-center" href="/system" id=""><i
-                            class="fas fa-cogs"></i> System</a>
+                <a title="Filament Management" class="nav-link text-center" href="/system">
+                    <i class="fas fa-cogs"></i> System
+                </a>
             </li>
         </ul>
     </div>
@@ -262,15 +268,6 @@
     </div>
 
     <div id="overlay"><i id="overlayIcon" class="fas fa-spinner fa-pulse fa-10x textActive"></i></div>
-    <script type="text/javascript" src="/assets/js/vendor/jquery-3.4.1.min.js"></script>
-    <!--    <script src="/assets/js/vendor/runtime.js"></script>-->
-    <script src="/assets/js/vendor/bootstrap.bundle.js"></script>
-    <script src="/assets/js/vendor/lodash.min.js"></script>
-    <script src="/assets/js/vendor/bootbox.min.js"></script>
-    <script src="/assets/js/vendor/noty.js"></script>
-    <script src="/assets/js/vendor/apexcharts.min.js"></script>
-    <script src="/assets/js/vendor/jpList.js"></script>
-    <script src="/assets/js/serverAliveCheck.min.js"></script>
+</div>
 </body>
-
 </html>

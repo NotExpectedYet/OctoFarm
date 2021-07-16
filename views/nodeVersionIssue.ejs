@@ -1,0 +1,47 @@
+<div class="row mt-5">
+    <div class="col-md-8 col-lg-8 m-auto">
+        <div class="card">
+            <div class="card-title">
+                <h1 class="text-center mb-3" style="margin-top:20px">
+                    <i class="fas fa-exclamation-triangle"></i> Node Version Issue!
+                </h1>
+            </div>
+            <div class="card-subtitle row align-items-center">
+                <h4 class="badge col text-warning">
+                    OctoFarm failed to start because your Node version does not meet requirements (Node 14+).
+                </h4>
+            </div>
+            <div class="card card-body">
+                <%- include('./partials/messages') %>
+                <span>
+                    Docker mode:
+                    <span class="badge badge-dark"><%= isDocker; %></span>
+                </span>
+                <span>
+                    Pm2 mode:
+                    <span class="badge badge-dark"><%= isPm2; %></span>
+                </span>
+                <span>
+                    OctoFarm version:
+                    <span class="badge badge-dark"><%= npmPackageJson; %></span>
+                </span>
+                <span>
+                    NodeJS version:
+                    <span class="badge badge-dark"><%= nodeVersion; %></span>
+                </span>
+                <span>
+                    OS:
+                    <span class="badge badge-dark"><%= os; %></span>
+                </span>
+                <br />
+
+                <form method="post">
+                    <div class="form-group">
+                        Please read the instructions to <a href="https://octofarm.net/installation#nvm-update">update your node version with <strong>nvm</strong> (Node Version Manager)</a>, docker, docker-compose, chocolatey or simply npm. <br/>
+                        Or if that does not help yet, find a good set of alternative instructions <a href="https://phoenixnap.com/kb/update-node-js-version">here</a>.
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

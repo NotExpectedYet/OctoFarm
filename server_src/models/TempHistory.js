@@ -4,12 +4,12 @@ const TempHistorySchema = new mongoose.Schema(
   {
     currentTemp: {
       type: Object,
-      required: true,
+      required: true
     },
     printer_id: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
   { capped: true, size: 10000, max: 1000000 }
 );

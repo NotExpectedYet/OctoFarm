@@ -5,20 +5,18 @@ const { getLogsPath } = require("../utils/system-paths.utils.js");
 const { isPm2, isNodemon, isNode } = require("../utils/env.utils.js");
 
 const isDocker = require("is-docker");
-const {
-  getUpdateNotificationIfAny,
-} = require("../runners/softwareUpdateChecker.js");
+const { getUpdateNotificationIfAny } = require("./octofarm-update.service.js");
 
 const { PrinterClean } = require("../lib/dataFunctions/printerClean.js");
 const systemInfo = require("../runners/systemInfo.js");
 const SystemInfo = systemInfo.SystemRunner;
 const prettyHelpers = require("../../views/partials/functions/pretty.js");
-const {AppConstants} = require("../app.constants");
+const { AppConstants } = require("../app.constants");
 const currentVersion = process?.env[AppConstants.VERSION_KEY];
 const systemInformationFileName = "system_information.txt";
 
 const {
-  checkIfFileFileExistsAndDeleteIfSo,
+  checkIfFileFileExistsAndDeleteIfSo
 } = require("../utils/file.utils.js");
 
 const { prettyPrintArray } = require("../utils/pretty-print.utils.js");
@@ -104,7 +102,7 @@ function generateSystemInformationContents() {
 async function generateOctoFarmSystemInformationTxt() {
   let systemInformation = {
     name: systemInformationFileName,
-    path: join(getLogsPath(), systemInformationFileName),
+    path: join(getLogsPath(), systemInformationFileName)
   };
   // Make sure existing zip files have been cleared from the system before continuing.
   await checkIfFileFileExistsAndDeleteIfSo(systemInformation?.path);

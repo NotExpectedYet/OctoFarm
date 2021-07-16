@@ -5,30 +5,55 @@ const Script = serverScripts.Script;
 const Alerts = require("../models/Alerts.js");
 
 class ScriptRunner {
+  /**
+   * Save alert - TODO Trigger, message and location validation lacking
+   * @param printer
+   * @param trigger
+   * @param message
+   * @param scriptLocation
+   * @returns {Promise<string>}
+   */
   static async save(printer, trigger, message, scriptLocation) {
     let alert = {
       active: true,
       trigger: trigger,
       message: message,
       scriptLocation: scriptLocation,
-      printers: printer,
+      printers: printer
     };
     let newAlert = await new Alerts(alert);
     logger.info("Saving: " + trigger + " " + scriptLocation + " " + message);
-    newAlert.save().then((e) => {
+    await newAlert.save().then((e) => {
       logger.info("Saved: " + trigger + " " + scriptLocation + " " + message);
     });
     return "saved";
   }
+
+  /**
+   * TODO has potential bug find
+   * @param newAlert
+   * @returns {Promise<string|undefined>}
+   */
   static async edit(newAlert) {
     let old = await Alerts.findById(newAlert.id);
+    if (!old) return;
+
     old.active = newAlert.active;
     old.trigger = newAlert.trigger;
     old.scriptLocation = newAlert.scriptLocation;
     old.message = newAlert.message;
     old.save();
+
     return "saved";
   }
+
+  /**
+   *
+   * @param printer
+   * @param trigger
+   * @param historyID
+   * @returns {Promise<void>}
+   */
   static async check(printer, trigger, historyID) {
     let currentAlerts = await Alerts.find({});
     for (let i = 0; i < currentAlerts.length; i++) {
@@ -48,16 +73,17 @@ class ScriptRunner {
       }
     }
   }
+
   static async test(scriptLocation, message) {
     logger.info("Testing Alerts: " + scriptLocation + " " + message);
-    let fire = await Script.fire(scriptLocation, JSON.stringify(message));
-    return fire;
+    return await Script.fire(scriptLocation, JSON.stringify(message));
   }
+
   static async fire(scriptLocation, message) {
     logger.info("Alert Fire: " + scriptLocation + " " + message);
-    let fire = await Script.fire(scriptLocation, message);
-    return fire;
+    return await Script.fire(scriptLocation, message);
   }
+
   static async convertMessage(printer, message, historyID) {
     let job = "";
     if (typeof printer.job != "undefined") {
@@ -67,10 +93,10 @@ class ScriptRunner {
         file: {
           name: "No File Selected",
           display: "No File Selected",
-          path: "No File Selected",
+          path: "No File Selected"
         },
         estimatedPrintTime: 0,
-        lastPrintTime: 0,
+        lastPrintTime: 0
       };
     }
     let progress = "";
@@ -85,7 +111,7 @@ class ScriptRunner {
         completion: 0,
         filepos: 0,
         printTime: "No Time Left",
-        printTimeLeft: "No Time Left",
+        printTimeLeft: "No Time Left"
       };
     }
 
@@ -228,6 +254,7 @@ class ScriptRunner {
   }
 }
 
+// TODO replace with luxon formatter
 const generateTime = function (seconds) {
   let string = "";
   if (seconds === undefined || isNaN(seconds) || seconds === null) {
@@ -274,6 +301,7 @@ const generateTime = function (seconds) {
   }
   return string;
 };
+
 module.exports = {
-  ScriptRunner: ScriptRunner,
+  ScriptRunner
 };

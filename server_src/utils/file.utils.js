@@ -11,5 +11,5 @@ function deleteExistingZipFile(fileName) {
 }
 
 module.exports = {
-  checkIfFileFileExistsAndDeleteIfSo,
+  checkIfFileFileExistsAndDeleteIfSo
 };

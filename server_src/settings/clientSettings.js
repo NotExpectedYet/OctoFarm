@@ -28,7 +28,7 @@ class ClientSettings {
                 y: 19,
                 width: 12,
                 height: 8,
-                id: "filamentUsageOverTime",
+                id: "filamentUsageOverTime"
               },
               { x: 0, y: 19, width: 12, height: 8, id: "filamentUsageByDay" },
               {
@@ -36,25 +36,25 @@ class ClientSettings {
                 y: 19,
                 width: 12,
                 height: 8,
-                id: "historyCompletionByDay",
-              },
+                id: "historyCompletionByDay"
+              }
             ],
             savedLayout: [],
             farmActivity: {
               currentOperations: false,
               cumulativeTimes: true,
-              averageTimes: true,
+              averageTimes: true
             },
             printerStates: {
               printerState: true,
               printerTemps: true,
               printerUtilisation: true,
               printerProgress: true,
-              currentStatus: true,
+              currentStatus: true
             },
             farmUtilisation: {
               currentUtilisation: true,
-              farmUtilisation: true,
+              farmUtilisation: true
             },
             historical: {
               weeklyUtilisation: true,
@@ -62,8 +62,8 @@ class ClientSettings {
               environmentalHistory: false,
               filamentUsageOverTime: false,
               filamentUsageByDay: false,
-              historyCompletionByDay: false,
-            },
+              historyCompletionByDay: false
+            }
           };
           const panelView = {
             currentOp: false,
@@ -71,7 +71,7 @@ class ClientSettings {
             hideClosed: false,
             extraInfo: false,
             powerBtn: false,
-            webBtn: false,
+            webBtn: false
           };
           const listView = {
             currentOp: false,
@@ -79,7 +79,7 @@ class ClientSettings {
             hideClosed: false,
             extraInfo: false,
             powerBtn: false,
-            webBtn: false,
+            webBtn: false
           };
           const cameraView = {
             currentOp: false,
@@ -87,11 +87,11 @@ class ClientSettings {
             hideClosed: false,
             extraInfo: false,
             powerBtn: false,
-            webBtn: false,
+            webBtn: false
           };
           const controlSettings = {
             filesTop: false
-          }
+          };
           // const operations = {};
           // const filaManager = {};
           const defaultSystemSettings = new ClientSettingsDB({
@@ -124,5 +124,5 @@ class ClientSettings {
 }
 
 module.exports = {
-  ClientSettings,
+  ClientSettings
 };

@@ -1,0 +1,26 @@
+name: NestJS CI
+
+on:
+  push:
+    branches: [ develop, master ]
+  pull_request:
+jobs:
+  nestjs:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x] # 15.x for later
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - run: yarn install --frozen-lockfile
+      working-directory: "server_2x"
+    - run: npm run build --if-present
+      working-directory: "server_2x"
+    - run: npm test
+      name: "Run unit and integration tests"
+      working-directory: "server_2x"

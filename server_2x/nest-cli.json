@@ -1,0 +1,19 @@
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {},
+  "projects": {
+    "proxy-gen": {
+      "type": "application",
+      "root": "tools",
+      "entryFile": "proxy-api-generator.main",
+      "sourceRoot": "tools/proxy-api-generator"
+    },
+    "octoprint-websocket-mock": {
+      "type": "application",
+      "root": "tools",
+      "entryFile": "octoprint-websocket-mock.main",
+      "sourceRoot": "tools/octoprint-websocket-mock"
+    }
+  }
+}

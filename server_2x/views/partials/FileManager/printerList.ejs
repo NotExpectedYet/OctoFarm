@@ -1,0 +1,43 @@
+<p>Check the boxes below to select the printers you'd like to upload files too. (Only idle printers available for selection...)</p>
+<p><b>Note:</b> You must select at least 2 printers.</p>
+<% if (typeof printers != 'undefined'){ %>
+  <% for(let i=0;i < printers.length;i++){%>
+    <% let name = "";%>
+    <% if (typeof printers[i].settingsApperance != "undefined") {%>
+      <% if (printers[i].settingsApperance.name === "" || printers[i].settingsApperance.name === null) {%>
+        <% name = printers[i].printerURL;%>
+      <% } else {%>
+        <% name = printers[i].settingsApperance.name;%>
+      <% }%>
+    <% } else {%>
+      <% name = printers[i].printerURL;%>
+    <%}%>
+
+    <% if(printers[i].stateColour.category == "Idle" || printers[i].stateColour.category == "Complete"){%>
+      <form class="was-validated form-check-inline form-check">
+        <div class="custom-control custom-checkbox mb-2 pr-2"><input type="checkbox" class="custom-control-input" id="multiUpPrinters-<%= printers[i]._id %>" value="<%= printers[i]._id %>" required>
+          <label class="custom-control-label" for="multiUpPrinters-<%= printers[i]._id %>"><%= name%></label>
+          <div class="invalid-feedback">Not this printer</div>
+          <div class="valid-feedback">
+            Sending to this printer
+          </div>
+        </div>
+      </form>
+    <% } %>
+  <%}%>
+<% } %>
+
+
+
+
+
+
+
+<% sortedIndex.forEach(sorted => { %> <%
+if(printers[sorted.actualIndex].stateColour.category != "Offline" && typeof printers[sorted.actualIndex].current != 'undefined'){ %>
+<!-- Connected -->
+
+
+
+  <% } %> <% }) %>
+</a>

@@ -1,4 +1,3 @@
-import "@babel/polyfill";
 import OctoFarmClient from "./lib/octofarm.js";
 import Calc from "./lib/functions/calc.js";
 import FileManager from "./lib/modules/fileManager.js";
@@ -31,7 +30,7 @@ class Manager {
       }
     });
     onlinePrinterList.forEach((printer, index) => {
-      let extruderList = ``;
+      let extruderList = "";
       for (let i = 0; i < printer.currentProfile.extruder.count; i++) {
         extruderList += `<div class="input-group mb-1"> <div class="input-group-prepend"> <label class="input-group-text bg-secondary text-light" for="tool${i}-${printer._id}">Filament:</label> </div> <select class="custom-select bg-secondary text-light" id="tool${i}-${printer._id}"></select></div>`;
       }
@@ -50,32 +49,31 @@ class Manager {
                 class="col-lg-2"
                 style="display:flex; justify-content:center; align-items:center;"
               >
-                <center><i class="fas fa-print fa-2x"></i><br>
-                <td><small><span title="${printer.printerState.desc}" id="printerBadge-${printer._id}" class="tag badge badge-${printer.printerState.colour.name} badge-pill ${printer.printerState.colour.category}">
-                        ${printer.printerState.state}</span></small></td></center>
+                <center>
+                  <i class="fas fa-print fa-2x"></i><br>
+                  <td>
+                  <small>
+                      <span title="${printer.printerState.desc}" id="printerBadge-${printer._id}" class="tag badge badge-${printer.printerState.colour.name} badge-pill ${printer.printerState.colour.category}">
+                          ${printer.printerState.state}
+                      </span>
+                      <span class="badge badge-dark badge-pill">
+                        Files: ${printer.fileList.filecount}
+                    </span>
+                    <span class="badge badge-dark badge-pill">
+                       Folders: ${printer.fileList.folderCount}
+                    </span>
+                  </small>
+                  </small>
+                  </td>
+                  </center>
               </div>
               <div class="col-lg-10">
-                <div class="d-flex w-100 justify-content-between">
-                  <h5 class="mb-1">
-                    <span id="printerName-${printer._id}">
-                        ${printer.printerName}
-                    </span>
-        
-                  </h5>
-                  <small>
-                    <span class="float-right badge badge-dark badge-pill">
-                        Files: ${printer.fileList.filecount} / Folders: ${printer.fileList.folderCount}
-                    </span></small
-                  >
-                </div>
-        
+                <button type="button" class="btn btn-secondary text-left" style="background-color: Transparent; border: 0px; pointer-events: none" id="printerName-${printer._id}" disabled>${printer.printerName}</button>
                 <div
                   class="float-right btn-group flex-wrap btn-group-sm"
                   role="group"
                   aria-label="Basic example"
                 >
-                 
-        
                 </div>
                 <div class="row">
                   <div class="col-lg-2">
@@ -89,25 +87,19 @@ class Manager {
                     </div>
                   </div>
                 </div>
-
-
-        
-        
                   <small class="pt-2 float-left"
                   ><i class="fas fa-cube"></i> <b>H:</b> ${printer.currentProfile.volume.height}mm x <b>W:</b> ${printer.currentProfile.volume.width}mm x <b>D:</b> ${printer.currentProfile.volume.depth}mm</small
                 ><br><!--Fix for firefox-->
-                <small class="pt-2 float-left"
+                <small class="pt-2 pb-2 float-left"
                   ><i class="fas fa-pen"></i> <b>Extruders:</b>
                   ${printer.currentProfile.extruder.count}
                   <b>Nozzle Size:</b> 
                   ${printer.currentProfile.extruder.nozzleDiameter}mm</small
                 >
-                
                                 ${extruderList}
               </div>
             </div>
           </a>
-              
       `
       );
       //Setup for first printer
@@ -148,7 +140,7 @@ class Manager {
             let updatePrinter = await OctoFarmClient.post(
               "printers/printerInfo",
               {
-                i: lastId,
+                i: lastId
               }
             );
             updatePrinter = await updatePrinter.json();
@@ -162,11 +154,10 @@ class Manager {
         const item = document.getElementById(
           "fileManagerPrinter-" + printer._id
         );
-        item.classList.add("bg-dark");
+        item.classList.add("bg-dark", "printerSelected");
         item.classList.remove("bg-secondary");
         const firstElement = document.getElementById("currentPrinter");
-        firstElement.innerHTML =
-          '<i class="fas fa-print"></i> ' + printer.printerName;
+        firstElement.innerHTML = `<i class="fas fa-print"></i> ${printer.printerName}`;
         FileSorting.loadSort(printer);
         Manager.updatePrinterList(printer._id);
       }
@@ -175,22 +166,28 @@ class Manager {
 
   static changePrinter(e, target) {
     if (!e.target.id.includes("filamentDrop")) {
+      const fileList = document.getElementById("fileBody");
+      if (!!fileList) {
+        fileList.innerHTML = "";
+        fileList.scrollTop = 0;
+      }
+
       //Set old one deselected
-      document.getElementById("fileBody").innerHTML = "";
       document.getElementById("currentFolder").innerHTML = "local";
       document.getElementById("fileManagerPrinter-" + lastId).className =
         "list-group-item list-group-item-action flex-column align-items-start bg-secondary";
 
       //Update old index to this one
       lastId = target;
-      const printerName = document.getElementById("printerName-" + lastId)
-        .innerHTML;
+      const printerName = document.getElementById(
+        "printerName-" + lastId
+      ).innerHTML;
       const panel = document.getElementById("fileManagerPrinter-" + target);
 
-      panel.classList.add("bg-dark");
+      panel.classList.add("bg-dark", "printerSelected");
       panel.classList.remove("bg-secondary");
       const firstElement = document.getElementById("currentPrinter");
-      firstElement.innerHTML = '<i class="fas fa-print"></i> ' + printerName;
+      firstElement.innerHTML = `<i class="fas fa-print"></i> ${printerName}`;
       Manager.updatePrinterList(target);
     }
   }
@@ -206,13 +203,10 @@ class Manager {
     fileList.innerHTML = `
          <div class="row mb-1">
           <div class="col-12">
-         
-
             <label class="btn btn-success float-left mr-1 mb-0 bg-colour-1" for="fileUploadBtn"><i class="fas fa-file-import"></i> Upload File(s)</label>
             <input id="fileUploadBtn" multiple accept=".gcode,.gco,.g" type="file" class="btn btn-success float-left bg-colour-1" id="uploadFileBtn">
             <label class="btn btn-info float-left mr-1 mb-0 bg-colour-2" for="fileUploadPrintBtn"><i class="fas fa-file-import"></i> Upload and Print</label>
             <input id="fileUploadPrintBtn" accept=".gcode,.gco,.g" type="file" class="btn btn-success float-left bg-colour-2" id="uploadFileBtn">
-
             <button
                     id="createFolderBtn"
                     type="button"
@@ -229,19 +223,17 @@ class Manager {
               <i class="fas fa-sync"></i> Re-Sync
             </button>
           </div>
-
         </div>
         `;
     document.getElementById("fileBody").insertAdjacentHTML(
       "beforeend",
       `
-            <div id="fileList-${id}" class="list-group" style="max-height:100%; overflow-y:scroll; min-height:1000px;" data-jplist-group="files">
-                
+            <div id="fileList-${id}" class="list-group" style="max-height:100%; overflow-y:scroll;" data-jplist-group="files">
             </div>
         `
     );
     let printer = await OctoFarmClient.post("printers/printerInfo", {
-      i: id,
+      i: id
     });
     printer = await printer.json();
     FileSorting.loadSort(printer);
@@ -258,8 +250,8 @@ class Manager {
         uploadPrintFile: document.getElementById("fileUploadPrintBtn"),
         syncFiles: document.getElementById("fileReSync"),
         back: document.getElementById("fileBackBtn"),
-        createFolderBtn: document.getElementById("createFolderBtn"),
-      },
+        createFolderBtn: document.getElementById("createFolderBtn")
+      }
     };
     fileButtons.fileManager.fileFolderCount.innerHTML = `<i class="fas fa-file"></i> ${printer.fileList.filecount} <i class="fas fa-folder"></i> ${printer.fileList.folderCount}`;
     if (typeof printer.storage !== "undefined") {
@@ -287,6 +279,9 @@ class Manager {
         FileManager.handleFiles(this.files, printer, "print");
       }
     );
+
+    // Root folder, disabled Back button
+    fileButtons.fileManager.back.disabled = true;
     fileButtons.fileManager.back.addEventListener("click", (e) => {
       FileManager.openFolder(undefined, undefined, printer);
     });
@@ -295,4 +290,5 @@ class Manager {
     });
   }
 }
+
 Manager.init();

@@ -6,12 +6,13 @@ export default class Calculate {
     return random;
   }
 
+  static perc(amount, rounding = 2) {
+    return `${amount?.toFixed(rounding) || 0}%`;
+  }
+
   // Apply tofixed if not null
-  static toFixed(amount, fractional) {
-    if (typeof amount !== "undefined" && amount !== null) {
-      return amount.toFixed(fractional);
-    }
-    return 0;
+  static toFixed(amount, fractional = 0) {
+    return amount?.toFixed(fractional) || 0;
   }
 
   // Convert miliseconds to Days, Hours, Minutes
@@ -20,8 +21,6 @@ export default class Calculate {
     if (seconds === undefined || isNaN(seconds) || seconds === null) {
       string = "No Time Estimate";
     } else {
-      const years = Math.floor(seconds / (360 * 365));
-
       const days = Math.floor(seconds / (3600 * 24));
 
       seconds -= days * 3600 * 24;
@@ -63,6 +62,7 @@ export default class Calculate {
     return (n - a) * (n - b) <= 0;
   }
 
+  // TODO EXACT COPY FROM SERVER print-cost.util.js!!
   static returnPrintCost(costSettings, time) {
     if (typeof costSettings === "undefined") {
       // Attempt to update cost settings in history...
@@ -115,7 +115,7 @@ export default class Calculate {
       "Sep",
       "Oct",
       "Nov",
-      "Dec",
+      "Dec"
     ];
     return `${days[date.getDay()]} ${
       months[date.getMonth()]

@@ -1,12 +1,10 @@
 const winston = require("winston");
+const { AppConstants } = require("../app.constants");
 
-const isProduction = process.env.NODE_ENV === "production";
-const isTest = process.env.NODE_ENV === "test";
-
-const dtFormat = new Intl.DateTimeFormat('en-GB', {
-  timeStyle: 'medium',
-  dateStyle: 'short',
-  timeZone: 'UTC'
+const dtFormat = new Intl.DateTimeFormat("en-GB", {
+  timeStyle: "medium",
+  dateStyle: "short",
+  timeZone: "UTC"
 });
 
 dateFormat = () => {
@@ -14,37 +12,44 @@ dateFormat = () => {
 };
 
 class LoggerService {
-  constructor(route, enableFileLogs = true) {
+  constructor(route, enableFileLogs = true, logFilterLevel) {
+    const isProd = process.env.NODE_ENV === AppConstants.defaultProductionEnv;
+    const isTest = process.env.NODE_ENV === AppConstants.defaultTestEnv;
+
+    if (!logFilterLevel) {
+      logFilterLevel = isProd || isTest ? "warn" : "info";
+    }
+
     this.log_data = null;
     this.route = route;
     this.logger = winston.createLogger({
       transports: [
         new winston.transports.Console({
-          level: (isProduction || isTest) ? "warn" : "info",
+          level: logFilterLevel
         }),
         ...(enableFileLogs
           ? [
-            new winston.transports.File({
-              level: (isProduction || isTest) ? "warn" : "info",
-              filename: `./logs/${route}.log`,
-              maxsize: "5000000",
-              maxFiles: 5,
-            }),
-          ]
-          : []),
+              new winston.transports.File({
+                level: isTest ? "warn" : "info", // Irrespective of environment
+                filename: `./logs/${route}.log`,
+                maxsize: "5000000",
+                maxFiles: 5
+              })
+            ]
+          : [])
       ],
       format: winston.format.printf((info) => {
         let message = `${dateFormat()} | ${info.level.toUpperCase()} | ${route} | ${
           info.message
         }`;
         message = info.obj
-          ? message + `data:${JSON.stringify(info.obj)} | `
+          ? message + ` data: ${JSON.stringify(info.obj)} | `
           : message;
         message = this.log_data
-          ? message + `log_data:${JSON.stringify(this.log_data)} | `
+          ? message + ` log_data: ${JSON.stringify(this.log_data)} | `
           : message;
         return message;
-      }),
+      })
     });
   }
 
@@ -54,25 +59,25 @@ class LoggerService {
 
   info(message, obj) {
     this.logger.log("info", message, {
-      obj,
+      obj
     });
   }
 
   warning(message, obj) {
     this.logger.log("warn", message, {
-      obj,
+      obj
     });
   }
 
   debug(message, obj) {
     this.logger.log("debug", message, {
-      obj,
+      obj
     });
   }
 
   error(message, obj) {
     this.logger.log("error", message, {
-      obj,
+      obj
     });
   }
 }

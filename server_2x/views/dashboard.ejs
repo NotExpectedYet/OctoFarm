@@ -1,0 +1,467 @@
+
+<% if(typeof printerCount != 'undefined' && printerCount > 0 ) {%>
+  <!--Current Operations-->
+
+  <link rel="stylesheet" href="/assets/css/vendor/gridstack.min.css" />
+<!--  <link rel="stylesheet" href="/css/gridstack-extra.css" />-->
+  <script src="/assets/js/vendor/gridstack.all.js"></script>
+
+
+
+    <div class="row">
+
+      <div class="col-12">
+        <% if(dashboardSettings.farmActivity.currentOperations){ %>
+        <%- include('./partials/currentOperations.ejs') %>
+        <% } %>
+      </div>
+
+    </div>
+
+
+<div class="grid-stack">
+  <% if(dashboardSettings.farmUtilisation.currentUtilisation){ %>
+    <div data-gs-id="currentUtil" class="grid-stack-item" data-gs-width="2" data-gs-height="5" data-gs-min-width="2" data-gs-min-height="5">
+      <div class="grid-stack-item-content card text-white bg-dark h-100">
+        <div class="card-header dashHeader p-0">
+          <button
+                  type="button"
+                  class="btn btn-secondary d-block ml-1 mr-1 p-1 float-left"
+                  href="#"
+                  aria-expanded="false"
+                  disabled
+          >
+            <i class="fas fa-star"></i> Current Utilisation
+          </button>
+          <span title="Drag to move this panel about" id="printerSortButton-5f3925f1f9b3090e04bcf2d8" class="tag sortableList btn btn-light btn-sm float-right">
+           <i class="fas fa-grip-vertical"></i>
+        </span>
+
+        </div>
+        <div class="card-body pb-0 pt-2 pb-0 text-center">
+          <div id="currentUtilisation"></div>
+
+        </div>
+      </div>
+    </div>
+  <% } %>
+
+    <% if(dashboardSettings.printerStates.currentStatus){ %>
+      <div data-gs-id="currentStat" id="dashboardInfo" class="grid-stack-item"  data-gs-width="3" data-gs-height="5" data-gs-min-width="2" data-gs-min-height="5">
+        <div class="grid-stack-item-content card text-white bg-dark h-100">
+          <div class="card-header dashHeader p-0">
+            <button
+                    type="button"
+                    class="btn btn-secondary d-block ml-1 mr-1 p-1 float-left"
+                    href="#"
+                    aria-expanded="false"
+                    disabled
+            >
+              <i class="fas fa-info-circle"></i> Current Status
+            </button>
+            <span title="Drag to move this panel about" id="printerSortButton-5f3925f1f9b3090e04bcf2d8" class="tag sortableList btn btn-light btn-sm float-right">
+           <i class="fas fa-grip-vertical"></i>
+        </span>
+
+          </div>
+          <div class="card-body pb-0 pt-0 text-center">
+            <div id="currentActivity"></div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <% if(dashboardSettings.farmUtilisation.farmUtilisation){ %>
+      <div data-gs-id="farmUtil" id="dashboardInfo" class="grid-stack-item"  data-gs-width="3" data-gs-height="5"  data-gs-min-width="3" data-gs-min-height="5">
+        <div class="grid-stack-item-content card text-white bg-dark  h-100">
+          <div class="card-header dashHeader p-0">
+            <button
+                    type="button"
+                    class="btn btn-secondary d-block ml-1 mr-1 p-1 float-left"
+                    href="#"
+                    aria-expanded="false"
+                    disabled
+            >
+              <i class="fas fa-star-half-alt"></i> Farm Utilisation
+            </button>
+
+            <span title="Drag to move this panel about" id="printerSortButton-5f3925f1f9b3090e04bcf2d8" class="tag sortableList btn btn-light btn-sm float-right">
+           <i class="fas fa-grip-vertical"></i>
+        </span>
+
+          </div>
+          <div class="card-body pb-0 text-center">
+
+            <%- include('./partials/Dashboard/dashboardFS.ejs') %>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <% if(dashboardSettings.farmActivity.averageTimes){ %>
+      <div data-gs-id="averageTimes" id="dashboardInfo" class="grid-stack-item"   data-gs-width="2" data-gs-height="5" data-gs-min-width="2" data-gs-min-height="5" >
+        <div class="grid-stack-item-content card text-white bg-dark  h-100">
+          <div class="card-header dashHeader p-0">
+            <button
+                    type="button"
+                    class="btn btn-secondary d-block ml-1 mr-1 p-1 float-left"
+                    href="#"
+                    aria-expanded="false"
+                    disabled
+            >
+              <i class="fas fa-stopwatch"></i> Average Times
+            </button>
+
+            <span title="Drag to move this panel about" id="printerSortButton-5f3925f1f9b3090e04bcf2d8" class="tag sortableList btn btn-light btn-sm float-right">
+           <i class="fas fa-grip-vertical"></i>
+        </span>
+          </div>
+          <div class="card-body pb-0 text-center">
+            <%- include('./partials/Dashboard/dashboardEstimated.ejs') %>
+
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <% if(dashboardSettings.farmActivity.cumulativeTimes){ %>
+      <div data-gs-id="cumulativeTimes" id="dashboardInfo" class="grid-stack-item"  data-gs-width="2" data-gs-height="5" data-gs-min-width="2" data-gs-min-height="5">
+        <div class="grid-stack-item-content card text-white bg-dark  h-100">
+          <div class="card-header dashHeader p-0">
+            <button
+                    type="button"
+                    class="btn btn-secondary d-block ml-1 mr-1 p-1 float-left"
+                    href="#"
+                    aria-expanded="false"
+                    disabled
+            >
+              <i class="fas fa-stopwatch"></i> Cumulative Times
+            </button>
+
+            <span title="Drag to move this panel about" id="printerSortButton-5f3925f1f9b3090e04bcf2d8" class="tag sortableList btn btn-light btn-sm float-right">
+           <i class="fas fa-grip-vertical"></i>
+        </span>
+
+          </div>
+          <div class="card-body pb-0 text-center">
+            <%- include('./partials/Dashboard/dashboardCumulative.ejs') %>
+
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <% if(dashboardSettings.printerStates.printerState){ %>
+      <div data-gs-id="printerStatus" class="grid-stack-item"  data-gs-width="3" data-gs-height="5" data-gs-min-height="1" data-gs-min-width="1">
+        <div class="grid-stack-item-content card text-white bg-dark">
+          <div class="card-header dashHeader p-0">
+            <button
+                    type="button"
+                    class="btn btn-secondary float-left d-block ml-1 mr-1 p-1 float-left"
+                    href="#"
+                    aria-expanded="false"
+                    disabled
+            >
+              <i class="fas fa-tint"></i> Printer Status
+            </button>
+
+            <span title="Drag to move this panel about" id="printerSortButton-5f3925f1f9b3090e04bcf2d8" class="tag sortableList btn btn-light btn-sm float-right">
+           <i class="fas fa-grip-vertical"></i>
+        </span>
+          </div>
+          <div class="card-body pb-0 p-0 text-center">
+            <small><i class="fas fa-square text-warning"></i> Active &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square text-success"></i> Complete &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square text-secondary"></i> Idle &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square text-danger"></i> Disconnected &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square text-offline"></i> Offline &nbsp;&nbsp;</small>
+            <div id="currentStatus" class="row justify-content-sm-center">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  <!--System/Farm Overview-->
+
+
+    <% if(dashboardSettings.printerStates.printerProgress){ %>
+      <div data-gs-id="printerProgress" class="grid-stack-item"  data-gs-width="3" data-gs-height="5" data-gs-min-height="1" data-gs-min-width="1">
+        <div class="grid-stack-item-content card text-white bg-dark">
+          <div class="card-header dashHeader p-0">
+            <button
+                    type="button"
+                    class="btn btn-secondary d-block ml-1 mr-1 p-1 float-left"
+                    href="#"
+                    aria-expanded="false"
+                    disabled
+            >
+              <i class="fas fa-spinner"></i> Printer Progress
+            </button>
+
+            <span title="Drag to move this panel about" id="printerSortButton-5f3925f1f9b3090e04bcf2d8" class="tag sortableList btn btn-light btn-sm float-right">
+           <i class="fas fa-grip-vertical"></i>
+        </span>
+
+          </div>
+          <div class="card-body pb-0 p-0 text-center" >
+            <small><i class="fas fa-square" style="color: black;"></i> 0% &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square text-secondary"></i> < 25% &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square text-primary"></i> 26% - 50% &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square text-info"></i> 51% - 75% &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square text-warning"></i> 76% - 99% &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square text-success"></i> 100% &nbsp;&nbsp;</small>
+            <div id="currentProgress" class="row justify-content-sm-center">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+    <% if(dashboardSettings.printerStates.printerTemps){ %>
+      <div data-gs-id="printerTemps" class="grid-stack-item"  data-gs-width="3" data-gs-height="5" data-gs-min-height="1" data-gs-min-width="1">
+        <div class="grid-stack-item-content card text-white bg-dark">
+          <div class="card-header dashHeader p-0">
+            <button
+                    type="button"
+                    class="btn btn-secondary float-left d-block ml-1 mr-1 p-1 float-left"
+                    href="#"
+                    aria-expanded="false"
+                    disabled
+            >
+              <i class="fas fa-thermometer-three-quarters"></i> Printer Temps
+            </button>
+
+            <span title="Drag to move this panel about" id="printerSortButton-5f3925f1f9b3090e04bcf2d8" class="tag sortableList btn btn-light btn-sm float-right">
+           <i class="fas fa-grip-vertical"></i>
+        </span>
+          </div>
+          <div class="card-body pb-0 p-0 text-center">
+            <small><i class="fas fa-square" style="color: green;"></i> Stable Temp &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square" style="color: orange;"></i> Heating &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square" style="color: #e74c3c;"></i> Offline &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square" style="color: darkBlue;"></i> Cooling &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square" style="color: cyan;"></i> Cooled &nbsp;&nbsp;</small>
+
+            <div id="currentTemps" class="row justify-content-sm-center">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <% if(dashboardSettings.printerStates.printerUtilisation){ %>
+      <div data-gs-id="printerUtilisation" class="grid-stack-item"  data-gs-width="3" data-gs-height="5" data-gs-min-height="1" data-gs-min-width="1">
+        <div class="grid-stack-item-content card text-white bg-dark">
+          <div class="card-header dashHeader p-0">
+            <button
+                    type="button"
+                    class="btn btn-secondary float-left d-block ml-1 mr-1 p-1 float-left"
+                    href="#"
+                    aria-expanded="false"
+                    disabled
+            >
+              <i class="fas fa-star-half-alt"></i>  Printer Utilisation
+            </button>
+
+            <span title="Drag to move this panel about" id="printerSortButton-5f3925f1f9b3090e04bcf2d8" class="tag sortableList btn btn-light btn-sm float-right">
+           <i class="fas fa-grip-vertical"></i>
+        </span>
+          </div>
+          <div class="card-body pb-0 p-0 text-center">
+            <small><i class="fas fa-square text-dark" style="color: black;"></i> 0% &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square text-secondary"></i> < 25% &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square text-primary"></i> 26% - 50% &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square text-info"></i> 51% - 75% &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square text-warning"></i> 76% - 99% &nbsp;&nbsp;</small>
+            <small><i class="fas fa-square text-success"></i> 100% &nbsp;&nbsp;</small>
+            <div id="currentUptime" class="row justify-content-sm-center">
+
+            </div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <% if(dashboardSettings.historical.weeklyUtilisation){ %>
+      <div data-gs-id="weeklyUtil" id="dashboardInfo" class="grid-stack-item"  data-gs-width="6" data-gs-height="6" data-gs-min-height="6" data-gs-max-height="10" data-gs-min-width="3">
+        <div class="grid-stack-item-content card text-white bg-dark">
+          <div class="card-header dashHeader p-0">
+            <button
+                    type="button"
+                    class="btn btn-secondary d-block ml-1 mr-1 p-1 float-left"
+                    href="#"
+                    aria-expanded="false"
+                    disabled
+            >
+              <i class="fas fa-info-circle"></i> Weekly Utilisation
+            </button>
+
+
+            <span title="Drag to move this panel about" id="printerSortButton-5f3925f1f9b3090e04bcf2d8" class="tag sortableList btn btn-light btn-sm float-right">
+           <i class="fas fa-grip-vertical"></i>
+        </span>
+          </div>
+          <div class="card-body pb-0 p-0">
+              <div id="daysActivityHeatMap" ></div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <% if(dashboardSettings.historical.hourlyTotalTemperatures){ %>
+      <div data-gs-id="hourlyTemper" class="grid-stack-item"  data-gs-width="6" data-gs-height="6" data-gs-min-height="6" data-gs-max-height="10" data-gs-min-width="3">
+        <div class="grid-stack-item-content card text-white bg-dark">
+          <div class="card-header dashHeader p-0">
+            <button
+                    type="button"
+                    class="btn btn-secondary float-left d-block ml-1 mr-1 p-1 float-left"
+                    href="#"
+                    aria-expanded="false"
+                    disabled
+            >
+              <i class="fas fa-thermometer-three-quarters"></i> Hourly Total Temperature
+            </button>
+            <span title="Drag to move this panel about" id="printerSortButton-5f3925f1f9b3090e04bcf2d8" class="tag sortableList btn btn-light btn-sm float-right">
+           <i class="fas fa-grip-vertical"></i>
+        </span>
+            <button
+                    type="button"
+                    class="btn btn-secondary float-right d-block ml-1 mr-1 p-1"
+                    href="#"
+                    aria-expanded="false"
+                    disabled
+            >
+              <span id="globalTemp"> <i class="fas fa-temperature-high"></i> Total Heat: <i class="fa fa-spinner fa-spin" aria-hidden="true"></i> °C </span>
+            </button>
+
+
+
+          </div>
+          <div class="card-body pb-0 p-0">
+              <div id="farmTempMap"></div>
+          </div>
+        </div>
+      </div>
+    <% } %>
+
+    <% if(dashboardSettings.historical.environmentalHistory){ %>
+      <div data-gs-id="enviroData" id="envrioData" class="grid-stack-item"  data-gs-width="12" data-gs-height="6" data-gs-min-height="6" data-gs-max-height="10" data-gs-min-width="3">
+        <div class="grid-stack-item-content card text-white bg-dark h-100">
+          <div class="card-header dashHeader p-0">
+            <button
+                    type="button"
+                    class="btn btn-secondary d-block ml-1 mr-1 p-1 float-left"
+                    href="#"
+                    aria-expanded="false"
+                    disabled
+            >
+              <i class="fas fa-tree"></i> Environmental History
+            </button>
+
+            <span title="Drag to move this panel about" id="printerSortButton-5f3925f1f9b3090e04bcf2d8" class="tag sortableList btn btn-light btn-sm float-right">
+           <i class="fas fa-grip-vertical"></i>
+        </span>
+              <button
+                      id="indoorAirQualityAlert"
+                      type="button"
+                      class="btn btn-secondary ml-1 mr-1 p-1 float-right d-none"
+                      href="#"
+                      aria-expanded="false"
+                      disabled
+              >
+
+              </button>
+          </div>
+          <div class="card-body pb-0 pt-2 pb-0 text-center">
+              <div id="enviromentalHistory"></div>
+          </div>
+
+        </div>
+      </div>
+    <% } %>
+      <% if(dashboardSettings.historical.filamentUsageOverTime){ %>
+          <div data-gs-id="filamentUsageOverTime" id="filamentUsageOverTime" class="grid-stack-item"  data-gs-width="12" data-gs-height="7" data-gs-min-height="7" data-gs-max-height="10" data-gs-min-width="3">
+              <div class="grid-stack-item-content card text-white bg-dark h-100">
+                  <div class="card-header dashHeader p-0">
+                      <button
+                              type="button"
+                              class="btn btn-secondary d-block ml-1 mr-1 p-1 float-left"
+                              href="#"
+                              aria-expanded="false"
+                              disabled
+                      >
+                          <i class="fas fa-star-half-alt"></i> Filament Usage Over Time
+                      </button>
+
+                      <span title="Drag to move this panel about" id="printerSortButton-5f3925f1f9b3090e04bcf2d8" class="tag sortableList btn btn-light btn-sm float-right">
+           <i class="fas fa-grip-vertical"></i>
+        </span>
+                  </div>
+                  <div class="card-body pb-0 pt-2 pb-0 text-center">
+                      <div id="usageOverFilamentTime"></div>
+                  </div>
+
+              </div>
+          </div>
+      <% } %>
+      <% if(dashboardSettings.historical.filamentUsageByDay){ %>
+          <div data-gs-id="filamentUsageByDay" id="filamentUsageByDay" class="grid-stack-item"  data-gs-width="12" data-gs-height="7" data-gs-min-height="7" data-gs-max-height="10" data-gs-min-width="3">
+              <div class="grid-stack-item-content card text-white bg-dark h-100">
+                  <div class="card-header dashHeader p-0">
+                      <button
+                              type="button"
+                              class="btn btn-secondary d-block ml-1 mr-1 p-1 float-left"
+                              href="#"
+                              aria-expanded="false"
+                              disabled
+                      >
+                          <i class="fas fa-star-half-alt"></i> Filament Usage By Day
+                      </button>
+
+                      <span title="Drag to move this panel about" id="printerSortButton-5f3925f1f9b3090e04bcf2d8" class="tag sortableList btn btn-light btn-sm float-right">
+           <i class="fas fa-grip-vertical"></i>
+        </span>
+                  </div>
+                  <div class="card-body pb-0 pt-2 pb-0 text-center">
+                      <div id="usageOverTime"></div>
+                  </div>
+
+              </div>
+          </div>
+      <% } %>
+      <% if(dashboardSettings.historical.historyCompletionByDay){ %>
+          <div data-gs-id="historyCompletionByDay" id="historyCompletionByDay" class="grid-stack-item"  data-gs-width="12" data-gs-height="7" data-gs-min-height="7" data-gs-max-height="10" data-gs-min-width="3">
+              <div class="grid-stack-item-content card text-white bg-dark h-100">
+                  <div class="card-header dashHeader p-0">
+                      <button
+                              type="button"
+                              class="btn btn-secondary d-block ml-1 mr-1 p-1 float-left"
+                              href="#"
+                              aria-expanded="false"
+                              disabled
+                      >
+                          <i class="fas fa-star-half-alt"></i> Print Completion By Day
+                      </button>
+
+                      <span title="Drag to move this panel about" id="printerSortButton-5f3925f1f9b3090e04bcf2d8" class="tag sortableList btn btn-light btn-sm float-right">
+           <i class="fas fa-grip-vertical"></i>
+        </span>
+                  </div>
+                  <div class="card-body pb-0 pt-2 pb-0 text-center">
+                      <div id="printCompletionByDay"></div>
+                  </div>
+
+              </div>
+          </div>
+      <% } %>
+
+
+
+
+  <script src="/assets/js/dashboardRunner.min.js" type="module"></script>
+  <% }else{ %>
+    <%- include('./addPrinters.ejs') %>
+  <% } %>
+

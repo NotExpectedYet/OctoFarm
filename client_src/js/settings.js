@@ -5,7 +5,7 @@ import Calc from "./lib/functions/calc.js";
 import Script from "./lib/modules/scriptCheck.js";
 import OctoPrintClient from "./lib/octoprint";
 import FileOperations from "./lib/functions/file.js";
-
+import ApexCharts from "apexcharts";
 // Add listeners to settings
 document.getElementById("saveServerSettings").addEventListener("click", (e) => {
   // Validate Printer Form, then Add
@@ -125,23 +125,23 @@ async function setupOctoPrintClientsforTimelapse() {
       buttons: {
         confirm: {
           label: "Yes",
-          className: "btn-success",
+          className: "btn-success"
         },
         cancel: {
           label: "No",
-          className: "btn-danger",
-        },
+          className: "btn-danger"
+        }
       },
       callback: async function (result) {
         if (result) {
           let settings = {
             webcam: {
               ffmpegVideoCodec: "libx264",
-              webcamEnabled: true,
-            },
+              webcamEnabled: true
+            }
           };
           let timelapse = {
-            type: "zchange",
+            type: "zchange"
           };
           for (let i = 0; i < printers.length; i++) {
             if (printers[i].printerState.colour.category !== "Offline") {
@@ -192,7 +192,7 @@ async function setupOctoPrintClientsforTimelapse() {
             }
           }
         }
-      },
+      }
     });
   } else {
     UI.createAlert(
@@ -234,45 +234,45 @@ const optionsMemory = {
       fontSize: "14px",
       fontWeight: "bold",
       fontFamily: undefined,
-      color: "#fff",
-    },
+      color: "#fff"
+    }
   },
   chart: {
     type: "donut",
     height: "100%",
     width: "100%",
     animations: {
-      enabled: false,
+      enabled: false
     },
-    background: "#303030",
+    background: "#303030"
   },
   theme: {
-    mode: "dark",
+    mode: "dark"
   },
   plotOptions: {
     pie: {
       expandOnClick: true,
       dataLabels: {
         offset: 10,
-        minAngleToShowLabel: 15,
-      },
-    },
+        minAngleToShowLabel: 15
+      }
+    }
   },
   stroke: {
-    show: false,
+    show: false
   },
   tooltip: {
     y: {
       formatter(val) {
         return Calc.bytes(val);
-      },
-    },
+      }
+    }
   },
   noData: {
-    text: "Loading...",
+    text: "Loading..."
   },
   dataLabels: {
-    enabled: false,
+    enabled: false
   },
   series: [],
   labels: ["Other", "OctoFarm", "Free"],
@@ -297,7 +297,7 @@ const optionsMemory = {
     offsetY: 0,
     labels: {
       colors: undefined,
-      useSeriesColors: false,
+      useSeriesColors: false
     },
     markers: {
       width: 9,
@@ -309,19 +309,19 @@ const optionsMemory = {
       customHTML: undefined,
       onClick: undefined,
       offsetX: 0,
-      offsetY: 0,
+      offsetY: 0
     },
     itemMargin: {
       horizontal: 1,
-      vertical: 0,
+      vertical: 0
     },
     onItemClick: {
-      toggleDataSeries: false,
+      toggleDataSeries: false
     },
     onItemHover: {
-      highlightDataSeries: false,
-    },
-  },
+      highlightDataSeries: false
+    }
+  }
 };
 const optionsCPU = {
   title: {
@@ -335,45 +335,45 @@ const optionsCPU = {
       fontSize: "14px",
       fontWeight: "bold",
       fontFamily: undefined,
-      color: "#fff",
-    },
+      color: "#fff"
+    }
   },
   chart: {
     type: "donut",
     height: "100%",
     width: "100%",
     animations: {
-      enabled: true,
+      enabled: true
     },
-    background: "#303030",
+    background: "#303030"
   },
   theme: {
-    mode: "dark",
+    mode: "dark"
   },
   plotOptions: {
     pie: {
       expandOnClick: false,
       dataLabels: {
         offset: 10,
-        minAngleToShowLabel: 15,
-      },
-    },
+        minAngleToShowLabel: 15
+      }
+    }
   },
   stroke: {
-    show: false,
+    show: false
   },
   tooltip: {
     y: {
       formatter(val) {
         return `${Math.round(val * 10) / 10}%`;
-      },
-    },
+      }
+    }
   },
   noData: {
-    text: "Loading...",
+    text: "Loading..."
   },
   dataLabels: {
-    enabled: false,
+    enabled: false
   },
   series: [],
   labels: ["System", "OctoFarm", "User", "Free"],
@@ -398,7 +398,7 @@ const optionsCPU = {
     offsetY: 0,
     labels: {
       colors: undefined,
-      useSeriesColors: false,
+      useSeriesColors: false
     },
     markers: {
       width: 9,
@@ -410,32 +410,32 @@ const optionsCPU = {
       customHTML: undefined,
       onClick: undefined,
       offsetX: 0,
-      offsetY: 0,
+      offsetY: 0
     },
     itemMargin: {
       horizontal: 1,
-      vertical: 0,
+      vertical: 0
     },
     onItemClick: {
-      toggleDataSeries: false,
+      toggleDataSeries: false
     },
     onItemHover: {
-      highlightDataSeries: false,
-    },
-  },
+      highlightDataSeries: false
+    }
+  }
 };
 const systemChartCPU = new ApexCharts(
   document.querySelector("#systemChartCPU"),
-  optionsCPU,
+  optionsCPU
 );
 systemChartCPU.render();
 const systemChartMemory = new ApexCharts(
   document.querySelector("#systemChartMemory"),
-  optionsMemory,
+  optionsMemory
 );
 systemChartMemory.render();
 setInterval(async function updateStatus() {
-  let systemInfo = await Client.get("settings/sysInfo");
+  let systemInfo = await Client.get("system/info");
   systemInfo = await systemInfo.json();
 
   const sysUptimeElem = document.getElementById("systemUptime");
@@ -445,7 +445,7 @@ setInterval(async function updateStatus() {
     sysUptimeElem.innerHTML = Calc.generateTime(systemInfo.sysUptime.uptime);
   }
 
-  if (systemInfo.sysUptime?.uptime && !!sysUptimeElem) {
+  if (systemInfo.processUptime && !!sysUptimeElem) {
     procUptimeElem.innerHTML = Calc.generateTime(systemInfo.processUptime);
   }
 
@@ -478,8 +478,7 @@ setInterval(async function updateStatus() {
       } else {
         systemChartMemory.updateSeries([systemUsedRAM, octoFarmRAM, freeRAM]);
       }
-    }
-    else {
+    } else {
       systemChartMemory.updateSeries([systemUsedRAM, 0, freeRAM]);
     }
   } else {
@@ -560,14 +559,14 @@ class ClientSettings {
       panelView: {
         currentOp: document.getElementById("panelCurrentOpOn").checked,
         hideOff: document.getElementById("panelHideOffline").checked,
-        hideClosed: document.getElementById("panelHideClosed").checked,
+        hideClosed: document.getElementById("panelHideClosed").checked
         // hideIdle: document.getElementById("panelHideIdle").checked,
       },
       cameraView: {
-        cameraRows: document.getElementById("selectCameraGrid").value,
+        cameraRows: document.getElementById("selectCameraGrid").value
       },
       controlSettings: {
-        filesTop: document.getElementById("printerControlFilesFirst").checked,
+        filesTop: document.getElementById("printerControlFilesFirst").checked
       },
       dashboard: {
         defaultLayout: [
@@ -588,7 +587,7 @@ class ClientSettings {
             y: 19,
             width: 12,
             height: 8,
-            id: "filamentUsageOverTime",
+            id: "filamentUsageOverTime"
           },
           { x: 0, y: 19, width: 12, height: 8, id: "filamentUsageByDay" },
           {
@@ -596,32 +595,32 @@ class ClientSettings {
             y: 19,
             width: 12,
             height: 8,
-            id: "historyCompletionByDay",
-          },
+            id: "historyCompletionByDay"
+          }
         ],
         savedLayout: localStorage.getItem("dashboardConfiguration"),
         farmActivity: {
-          currentOperations: document.getElementById("currentOperations")
-            .checked,
+          currentOperations:
+            document.getElementById("currentOperations").checked,
           cumulativeTimes: document.getElementById("cumulativeTimes").checked,
-          averageTimes: document.getElementById("averageTimes").checked,
+          averageTimes: document.getElementById("averageTimes").checked
         },
         printerStates: {
           printerState: document.getElementById("printerState").checked,
           printerTemps: document.getElementById("printerTemps").checked,
-          printerUtilisation: document.getElementById("printerUtilisation")
-            .checked,
+          printerUtilisation:
+            document.getElementById("printerUtilisation").checked,
           printerProgress: document.getElementById("printerProgress").checked,
-          currentStatus: document.getElementById("currentStatus").checked,
+          currentStatus: document.getElementById("currentStatus").checked
         },
         farmUtilisation: {
-          currentUtilisation: document.getElementById("currentUtilisation")
-            .checked,
-          farmUtilisation: document.getElementById("farmUtilisation").checked,
+          currentUtilisation:
+            document.getElementById("currentUtilisation").checked,
+          farmUtilisation: document.getElementById("farmUtilisation").checked
         },
         historical: {
-          weeklyUtilisation: document.getElementById("weeklyUtilisation")
-            .checked,
+          weeklyUtilisation:
+            document.getElementById("weeklyUtilisation").checked,
           hourlyTotalTemperatures: document.getElementById(
             "hourlyTotalTemperatures"
           ).checked,
@@ -630,13 +629,13 @@ class ClientSettings {
           historyCompletionByDay: document.getElementById(
             "printCompletionCheck"
           ).checked,
-          filamentUsageByDay: document.getElementById("filamentUsageCheck")
-            .checked,
+          filamentUsageByDay:
+            document.getElementById("filamentUsageCheck").checked,
           filamentUsageOverTime: document.getElementById(
             "filamentUsageOverTimeCheck"
-          ).checked,
-        },
-      },
+          ).checked
+        }
+      }
     };
     await Client.post("settings/client/update", opts);
     localStorage.setItem("clientSettings", JSON.stringify(opts));
@@ -839,8 +838,8 @@ class ServerSettings {
             retentionPolicy: {
               duration: "365d",
               replication: 1,
-              defaultRet: true,
-            },
+              defaultRet: true
+            }
           };
         }
       });
@@ -925,7 +924,7 @@ class ServerSettings {
     }
     let updateData = {
       forcePull: false,
-      doWeInstallPackages: false,
+      doWeInstallPackages: false
     };
     if (doWeForcePull) {
       updateData.forcePull = true;
@@ -967,12 +966,12 @@ class ServerSettings {
         buttons: {
           cancel: {
             className: "btn-danger",
-            label: '<i class="fa fa-times"></i> Cancel',
+            label: '<i class="fa fa-times"></i> Cancel'
           },
           confirm: {
             className: "btn-success",
-            label: '<i class="fa fa-check"></i> Override',
-          },
+            label: '<i class="fa fa-check"></i> Override'
+          }
         },
         callback: function (result) {
           if (result) {
@@ -984,7 +983,7 @@ class ServerSettings {
               updateOctoFarmBtn.disabled = false;
             }
           }
-        },
+        }
       });
       return;
     }
@@ -1001,12 +1000,12 @@ class ServerSettings {
         buttons: {
           cancel: {
             className: "btn-danger",
-            label: '<i class="fa fa-times"></i> Cancel',
+            label: '<i class="fa fa-times"></i> Cancel'
           },
           confirm: {
             className: "btn-success",
-            label: '<i class="fa fa-check"></i> Confirm',
-          },
+            label: '<i class="fa fa-check"></i> Confirm'
+          }
         },
         callback: function (result) {
           if (result) {
@@ -1018,7 +1017,7 @@ class ServerSettings {
               updateOctoFarmBtn.disabled = false;
             }
           }
-        },
+        }
       });
       return;
     }
@@ -1108,36 +1107,36 @@ class ServerSettings {
     let reboot = false;
     const onlinePoll = document.getElementById("webSocketThrottle").value;
     const onlinePolling = {
-      seconds: onlinePoll,
+      seconds: onlinePoll
     };
     const server = {
       port: parseInt(document.getElementById("serverPortNo").value),
       loginRequired: document.getElementById("requireLogin").checked,
-      registration: document.getElementById("requireRegistration").checked,
+      registration: document.getElementById("requireRegistration").checked
     };
     const timeout = {
       webSocketRetry: document.getElementById("webSocketRetry").value * 1000,
       apiTimeout: document.getElementById("APITimeout").value * 1000,
       apiRetryCutoff: document.getElementById("APIRetryTimeout").value * 1000,
-      apiRetry: document.getElementById("APIRetry").value * 1000,
+      apiRetry: document.getElementById("APIRetry").value * 1000
     };
     const filament = {
-      filamentCheck: document.getElementById("checkFilament").checked,
+      filamentCheck: document.getElementById("checkFilament").checked
     };
     const history = {
       snapshot: {
         onComplete: document.getElementById("snapOnComplete").checked,
-        onFailure: document.getElementById("snapOnFailure").checked,
+        onFailure: document.getElementById("snapOnFailure").checked
       },
       thumbnails: {
         onComplete: document.getElementById("thumbOnComplete").checked,
-        onFailure: document.getElementById("thumbOnFailure").checked,
+        onFailure: document.getElementById("thumbOnFailure").checked
       },
       timelapse: {
         onComplete: document.getElementById("timelapseOnComplete").checked,
         onFailure: document.getElementById("timelapseOnFailure").checked,
-        deleteAfter: document.getElementById("timelapseDelete").checked,
-      },
+        deleteAfter: document.getElementById("timelapseDelete").checked
+      }
     };
     const influxExport = {
       active: document.getElementById("infActivateInfluxExport").checked,
@@ -1149,8 +1148,8 @@ class ServerSettings {
       retentionPolicy: {
         duration: document.getElementById("infDuration").value,
         replication: document.getElementById("infReplication").value,
-        defaultRet: document.getElementById("infRetention").checked,
-      },
+        defaultRet: document.getElementById("infRetention").checked
+      }
     };
     if (
       oldServerSettings.server.port !== server.port ||
@@ -1181,7 +1180,7 @@ class ServerSettings {
       timeout,
       filament,
       history,
-      influxExport,
+      influxExport
     })
       .then((res) => {
         return res.json();
@@ -1194,17 +1193,17 @@ class ServerSettings {
               "Your settings changes require a restart, would you like to do this now?",
             buttons: {
               cancel: {
-                label: '<i class="fa fa-times"></i> Cancel',
+                label: '<i class="fa fa-times"></i> Cancel'
               },
               confirm: {
-                label: '<i class="fa fa-check"></i> Confirm',
-              },
+                label: '<i class="fa fa-check"></i> Confirm'
+              }
             },
             callback(result) {
               if (result) {
                 ServerSettings.serviceRestart();
               }
-            },
+            }
           });
         }
       });

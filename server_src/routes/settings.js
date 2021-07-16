@@ -7,7 +7,7 @@ const ClientSettingsDB = require("../models/ClientSettings.js");
 const HistoryDB = require("../models/History");
 const SpoolsDB = require("../models/Filament.js");
 const ProfilesDB = require("../models/Profiles.js");
-const roomDataDB = require("../models/roomData.js");
+const roomDataDB = require("../models/RoomData.js");
 const UserDB = require("../models/User.js");
 const PrinterDB = require("../models/Printer.js");
 const AlertsDB = require("../models/Alerts.js");
@@ -17,15 +17,15 @@ const logger = new Logger("OctoFarm-API");
 const runner = require("../runners/state.js");
 const multer = require("multer");
 const { Runner } = runner;
-const { SystemRunner } = require("../runners/systemInfo.js");
+// const { SystemRunner } = require("../runners/systemInfo.js");
 const { SettingsClean } = require("../lib/dataFunctions/settingsClean.js");
 const { Logs } = require("../lib/serverLogs.js");
 const { SystemCommands } = require("../lib/serverCommands.js");
 
 const {
   checkReleaseAndLogUpdate,
-  getUpdateNotificationIfAny,
-} = require("../runners/softwareUpdateChecker.js");
+  getUpdateNotificationIfAny
+} = require("../services/octofarm-update.service.js");
 
 module.exports = router;
 
@@ -38,7 +38,7 @@ const Storage = multer.diskStorage({
   },
   filename: function (req, file, callback) {
     callback(null, "bg.jpg");
-  },
+  }
 });
 
 const upload = multer({ storage: Storage });
@@ -61,9 +61,8 @@ router.post(
     // Generate the log package
     let zipDumpResponse = {
       status: "error",
-      msg:
-        "Unable to generate zip file, please check 'OctoFarm-API.log' file for more information.",
-      zipDumpPath: "",
+      msg: "Unable to generate zip file, please check 'OctoFarm-API.log' file for more information.",
+      zipDumpPath: ""
     };
 
     try {
@@ -97,7 +96,7 @@ router.get(
       await AlertsDB.deleteMany({});
       await GcodeDB.deleteMany({});
       res.send({
-        message: "Successfully deleted databases, server will restart...",
+        message: "Successfully deleted databases, server will restart..."
       });
       logger.info("Database completely wiped.... Restarting server...");
       SystemCommands.rebootOctoFarm();
@@ -112,7 +111,7 @@ router.get(
       await eval(databaseName).deleteMany({});
       res.send({
         message:
-          "Successfully deleted " + databaseName + ", server will restart...",
+          "Successfully deleted " + databaseName + ", server will restart..."
       });
       logger.info(
         databaseName + " successfully deleted.... Restarting server..."
@@ -155,7 +154,7 @@ router.post(
     let clientResponse = {
       haveWeSuccessfullyUpdatedOctoFarm: false,
       statusTypeForUser: "error",
-      message: "",
+      message: ""
     };
     let force = req?.body;
     if (
@@ -170,9 +169,11 @@ router.post(
     }
 
     try {
-      clientResponse = await SystemCommands.checkIfOctoFarmNeedsUpdatingAndUpdate(
-        clientResponse, force
-      );
+      clientResponse =
+        await SystemCommands.checkIfOctoFarmNeedsUpdatingAndUpdate(
+          clientResponse,
+          force
+        );
     } catch (e) {
       clientResponse.message =
         "Issue with updating | " + e?.message.replace(/(<([^>]+)>)/gi, "");
@@ -203,7 +204,7 @@ router.post("/client/update", ensureAuthenticated, (req, res) => {
       hideOff: req.body.panelView.hideOff,
       hideClosed: req.body.panelView.hideClosed,
       hideIdle: req.body.panelView.hideIdle,
-      printerRows: req.body.cameraView.cameraRows,
+      printerRows: req.body.cameraView.cameraRows
     };
     checked[0].panelView = panelView;
     checked[0].dashboard = req.body.dashboard;
@@ -270,33 +271,12 @@ router.post("/server/update", ensureAuthenticated, (req, res) => {
     if (shouldDisableInflux) {
       res.send({
         msg: returnMsg,
-        status: "warning",
+        status: "warning"
       });
     } else {
       res.send({ msg: "Settings Saved", status: "success" });
     }
   });
-});
-
-/**
- * Acquire system information from system info runner
- */
-router.get("/sysInfo", ensureAuthenticated, async (req, res) => {
-  const systemInformation = await SystemRunner.returnInfo();
-  let sysInfo = null;
-
-  if (!!systemInformation) {
-    sysInfo = {
-      osInfo: systemInformation.osInfo,
-      cpuInfo: systemInformation.cpuInfo,
-      cpuLoad: systemInformation.cpuLoad,
-      memoryInfo: systemInformation.memoryInfo,
-      sysUptime: systemInformation.sysUptime,
-      currentProcess: systemInformation.currentProcess,
-      processUptime: systemInformation.processUptime,
-    };
-  }
-  res.send(sysInfo);
 });
 
 router.get("/customGcode/delete/:id", ensureAuthenticated, async (req, res) => {

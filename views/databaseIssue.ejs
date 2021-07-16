@@ -37,7 +37,7 @@
                     OS:
                     <span class="badge badge-dark"><%= os; %></span>
                 </span>
-                <br />
+                <br/>
 
                 <form method="post">
                     <div class="form-group">
@@ -51,10 +51,10 @@
                             <input type="url" id="connString" class="input-group-append form-control"
                                    oninput="evaluateMongoDbInput()"
                                    value="<%= mongoURL; %>"
-                                   placeholder="" />
+                                   placeholder=""/>
                         </div>
                         <small id="connection-string-invalid" class="form-text text-danger">
-                            Your connection string seems to have invalid format. <br />
+                            Your connection string seems to have invalid format. <br/>
                             <ul>
                                 <li>Must start with <small class="badge">'mongodb://'</small></li>
                                 <li>Must contain <small class="badge">'/octofarm'</small></li>
@@ -71,7 +71,7 @@
                             Your connection string seems properly formatted.
                         </small>
                     </div>
-                    <br />
+                    <br/>
                     <button type="button"
                             id="test-connection-button"
                             class="btn btn-warning"
@@ -84,7 +84,7 @@
                             id="save-connection-button"
                             class="btn btn-success"
                             onclick="postSaveConnection()"
-                            <% if (isDocker) { %>
+                    <% if (isDocker) { %>
                             hidden
                             <% } %>
                             disabled>
@@ -95,9 +95,6 @@
                             id="restart-server-button"
                             class="btn btn-danger"
                             onclick="postRestartServer()"
-                            <% if (isDocker) { %>
-                            hidden
-                            <% } %>
                             disabled>
                         Restart OctoFarm
                     </button>
@@ -110,7 +107,7 @@
                             <strong>Running OctoFarm in a docker container.</strong>
                             <br/> Update the MONGO variable in your docker command `-e
                             MONGO=...` or docker-compose.yml file's `environment:` section.
-                            <br />
+                            <br/>
                             You can still use the test button above. Make sure to restart the container after you've
                             managed to establish a successful connection here.
                         </div>
@@ -206,22 +203,28 @@
       return;
     }
     notYetValidatedConnection = true;
+    setLastMessageBox("Awaiting response from OctoFarm server.");
     fetch("/test-connection", fetchOptions)
-      .then(r => r.json())
-      .catch(e => {
-        setLastMessageBox("Could not test because of lost connection... is OctoFarm still alive and kicking?", true);
-      })
-      .then(b => {
-        if (b.succeeded === true) {
-          notYetValidatedConnection = false;
-          setLastMessageBox("Successfully tested, you can save this setting!", false);
-        } else {
-          setLastMessageBox("Test failed! Reason '" + b.reason + "'", true);
-        }
-      })
-      .finally(() => {
-        getPageElements().saveButton.disabled = notYetValidatedConnection;
-      });
+        .then(r => r.json())
+        .catch(e => {
+          setLastMessageBox("Could not test because of lost connection... is OctoFarm still alive and kicking?", true);
+        })
+        .then(b => {
+          if (b.succeeded === true) {
+            notYetValidatedConnection = false;
+            if (isDocker) {
+              setLastMessageBox("Successfully tested, you should rebuild or edit the octofarm docker container with the new MONGO variable to apply this change! \n If this is a startup problem, use the restart button.", false);
+              getPageElements().restartOctoFarmButton.disabled = notYetValidatedConnection;
+            } else {
+              setLastMessageBox("Successfully tested, you can save this setting!", false);
+            }
+          } else {
+            setLastMessageBox("Test failed! Reason '" + b.reason + "'", true);
+          }
+        })
+        .finally(() => {
+          getPageElements().saveButton.disabled = notYetValidatedConnection;
+        });
   }
 
   function postSaveConnection() {
@@ -230,20 +233,20 @@
       return;
     }
     fetch("/save-connection-env", fetchOptions)
-      .then(r => r.json())
-      .catch(e => {
-        setLastMessageBox("Could not test because of lost connection... is OctoFarm still alive and kicking?", true);
-      })
-      .then(b => {
-        if (b.succeeded === true) {
-          setLastMessageBox(b.reason, false);
-        } else {
-          setLastMessageBox("Failed to save connection setting. Reason '" + b.reason + "'", true);
-        }
-      })
-      .finally(() => {
-        getPageElements().restartOctoFarmButton.disabled = notYetValidatedConnection;
-      });
+        .then(r => r.json())
+        .catch(e => {
+          setLastMessageBox("Could not test because of lost connection... is OctoFarm still alive and kicking?", true);
+        })
+        .then(b => {
+          if (b.succeeded === true) {
+            setLastMessageBox(b.reason, false);
+          } else {
+            setLastMessageBox("Failed to save connection setting. Reason '" + b.reason + "'", true);
+          }
+        })
+        .finally(() => {
+          getPageElements().restartOctoFarmButton.disabled = notYetValidatedConnection;
+        });
   }
 
   function postRestartServer() {
@@ -252,18 +255,18 @@
       return;
     }
     fetch("/restart-octofarm", fetchOptions)
-      .then(r => r.json())
-      .catch(e => {
-        setLastMessageBox("Could not restart because of lost connection... is OctoFarm still alive and kicking?", true);
-      })
-      .then(b => {
-        if (b === true) {
-          setLastMessageBox("System restart command was successful,the server will restart in 5 seconds... Please refresh page or wait for automatic refresh in 10 seconds.", false);
-          setTimeout(() => location.reload(), 10 * 1000)
-        } else {
-          setLastMessageBox("Failed to Restart OctoFarm. Reason:'" + b + "'", true);
-        }
-      });
+        .then(r => r.json())
+        .catch(e => {
+          setLastMessageBox("Could not restart because of lost connection... is OctoFarm still alive and kicking?", true);
+        })
+        .then(b => {
+          if (b === true) {
+            setLastMessageBox("System restart command was successful,the server will restart in 5 seconds... Please refresh page or wait for automatic refresh in 10 seconds.", false);
+            setTimeout(() => location.reload(), 10 * 1000)
+          } else {
+            setLastMessageBox("Failed to Restart OctoFarm. Reason:'" + b + "'", true);
+          }
+        });
   }
 
   getPageElements().mongoDBInput.setAttribute("placeholder", defaultPlaceholder);

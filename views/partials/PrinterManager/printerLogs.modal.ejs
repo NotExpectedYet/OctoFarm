@@ -1,0 +1,129 @@
+<div class="col-12 col-sm-12 col-md-3 col-lg-2 col-xl-2">
+    <div class="list-group" id="list-tab" role="tablist">
+        <a class="list-group-item list-group-item-action active" id="system-logs-list"
+           data-toggle="list" href="#system-logs" role="tab" aria-controls="panelview"><i
+                    class="far fa-user"></i> OctoFarm <span id="logCount">(<i
+                        class="fas fa-spinner fa-spin"></i>)</span></a>
+        <a class="list-group-item list-group-item-action" id="system-error-list"
+           data-toggle="list" href="#system-error" role="tab" aria-controls="listview"><i
+                    class="fas fa-exclamation-triangle"></i> Printer Errors <span
+                    id="errorCount">(<i class="fas fa-spinner fa-spin"></i>)</span></a>
+        <a class="list-group-item list-group-item-action" id="system-temperature-list"
+           data-toggle="list" href="#system-temperature" role="tab" aria-controls="listview"><i
+                    class="fas fa-chart-line"></i> Printer Temperature <span id="tempCount">(<i
+                        class="fas fa-spinner fa-spin"></i>)</span></a>
+        <a class="list-group-item list-group-item-action" id="system-octologs-list"
+           data-toggle="list" href="#system-octologs" role="tab" aria-controls="listview"><i
+                    class="fas fa-print"></i> OctoPrints Logs <span id="octoPrintCount">(<i
+                        class="fas fa-spinner fa-spin"></i>)</span></a>
+        <a class="list-group-item list-group-item-action" id="system-octoprint-list"
+           data-toggle="list" href="#system-octoprint" role="tab" aria-controls="listview"><i
+                    class="fas fa-plug"></i> OctoPrints Plugin Logs <span id="octoCount">(<i
+                        class="fas fa-spinner fa-spin"></i>)</span></a>
+        <button class="btn btn-success" id="system-refresh-list" data-toggle="list" role="tab"
+                aria-controls="listview"><i class="fas fa-sync"></i> Refresh
+        </button>
+    </div>
+</div>
+<div class="col-12 col-sm-12 col-md-9 col-lg-10 col-xl-10">
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="system-logs" role="tabpanel"
+             aria-labelledby="server-status-list">
+            <div class="row table-responsive-sm table-responsive-md">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <table id="printerConnectionLogTable" class="table table-dark text-center">
+                        <thead>
+                        <tr>
+                            <th class=" sticky-table table-dark text-wrap">Date</th>
+                            <th scope="col" class=" sticky-table table-dark">Printer URL</th>
+                            <th scope="col" class=" sticky-table table-dark">Message</th>
+                        </tr>
+                        </thead>
+                        <tbody id="printerConnectionLogRows"
+                               style="height:100%; overflow-y:auto; font-family: monospace;">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="system-error" role="tabpanel"
+             aria-labelledby="server-settings-list">
+
+            <div class="row table-responsive-sm table-responsive-md">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <table id="printerErrorLogTable" class="table table-dark text-center">
+                        <thead>
+                        <tr>
+                            <th class=" sticky-table table-dark text-wrap">Date</th>
+                            <th scope="col" class=" sticky-table table-dark">Printer URL</th>
+                            <th scope="col" class=" sticky-table table-dark">Message</th>
+                        </tr>
+                        </thead>
+                        <tbody id="printerErrorLogRows"
+                               style="height:100%; overflow-y:auto; font-family: monospace;">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        <div class="tab-pane fade" id="system-temperature" role="tabpanel"
+             aria-labelledby="server-timeout">
+            <div class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <div id="printerTempChart"></div>
+                </div>
+            </div>
+
+        </div>
+        <div class="tab-pane fade" id="system-octoprint" role="tabpanel"
+             aria-labelledby="server-octoprint">
+            <div class="row table-responsive-sm table-responsive-md">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <table id="octoprintLogsTable" class="table table-dark text-center">
+                        <thead>
+                        <tr>
+                            <th class=" sticky-table table-dark text-wrap">Date</th>
+                            <th scope="col" class=" sticky-table table-dark">Printer URL</th>
+                            <th scope="col" class=" sticky-table table-dark">Plugin</th>
+                            <th scope="col" class=" sticky-table table-dark">Message</th>
+                        </tr>
+                        </thead>
+                        <tbody id="octoprintLogsRows"
+                               style="height:100%; overflow-y:auto; font-family: monospace;">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+        <div class="tab-pane fade" id="system-octologs" role="tabpanel"
+             aria-labelledby="server-octologs">
+            <div class="row">
+                <div class="col-lg-12">
+                    <select class="custom-select" id="octoPrintLogsSelect">
+
+                    </select>
+                </div>
+            </div>
+            <div class="row  table-responsive-sm table-responsive-md">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                    <table id="octologsLogsTable" class="table table-dark text-left">
+                        <!--                                                    <thead>-->
+                        <!--                                                    <tr>-->
+                        <!--                                                        <th class="sticky-table table-dark text-wrap" style="width:150px;">Date</th>-->
+                        <!--                                                        <th scope="col" class=" sticky-table table-dark">Logger</th>-->
+                        <!--                                                        <th scope="col" class=" sticky-table table-dark">Type</th>-->
+                        <!--                                                        <th scope="col" class=" sticky-table table-dark">Message</th>-->
+                        <!--                                                    </tr>-->
+                        <!--                                                    </thead>-->
+                        <tbody id="octologsLogsRows"
+                               style="height:100%; overflow-y:auto; font-family: monospace;">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -46,21 +46,24 @@ function stringifyDotEnv(obj) {
  */
 function writeVariableToEnvFile(absoluteEnvPath, variableKey, jsonObject) {
   if (isDocker()) {
-    logger.error("Tried to persist setting to .env in docker mode. Avoided that.");
+    logger.error(
+      "Tried to persist setting to .env in docker mode. Avoided that."
+    );
     return;
   }
   const latestDotEnvConfig = dotenv.config();
   if (latestDotEnvConfig?.error?.code === "ENOENT") {
     logger.warning("Creating .env file for you as it was not found.");
-  }
-  else if (!!latestDotEnvConfig.error) {
-    console.log(JSON.stringify(latestDotEnvConfig.error));
-    throw new Error("Could not parse current .env file. Please ensure the file contains lines with each looking like 'MONGO=http://mongo/octofarm' and 'OCTOFARM_PORT=4000' and so on.");
+  } else if (!!latestDotEnvConfig.error) {
+    logger.error(JSON.stringify(latestDotEnvConfig.error));
+    throw new Error(
+      "Could not parse current .env file. Please ensure the file contains lines with each looking like 'MONGO=http://mongo/octofarm' and 'OCTOFARM_PORT=4000' and so on."
+    );
   }
 
   const newDotEnv = {
     ...latestDotEnvConfig.parsed,
-    [variableKey]:jsonObject
+    [variableKey]: jsonObject
   };
 
   const dotEnvResult = stringifyDotEnv(newDotEnv);
@@ -71,24 +74,26 @@ function verifyPackageJsonRequirements(rootPath) {
   const dirConts = fs.readdirSync(rootPath);
   const hasPackageJson = dirConts.includes("package.json");
   if (!hasPackageJson) {
-    logger.error(`FAILURE. Could not find 'package.json' in root folder ${rootPath}`);
+    logger.error(
+      `FAILURE. Could not find 'package.json' in root folder ${rootPath}`
+    );
     return false;
   } else {
-    logger.info("✓ found 'package.json'");
+    logger.debug("✓ found 'package.json'");
     const packageName = require("../../package.json").name;
     if (!packageName) {
       logger.error(
-        "X Could not find 'name' property in package.json file. Aborting OctoFarm.",
+        "X Could not find 'name' property in package.json file. Aborting OctoFarm."
       );
       return false;
     } else if (packageName.toLowerCase() !== "octofarm") {
       logger.error(
-        `X property 'name' in package.json file didnt equal 'octofarm' (found: ${packageName.toLowerCase()}). Aborting OctoFarm.`,
+        `X property 'name' in package.json file didnt equal 'octofarm' (found: ${packageName.toLowerCase()}). Aborting OctoFarm.`
       );
       return false;
     }
   }
-  logger.info("✓ Correctly validated octofarm package.json file!");
+  logger.debug("✓ Correctly validated octofarm package.json file!");
   return true;
 }
 
@@ -118,7 +123,9 @@ function ensureBackgroundImageExists(rootPath) {
     // Bug in PKG
     // fs.copyFileSync(defaultBgPath, "C:\\Users\\USER_HERE\\Projects\\NodeJS\\OctoFarm\\package\\images\\roll.jpg");
 
-    logger.info(`✓ Copyied default background image to ${targetBgPath} as it was not found.`);
+    logger.info(
+      `✓ Copyied default background image to ${targetBgPath} as it was not found.`
+    );
   }
 }
 
@@ -128,5 +135,5 @@ module.exports = {
   isNode,
   writeVariableToEnvFile,
   verifyPackageJsonRequirements,
-  ensureBackgroundImageExists,
+  ensureBackgroundImageExists
 };

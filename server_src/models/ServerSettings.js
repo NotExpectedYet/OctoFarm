@@ -6,13 +6,13 @@ const ServerSettingsSchema = new mongoose.Schema({
       type: String,
       default: "0.5",
       required: true
-    },
+    }
   },
   server: {
     port: {
       type: Number,
       default: 4000,
-      required: true,
+      required: true
     },
     loginRequired: {
       type: Boolean,
@@ -45,18 +45,18 @@ const ServerSettingsSchema = new mongoose.Schema({
       type: Number,
       default: 5000,
       required: true
-    },
+    }
   },
   filamentManager: {
     type: Boolean,
     default: false,
-    required: false,
+    required: false
   },
   filament: {
     filamentCheck: {
       type: Boolean,
       default: false,
-      require: true,
+      require: true
     }
   },
   history: {
@@ -100,7 +100,7 @@ const ServerSettingsSchema = new mongoose.Schema({
         default: false,
         required: true
       }
-    },
+    }
   },
   influxExport: {
     active: {
@@ -127,8 +127,8 @@ const ServerSettingsSchema = new mongoose.Schema({
       defaultRet: {
         type: Boolean
       }
-    },
-  },
+    }
+  }
 });
 
 const ServerSettings = mongoose.model("ServerSettings", ServerSettingsSchema);

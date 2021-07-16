@@ -8,7 +8,7 @@ const logger = new Logger("OctoFarm-Server");
 const { getLogsPath } = require("../utils/system-paths.utils.js");
 
 const {
-  checkIfFileFileExistsAndDeleteIfSo,
+  checkIfFileFileExistsAndDeleteIfSo
 } = require("../utils/file.utils.js");
 
 async function createZipFile(fileName, filePaths) {
@@ -20,7 +20,7 @@ async function createZipFile(fileName, filePaths) {
 
   const output = createWriteStream(currentZipFile);
   const archive = archiver("zip", {
-    zlib: { level: 9 }, // Sets the compression level.
+    zlib: { level: 9 } // Sets the compression level.
   });
 
   // Listeners

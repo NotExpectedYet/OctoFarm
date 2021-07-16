@@ -1,4 +1,7 @@
-const arrayValidator = function arrayLengthValidator(minIncl = null, maxIncl = null) {
+const arrayValidator = function arrayLengthValidator(
+  minIncl = null,
+  maxIncl = null
+) {
   return (arrayValue) => {
     let isMinLength = true;
     let isMaxLength = true;
@@ -13,5 +16,5 @@ const arrayValidator = function arrayLengthValidator(minIncl = null, maxIncl = n
 };
 
 module.exports = {
-  arrayValidator,
+  arrayValidator
 };

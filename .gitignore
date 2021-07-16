@@ -1,20 +1,27 @@
-node_modules/
-config/db.js
-TODO.md
-logs/
-.clinic/
-.idea/*
-.idea/inspectionProfiles/*
-.idea/jsLinters/*
-.idea/libraries/*
-images/historyCollection/
-/.idea/
-*.env
-*docker-compose.yml
-/.build
-/.cache
+**/.idea/
+**/node_modules/
+**/config/db.js
+**/logs/
+**/.clinic/
+**/dist/
+**/.env
+**/docker-compose.yml
+**/.build
+**/.cache
+**/coverage
 /images
 
 # Ignore any local release zips
 octofarm.zip
+/dist/
+/views/assets/dist/
 package/
+
+# Client
+/web-client/
+client_2x/build/
+
+# V2 Server
+server_2x/assets/public/assets/
+
+*.tgz

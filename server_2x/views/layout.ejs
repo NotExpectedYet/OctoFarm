@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="stylesheet" href="/assets/css/vendor/font-awesome.css"/>
+    <link rel="stylesheet" href="/assets/css/vendor/bootstrap-v4.css"/>
+    <link rel="stylesheet" href="/assets/css/vendor/slate.css"/>
+    <link rel="stylesheet" href="/assets/css/octofarm.css"/>
+    <link rel="stylesheet" href="/assets/css/vendor/noty.css"/>
+    <link rel="stylesheet" href="/assets/css/vendor/balloon.css"/>
+    <link rel="stylesheet" href="/assets/css/vendor/jplist.css"/>
+    <link rel="stylesheet" href="/assets/css/vendor/font-awesome.css"/>
+    <title><%= octoFarmPageTitle %>: <%= page %></title>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top p-1">
+    <a class="navbar-brand notyet" href="#">
+        <img src="favicon.ico" width="40px" class="pl-2" alt="favicon">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <% let noPrinters = "d-none" %>
+    <% if(typeof printerCount !== 'undefined' && printerCount > 0){ %>
+        <% noPrinters = "" %>
+    <% } %>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li id="menuDashboard">
+                <a title="Farm Dashboard" class="nav-link text-center" href="/dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+            <li class="nav-item">
+                <a title="Panel Layout Monitoring View" class="nav-link text-light text-center btn-sm <%= noPrinters %>"
+                   id="menuPanelView" href="/mon/panel"><i class="fas fa-columns"></i>
+                    Panel</a>
+            </li>
+            <li class="nav-item">
+                <a title="List Layout Monitoring View" class="nav-link text-light text-center btn-sm <%= noPrinters %>"
+                   id="menuListView" href="/mon/list"><i class="fas fa-list"></i> List</a>
+            </li>
+            <li class="nav-item">
+                <a title="Camera Layout Monitoring View"
+                   class="nav-link text-light text-center btn-sm <%= noPrinters %>" id="menuCameraView"
+                   href="/mon/camera"><i class="fas fa-video"></i>
+                    Camera</a>
+            </li>
+            <li class="nav-item">
+                <a title="Davids super power tool" class="nav-link text-light text-center btn-sm d-none"
+                   id="menuListView" href="/mon/printerMap"><i class="fas fa-list"></i> Map</a>
+            </li>
+            <li class="nav-item">
+                <a title="Current Operations Monitoring Layout View"
+                   class="nav-link text-light text-center btn-sm <%= noPrinters %>" id="menucurrentOperationsView"
+                   href="/mon/currentOp"><i class="fas fa-star"></i>
+                    Current Operations</a>
+            </li>
+            <% if(page.includes("Camera") || page.includes("List") || page.includes("Panel") || page.includes("Printer Map")){ %>
+
+                <li class="nav-item">
+                    <div class="input-group p-0 m-0 pr-1  mx-auto">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="filterStates">Filter: </label>
+                        </div>
+                        <select class="custom-select" id="filterStates">
+                            <% for(let i = 0; i < printGroups.length; i++){ %>
+                                <option href="#" value="<%= printGroups[i] %>"><%= printGroups[i] %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div class="input-group p-0 m-0 pr-1 mx-auto d-none">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="sortStates">Sort: </label>
+                        </div>
+                        <select class="custom-select" id="sortStates">
+                            <option href="#" value="index">Index</option>
+                            <option href="#" value="percent">Percent</option>
+                            <option id="timeOption" href="#" value="time">Time</option>
+                        </select>
+                    </div>
+                </li>
+
+            <% } %>
+            <li class="nav-item">
+                <span title="Panel Layout Monitoring View"
+                      class="nav-link text-light text-center btn-sm <%= noPrinters %>" id="menuPanelView">
+                    <% if(typeof dashboardStatistics !== "undefined"){ %>
+                        <% if(typeof dashboardStatistics.currentTemperature !== "undefined" && dashboardStatistics.currentTemperature !== null){ %>
+                            <i class="fas fa-temperature-high"></i> <%= dashboardStatistics.currentTemperature %>°C
+                        <% } %>
+                        <% if(typeof dashboardStatistics.currentHumidity !== "undefined" && dashboardStatistics.currentHumidity !== null){ %>
+                            | <i class="fas fa-tint"></i> <%= dashboardStatistics.currentHumidity %>%
+                        <% } %>
+                        <% if(typeof dashboardStatistics.currentPressure !== "undefined" && dashboardStatistics.currentPressure !== null){ %>
+                            | <i class="fas fa-percent"></i> <%= dashboardStatistics.currentPressure %>hPa
+                        <% } %>
+                        <% if(typeof dashboardStatistics.currentIAQ !== "undefined" && dashboardStatistics.currentIAQ !== null){ %>
+                            | <i class="fas fa-air-freshener"></i> <%= dashboardStatistics.currentIAQ %>
+                        <% } %>
+
+                    <% } %>
+                </span>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li id="menuPrinters">
+                <% if(process.env.npm_package_version && process.env.npm_package_version.includes("dev")){ %>
+                    <a title="Printer Setup" class="nav-link text-center notyet">
+                        <i class="fas fa-code-branch"></i> <%= process.env.npm_package_version %>
+                    </a>
+                <% } %>
+            </li>
+            <li id="menuPrinters">
+                <a title="Printer Setup" class="nav-link text-center" href="/printers">
+                    <i class="fas fa-print"></i> Printers
+                </a>
+            </li>
+            <li class="nav-item">
+                <a title="File Manager" class="nav-link text-center" href="/filemanager" id="fileManagerBtn">
+                    <i class="fas fa-folder-open"></i> File Manager
+                </a>
+            </li>
+            <li class="nav-item">
+                <a title="Print History" class="nav-link text-center" href="/history" id="historyBtn">
+                    <i class="fas fa-history"></i> History
+                </a>
+            </li>
+            <li class="nav-item">
+                <a title="Filament Management" class="nav-link text-center" href="/filament" id=""><i
+                            class="fas fa-toilet-paper"></i> Filament</a>
+            </li>
+            <li class="nav-item">
+                <a title="Filament Management" class="nav-link text-center" href="/system" id=""><i
+                            class="fas fa-cogs"></i> System</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div class="restricScreenSize">
+    <%- body %>
+    <div class="modal fade" id="printerManagerModal" tabindex="-1" role="dialog"
+         aria-labelledby="printerManagerModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header px-3 pt-3 pb-2">
+                    <div class="input-group mb-0" style="width:600px">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text p-1" for="printerSelection">Printer Control: </label>
+                        </div>
+                        <select class="custom-select p-1" id="printerSelection">
+
+                        </select>
+                    </div>
+                    <span id="printerIndex" value="" style="display: none;"></span>
+                    <button id="printerManagerModalBtn" type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                        <span class="text-white" aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2 text-center" id="status">
+                                <button id="pmStatus" type="button" class="btn btn-secondary mb-2 " href="#"
+                                        target="_blank" disabled><i class="fas fa-spinner fa-spin"></i></button>
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3" id="printerPortDrop">
+
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-2 col-xl-2" id="printerBaudDrop">
+
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3" id="printerProfileDrop">
+
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-6 col-lg-2 col-xl-2" id="printerConnect">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <div id="printerControls"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" id="printerManagerFooter">
+                    <button id="" type="button" class="btn btn-light" data-dismiss="modal">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="lostServerConnection" tabindex="0" role="dialog" aria-labelledby="lostServerConnection"
+         aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="lostServerConnection">Lost Connection to Server...</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-white" aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 text-center">
+                                <p><i id="lostConnectionSpinner" class="fas fa-spinner fa-spin"></i></p>
+                                <p id="lostConnectionText">Attempting to reconnect...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="connectionActionBtn" class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="connectionModal" tabindex="0" role="dialog" aria-labelledby="connectionModal"
+         aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="connectionModalLabel">Printer Connect/Disconnect</h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span class="text-white" aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div id="printerConnection" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="" type="button" class="btn btn-light" data-dismiss="modal">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay"><i id="overlayIcon" class="fas fa-spinner fa-pulse fa-10x textActive"></i></div>
+    <script type="text/javascript" src="/assets/js/vendor/jquery-3.4.1.min.js"></script>
+    <!--    <script src="/assets/js/vendor/runtime.js"></script>-->
+    <script src="/assets/js/vendor/bootstrap.bundle.js"></script>
+    <script src="/assets/js/vendor/lodash.min.js"></script>
+    <script src="/assets/js/vendor/bootbox.min.js"></script>
+    <script src="/assets/js/vendor/noty.js"></script>
+    <script src="/assets/js/vendor/apexcharts.min.js"></script>
+    <script src="/assets/js/vendor/jpList.js"></script>
+    <script src="/assets/js/serverAliveCheck.min.js"></script>
+</body>
+
+</html>

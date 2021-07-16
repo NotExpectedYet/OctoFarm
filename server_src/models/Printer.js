@@ -1,109 +1,113 @@
 const mongoose = require("mongoose");
-const Schema = require('mongoose/lib/schema');
-const {arrayValidator} = require('../utils/validators');
-const {arrayLengthValidator} = require('./PrinterGroup');
+const Schema = require("mongoose/lib/schema");
+const { arrayValidator } = require("../utils/validators");
+const { arrayLengthValidator } = require("./PrinterGroup");
 
 const PrinterSchema = new mongoose.Schema({
   category: {
     type: String,
-    required: false,
+    required: false
   },
   dateAdded: {
     type: Number,
-    required: false,
+    required: false
   },
   currentIdle: {
     type: Number,
-    required: false,
+    required: false
   },
   currentActive: {
     type: Number,
-    required: false,
+    required: false
   },
   currentOffline: {
     type: Number,
-    required: false,
+    required: false
   },
   type: {
     type: String,
-    required: false,
+    required: false
   },
   sortIndex: {
     type: Number,
-    required: false,
+    required: false
   },
   ip: {
     type: String,
-    required: false,
+    required: false
   },
   port: {
     type: String,
-    required: false,
+    required: false
   },
   apikey: {
     type: String,
-    required: true,
+    required: true
   },
   camURL: {
     type: String,
-    required: false,
+    required: false
   },
   printerURL: {
     type: String,
-    required: false,
+    required: false
+  },
+  webSocketURL: {
+    type: String,
+    required: false
   },
   octoPrintVersion: {
     type: String,
-    required: false,
+    required: false
   },
   klipperFirmwareVersion: {
     type: String,
-    required: false,
+    required: false
   },
   feedRate: {
     type: Number,
-    required: false,
+    required: false
   },
   flowRate: {
     type: Number,
-    required: false,
+    required: false
   },
   settingsApperance: {
     type: Object,
-    required: false,
+    required: false
   },
   selectedFilament: {
     type: Object,
-    required: false,
+    required: false
   },
   currentUser: {
     type: String,
-    required: false,
+    required: false
   },
   group: {
     type: String,
-    required: false,
+    required: false
   },
   tempTriggers: {
     type: Object,
-    required: false,
+    required: false
   },
   powerSettings: {
     type: Object,
-    required: false,
+    required: false
   },
   costSettings: {
     type: Object,
-    required: false,
+    required: false
   },
   fileList: {
     type: Object,
-    required: false,
+    required: false
   },
   storage: {
     type: Object,
-    required: false,
-  },
+    required: false
+  }
 });
 
 const Printer = mongoose.model("Printer", PrinterSchema);

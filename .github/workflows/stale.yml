@@ -14,5 +14,5 @@ jobs:
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         stale-issue-message: 'This issue has been marked as stale... It will be closed in 5 days unless commented on.'
-        exempt-issue-labels: 'feature-request,discussion,investigating further'
+        exempt-issue-labels: 'feature-request,discussion,investigating further,fixed'
         stale-issue-label: 'stale'

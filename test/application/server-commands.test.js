@@ -1,7 +1,7 @@
 describe("ServerCommands", () => {
   jest.mock("child_process", () => {
     return {
-      exec: () => Promise.resolve(),
+      exec: () => Promise.resolve()
     };
   });
   jest.mock("../../server_src/utils/npm.utils");
@@ -13,7 +13,7 @@ describe("ServerCommands", () => {
 
   jest.mock("lookpath", () => {
     return {
-      lookpath: () => Promise.resolve("/usr/random/path"),
+      lookpath: () => Promise.resolve("/usr/random/path")
     };
   });
   const { lookpath } = require("lookpath");
@@ -23,48 +23,48 @@ describe("ServerCommands", () => {
       modified: [
         "package-lock.json",
         "package.json",
-        "server_src/lib/serverCommands.js",
+        "server_src/lib/serverCommands.js"
       ],
       ahead: 0,
-      behind: 0,
+      behind: 0
     };
 
     const scenarioModifiedBehindOutput = {
       modified: [
         "package-lock.json",
         "package.json",
-        "server_src/lib/serverCommands.js",
+        "server_src/lib/serverCommands.js"
       ],
       ahead: 0,
-      behind: 1,
+      behind: 1
     };
 
     const scenarioModifiedAheadOutput = {
       modified: [
         "package-lock.json",
         "package.json",
-        "server_src/lib/serverCommands.js",
+        "server_src/lib/serverCommands.js"
       ],
       ahead: 1,
-      behind: 0,
+      behind: 0
     };
 
     const scenarioAheadOutput = {
       modified: [],
       ahead: 1,
-      behind: 0,
+      behind: 0
     };
 
     const scenarioBehindOutput = {
       modified: [],
       ahead: 0,
-      behind: 1,
+      behind: 1
     };
 
     const scenarioUpToDate = {
       modified: [],
       ahead: 0,
-      behind: 0,
+      behind: 0
     };
 
     const successType = "success";
@@ -83,32 +83,32 @@ describe("ServerCommands", () => {
         name: "should not complain about modifications",
         scenario: scenarioModifiedOutput,
         type: successType,
-        containsMessage: upToDateMessage,
+        containsMessage: upToDateMessage
       },
       {
         name: "should warn about modifications when behind",
         scenario: scenarioModifiedBehindOutput,
         type: warningType,
-        containsMessage: modificationsDetectedMessage,
+        containsMessage: modificationsDetectedMessage
       },
       {
         name: "should not take not of being ahead",
         scenario: scenarioAheadOutput,
         type: successType,
-        containsMessage: upToDateMessage,
+        containsMessage: upToDateMessage
       },
       {
         name: "should not take not of being ahead with modifications",
         scenario: scenarioModifiedAheadOutput,
         type: successType,
-        containsMessage: upToDateMessage,
+        containsMessage: upToDateMessage
       },
       {
         name: "should try to pull when behind",
         scenario: scenarioBehindOutput,
         type: successType,
-        containsMessage: upDateCompletedMessage,
-      },
+        containsMessage: upDateCompletedMessage
+      }
     ];
 
     beforeEach(() => {
@@ -119,10 +119,8 @@ describe("ServerCommands", () => {
 
     it("should be able to detect no updates", async () => {
       mockedSimpleGit.setTestScenario(scenarioUpToDate);
-      const serverResponse = await SystemCommands.checkIfOctoFarmNeedsUpdatingAndUpdate(
-        {},
-        true
-      );
+      const serverResponse =
+        await SystemCommands.checkIfOctoFarmNeedsUpdatingAndUpdate({}, true);
       expect(serverResponse.message).toBe(upToDateMessage);
       expect(serverResponse.haveWeSuccessfullyUpdatedOctoFarm).toBe(false);
       expect(serverResponse.statusTypeForUser).toBe(successType);
@@ -131,10 +129,8 @@ describe("ServerCommands", () => {
     it("should be able to complete when no uninstalled packages and behind in commits", async () => {
       mockedSimpleGit.setTestScenario(scenarioBehindOutput);
       npmUtils.setHasMissingPackages([]);
-      const serverResponse2 = await SystemCommands.checkIfOctoFarmNeedsUpdatingAndUpdate(
-        {},
-        true
-      );
+      const serverResponse2 =
+        await SystemCommands.checkIfOctoFarmNeedsUpdatingAndUpdate({}, true);
       expect(serverResponse2.message).toContain(upDateCompletedMessage);
       expect(serverResponse2.statusTypeForUser).toBe(successType);
     });
@@ -142,10 +138,8 @@ describe("ServerCommands", () => {
     it("should be able to detect but not fix missing npm packages without force.doWeInstallPackages", async () => {
       mockedSimpleGit.setTestScenario(scenarioBehindOutput);
       npmUtils.setHasMissingPackages(["random"]);
-      const serverResponse = await SystemCommands.checkIfOctoFarmNeedsUpdatingAndUpdate(
-        {},
-        true
-      );
+      const serverResponse =
+        await SystemCommands.checkIfOctoFarmNeedsUpdatingAndUpdate({}, true);
       expect(serverResponse.message).toContain(missingPackagesMessage);
       expect(serverResponse.statusTypeForUser).toBe(warningType);
     });
@@ -153,10 +147,11 @@ describe("ServerCommands", () => {
     it("should be able to detect and fix missing npm packages", async () => {
       mockedSimpleGit.setTestScenario(scenarioBehindOutput);
       npmUtils.setHasMissingPackages(["random"]);
-      const serverResponse = await SystemCommands.checkIfOctoFarmNeedsUpdatingAndUpdate(
-        {},
-        { doWeInstallPackages: true }
-      );
+      const serverResponse =
+        await SystemCommands.checkIfOctoFarmNeedsUpdatingAndUpdate(
+          {},
+          { doWeInstallPackages: true }
+        );
       expect(serverResponse.message).toContain(upDateCompletedMessage);
       expect(serverResponse.statusTypeForUser).toBe(successType);
     });
@@ -169,10 +164,8 @@ describe("ServerCommands", () => {
 
     it("should fail on not being a git repo", async () => {
       mockedSimpleGit.setIsRepo(false);
-      const serverResponse = await SystemCommands.checkIfOctoFarmNeedsUpdatingAndUpdate(
-        {},
-        true
-      );
+      const serverResponse =
+        await SystemCommands.checkIfOctoFarmNeedsUpdatingAndUpdate({}, true);
       expect(serverResponse.message).toContain(notAGitRepoStart);
       expect(serverResponse.statusTypeForUser).toBe(warningType);
     });
@@ -180,10 +173,8 @@ describe("ServerCommands", () => {
     for (const spec of scenarioOutcomes) {
       it(spec.name, async () => {
         mockedSimpleGit.setTestScenario(spec.scenario);
-        const serverResponse = await SystemCommands.checkIfOctoFarmNeedsUpdatingAndUpdate(
-          {},
-          true
-        );
+        const serverResponse =
+          await SystemCommands.checkIfOctoFarmNeedsUpdatingAndUpdate({}, true);
         expect(serverResponse.message).toContain(spec.containsMessage);
         expect(serverResponse.statusTypeForUser).toBe(spec.type);
       });

@@ -1,904 +1,101 @@
-<!--Printer Management-->
+<% let base = './partials' %>
+<% let card = base + '/octofarm-card.ejs' %>
+<% let modal = base + '/octofarm-modal.ejs' %>
+<% let table = base + '/octofarm-table.ejs' %>
+
+<% if(typeof userGroup != "undefined" && userGroup === "Administrator"){ %>
 <div class="row">
-    <div id="printerManager" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-8">
-        <div class="card text-white bg-dark h-100">
-            <div class="card-header dashHeader p-0 pt-1 mb-0">
-                <button
-                        type="button"
-                        class="btn btn-secondary"
-                        href="#"
-                        aria-expanded="false"
-                        disabled
-                >
-                    <i class="fas fa-print"></i> Printer Management: <%= printerCount; %>
-                </button>
-            </div>
-            <div class="card-body p-0">
-                <div class="row">
-                    <% if(typeof userGroup != "undefined" && userGroup === "Administrator"){ %>
-                        <div class="col-lg-3 text-center">
-                            <u><h5 class="mb-0">Administration</h5></u><br>
-                            <button
-                                    title="Add Printer to your Farm"
-                                    id="addPrinterBtn"
-                                    type="button"
-                                    class="tag btn btn-success ml-1 p-1 bg-colour-1"
-                                    href="#"
-                                    aria-expanded="false"
-                            >
-                                <i class="fas fa-plus fa-sm"></i> Add
-                            </button>
-                            <button id="editPrinterBtn" type="button" class="tag btn btn-warning ml-1 p-1 bg-colour-2"
-                                    data-toggle="modal" data-target="#printerEditModal">
-                                <i class="fas fa-edit"></i> Edit
-                            </button>
-                            <br>
-                            <form id="uploadFileModalContentForm" class="text-center">
-                                <input
+<%- include(card, {
+    tile:{
+    id:"printerManagementBtns",i:"fa-print",title:"Managment",class:"col-12 col-sm-12 col-md-4 col-lg-3 col-xl-2",
+    },
+    bodyFile:'./PrinterManager/printerManagementContent.ejs'
+    })
+%>
+<%- include(card, {
+    tile:{
+    id:"printerManagmentConnectionLog",i:"fa-sticky-note",title:"Connection Log",class:"col-12 col-sm-12 col-md-8 col-lg-9 col-xl-10",
+    },
+    status: {
+        id: "printerManagementConnectionLogStatus",
+        icon: "fa-info-circle",
+        title: "Log Lines: "
+    },
+    bodyFile:'./PrinterManager/printerConnectionLog.ejs'
+    })
+%>
+<% } %>
+</div>
 
-                                        class="fileElem"
-                                        type="file"
-                                        id="importPrinterBtn"
-                                        accept=".json"
-                                /><label
-                                        title="Import printers from a json file"
-                                        class="tag btn btn-primary mt-2 ml-1 mb-0 p-1 bg-colour-3"
-                                        for="importPrinterBtn"
-                                ><i class="fas fa-file-import"></i> Import</label
-                                >
-                            </form>
-                            <button
-                                    title="Export printers from OctoFarm"
-                                    id="exportPrinterBtn"
-                                    type="button"
-                                    class="tag btn btn-info ml-1 p-1 mt-2 bg-colour-4"
-                                    href="#"
-                                    aria-expanded="false"
-                            >
-                                <i class="fas fa-file-export"></i> Export
-                            </button>
-                            <button
-                                    title="Delete Printers from your farm"
-                                    id="deletePrintersBtn"
-                                    type="button"
-                                    class="tag btn btn-primary ml-1 p-1 mt-2 bg-colour-1"
-                                    href="#"
-                                    aria-expanded="false"
-                                    data-toggle="modal" data-target="#printerEditModal"
-                            >
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                            <br>
-                            <button
-                                    title="Add printers by scanning your network for online OctoPrint instances."
-                                    id="scanNetworkBtn"
-                                    type="button"
-                                    class="tag btn btn-primary ml-1 p-1 mt-2 bg-colour-2"
-                                    href="#"
-                                    aria-expanded="false"
-                            >
-                                <i class="fas fa-wifi"></i> Scan
-                            </button>
-                            <button
-                                    title="Create pre-defined custom gcode scripts to use with the Bulk Gcode commands"
-                                    id="customGcodeBtn"
-                                    type="button"
-                                    class="tag btn btn-primary ml-1 p-1 mt-2 bg-colour-3"
-                                    href="#"
-                                    aria-expanded="false"
-                                    data-toggle="modal" data-target="#printerCustomGcodeScriptsModal"
-
-                            >
-                                <i class="fas fa-code"></i> Gcode Scripts
-                            </button>
-                            <br>
-
-
-                        </div>
-                    <% } %>
-                    <div class="col-lg-3 text-center">
-                        <u><h5 class="mb-0">Printer</h5></u><br>
-                        <button
-                                title="Connect multiple Printers at once."
-                                id="bulkConnectBtn"
-                                type="button"
-                                class="tag btn btn-primary ml-1 p-1 bg-colour-1"
-                                href="#"
-                                aria-expanded="false"
-                                data-toggle="modal" data-target="#printerEditModal"
-                        >
-                            <i class="fas fa-link"></i> Connect
-                        </button>
-                        <button
-                                title="Diconnect multiple Printers at once."
-                                id="bulkDisconnectBtn"
-                                type="button"
-                                class="tag btn btn-primary ml-1 p-1 bg-colour-2"
-                                href="#"
-                                aria-expanded="false"
-                                data-toggle="modal" data-target="#printerEditModal"
-                        >
-                            <i class="fas fa-unlink"></i> Disconnect
-                        </button>
-                        <button
-                                title="Power On/Off multiple Printers at once."
-                                id="bulkPowerBtn"
-                                type="button"
-                                class="tag btn btn-primary ml-1 p-1 bg-colour-3"
-                                href="#"
-                                aria-expanded="false"
-                                data-toggle="modal" data-target="#printerEditModal"
-                        >
-                            <i class="fas fa-power-off"></i> Power
-                        </button>
-                        <button
-                                title="Re-Sync multiple Printers in your farm at once. This has no bearing on Active Prints!"
-                                id="searchOfflineBtn"
-                                type="button"
-                                class="tag btn btn-success m-1 p-1"
-                                href="#"
-                        >
-                            <i class="fas fa-redo fa-sm"></i> Re-Sync
-                        </button>
-                        <br>
-
-                        <button
-                                title="Send heating commands to multiple printers at once."
-                                id="bulkPreHeat"
-                                type="button"
-                                class="tag btn btn-danger ml-1 p-1 bg-colour-1"
-                                href="#"
-                                aria-expanded="false"
-                                data-toggle="modal" data-target="#printerEditModal"
-                        >
-                            <i class="fas fa-temperature-high"></i> Pre-Heat
-                        </button>
-                        <button
-                                title="Control multiple printers at once."
-                                id="bulkControl"
-                                type="button"
-                                class="tag btn btn-danger ml-1 p-1 bg-colour-2"
-                                href="#"
-                                aria-expanded="false"
-                                data-toggle="modal" data-target="#printerEditModal"
-                        >
-                            <i class="fas fa-gamepad"></i> Control
-                        </button>
-                        <button
-                                title="Send gcode commands to multiple printers at once."
-                                id="bulkGcodeCommands"
-                                type="button"
-                                class="tag btn btn-danger ml-1 p-1 bg-colour-3"
-                                href="#"
-                                aria-expanded="false"
-                                data-toggle="modal" data-target="#printerEditModal"
-                        >
-                            <i class="fas fa-code"></i> Gcode
-                        </button>
-                    </div>
-                    <div class="col-lg-3 text-center">
-                        <u><h5 class="mb-0">Plugins</h5></u><br>
-                        <button
-                                title="Install multiple plugins at once."
-                                id="blkPluginsInstallBtn"
-                                type="button"
-                                class="tag btn btn-warning ml-1 p-1  mb-1 bg-colour-1"
-                                href="#"
-                                aria-expanded="false"
-                                data-toggle="modal" data-target="#printerEditModal"
-                        >
-                            <i class="fas fa-plug"></i> Install Plugins
-                        </button>
-                        <button
-                                title="Uninstall multiple plugins at once."
-                                id="blkPluginsUnInstallBtn"
-                                type="button"
-                                class="tag btn btn-warning ml-1 p-1  mb-1  bg-colour-2"
-                                href="#"
-                                aria-expanded="false"
-                                data-toggle="modal" data-target="#printerEditModal"
-                        >
-
-
-                            <i class="fas fa-plug"></i> Uninstall Plugins
-                        </button>
-                        <button
-                                title="Enable multiple plugins at once"
-                                id="blkPluginsEnableBtn"
-                                type="button"
-                                class="tag btn btn-warning ml-1 p-1  mb-1  bg-colour-3"
-                                href="#"
-                                aria-expanded="false"
-                                data-toggle="modal" data-target="#printerEditModal"
-                        >
-                            <i class="fas fa-plug"></i> Enable Plugin
-                        </button>
-                        <button
-                                title="Disable multiple plugins at once"
-                                id="blkPluginsDisableBtn"
-                                type="button"
-                                class="tag btn btn-warning ml-1 p-1  mb-1  bg-colour-4"
-                                href="#"
-                                aria-expanded="false"
-                                data-toggle="modal" data-target="#printerEditModal"
-                        >
-                            <i class="fas fa-plug"></i> Disable Plugin
-                        </button>
-                        <button
-                                title="Install multiple plugins at once."
-                                id="blkUpdatePluginsBtn"
-                                type="button"
-                                class="tag btn btn-warning ml-1 p-1 mb-1 bg-colour-3 d-none"
-                                href="#"
-                        >
-                            <i class="fas fa-upload"></i> Plugin updates available!
-                        </button>
-                        <button
-                                title="Install multiple plugins at once."
-                                id="pluginTracking"
-                                type="button"
-                                class="tag btn btn-warning ml-1 p-1 mb-1 bg-colour-3 d-none"
-                                href="#"
-                                disabled
-                        >
-
-                        </button>
-                        <button
-                                title="Restart the octoprint instances that require it..."
-                                id="restartInstances"
-                                type="button"
-                                class="tag btn btn-warning ml-1 p-1 mb-1 bg-colour-3 d-none"
-                                href="#"
-                                aria-expanded="false"
-                        >
-                            Restart those instances!
-                        </button>
-                    </div>
-                    <div class="col-lg-3 text-center d-none">
-
-                        <u><h5 class="mb-0 mt-1">OctoPrint</h5></u><br>
-                        <button
-                                title="Install multiple plugins at once."
-                                id="blkOctoPrintBackupBtn"
-                                type="button"
-                                class="tag btn btn-warning ml-1 p-1 mb-1 bg-colour-1"
-                                href="#"
-                                aria-expanded="false"
-                                data-toggle="modal" data-target="#printerEditModal"
-                                disabled
-                        >
-                            <i class="fas fa-plug"></i> Backup OctoPrint
-                        </button>
-                        <button
-                                title="Install multiple plugins at once."
-                                id="blkOctoPrintRestoreBtn"
-                                type="button"
-                                class="tag btn btn-warning ml-1 p-1 mb-1 bg-colour-2"
-                                href="#"
-                                aria-expanded="false"
-                                data-toggle="modal" data-target="#printerEditModal"
-                                disabled
-                        >
-                            <i class="fas fa-plug"></i> Restore OctoPrint
-                        </button>
-                        <br>
-                        <button
-                                title="Install multiple plugins at once."
-                                id="blkOctoPrintUpdate"
-                                type="button"
-                                class="tag btn btn-warning ml-1 p-1 mb-1 bg-colour-2 d-none"
-                                href="#"
-                        >
-                            <i class="fas fa-upload"></i> OctoPrint updates available!
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="printerManager" class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-4">
-        <div class="card text-white bg-dark h-100">
-            <div class="card-header dashHeader p-0 pt-1 mb-0">
-                <button
-                        type="button"
-                        class="btn btn-secondary"
-                        href="#"
-                        aria-expanded="false"
-                        disabled
-                >
-                    <i class="fas fa-print"></i> Connection Log
-                </button>
-            </div>
-            <div id="printerTickerMessageBox" class="card-body p-0"
-                 style="height:12rem; width:100%; overflow-y: scroll; font-family: monospace;">
-            </div>
-        </div>
-    </div>
+<div class="row">
+    <%- include(table, {
+        table:{
+            id:"printerNewTable", contentId:"printerNewList", hide:true, headers: [
+                { title:"Name", style:"" },
+                { title:"Group", style:"min-width:190px;" },
+                { title:"Printer URL", style:"" },
+                { title:"Camera URL", style:"" },
+                { title:"API KEY", style:"" },
+                { title:'<button id="saveAllBtn" type="button" class="btn btn-success btn-sm"><i class="fas fa-save"></i></button>', style:"max-width:50px;" },
+                { title:'<button id="delAllBtn" type="button" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>', style:"max-width:50px;" }
+            ]
+        }
+    })
+    %>
 </div>
 <div class="row">
-    <div class="col-lg-12 table-responsive-sm table-responsive-md">
-        <table id="printerNewTable" class="table table-dark table-striped text-center d-none">
-            <thead>
-            <tr>
-                <th class="table-dark text-wrap">Name</th>
-                <th scope="col" class="table-dark" width="190px">Group</th>
-                <th scope="col" class="table-dark">Printer URL</th>
-                <th scope="col" class="table-dark">Camera URL</th>
-                <th scope="col" class="table-dark">API KEY</th>
-                <th scope="col" class="table-dark">
-                    <button id="saveAllBtn" type="button" class="btn btn-success btn-sm">
-                        <i class="fas fa-save"></i>
-                    </button>
-                </th>
-                <th scope="col" class="table-dark">
-                    <button id="delAllBtn" type="button" class="btn btn-danger btn-sm">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </th>
-            </tr>
-            </thead>
-            <tbody id="printerNewList" style="height:100%; overflow-y:auto;">
-            </tbody>
-        </table>
-    </div>
+    <%- include(table, {
+        table:{
+            id:"printerTable", contentId:"printerList", headers: [
+                { title:"Sort Index" ,style:"min-width:100px;" },
+                { title:"Name" ,style:"", wrap:" text-wrap" },
+                { title:"Actions" ,style:"min-width:250px;" },
+                { title:"Manage" ,style:"min-width:200px;" },
+                { title:"Host State" ,style:"min-width:50px;" },
+                { title:"Printer State" ,style:"min-width:50px;" },
+                { title:"WebSocket" ,style:"min-width:150px;" },
+                { title:"Group" ,style:"min-width:10px;" },
+                { title:"Printer" ,style:"min-width:50px;", wrap:" text-wrap"},
+                { title:"OctoPrint" ,style:"min-width:100px;", wrap:" text-wrap"},
+            ]
+        }
+    })
+    %>
 </div>
-<div class="row">
-    <div class="col-lg-12 table-responsive-sm table-responsive-md">
-        <table id="printerTable" class="table table-dark table-striped text-center">
-            <thead>
-            <tr>
-                <th scope="col" class=" sticky-table table-dark" style="min-width:50px;">Sort Index</th>
-                <th class=" sticky-table table-dark text-wrap">Name</th>
-                <th scope="col" class=" sticky-table table-dark" style="min-width:200px;">Actions</th>
-                <th scope="col" class=" sticky-table table-dark" style="min-width:200px;">Manage</th>
-                <th scope="col" class=" sticky-table table-dark" style="min-width:50px;">Host State</th>
-                <th scope="col" class=" sticky-table table-dark" style="min-width:150px;">Printer State</th>
-                <th scope="col" class=" sticky-table table-dark" style="min-width:10px;">WebSocket</th>
-                <th scope="col" class=" sticky-table table-dark" style="min-width:25px;">Group(s)</th>
-                <th scope="col" class=" sticky-table table-dark" style="min-width:100px;">
-                    Printer
-                </th>
-                <th scope="col" class=" sticky-table table-dark" style="min-width:100px;">OctoPrint</th>
-            </tr>
-            </thead>
-            <tbody id="printerList" style="height:100%; overflow-y:auto;">
-            </tbody>
-        </table>
-    </div>
-</div>
-<div class="modal fade" id="printerEditModal" tabindex="0" role="dialog" aria-labelledby="printerEditModal"
-     aria-hidden="true" data-keyboard="false">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="printerEditLabel">Printers</h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span class="text-white" aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                            <div id="multiPrintersSection" class="col-lg-12">
+<%- include(modal, {
+    modal:{
+    id:"printerSelect", title:"Printer Select: "
+    },
+    bodyFile:'./PrinterManager/printerSelect.modal.ejs'
+    })
+%>
+<%- include(modal, {
+    modal:{
+    id:"printerLogs", title:"Printer Logs: "
+    },
+    bodyFile:'./PrinterManager/printerLogs.modal.ejs'
+})
+%>
+<%- include(modal, {
+    modal:{
+    id:"printerSettings", title:"Printer Settings: "
+    },
+    bodyFile:'./PrinterManager/printerSettings.modal.ejs'
+})
+%>
+<%- include(modal, {
+    modal:{
+    id:"printerCustomGcodeScripts", title:"Custom Gcode Scripts"
+    },
+    bodyFile:'./PrinterManager/printerCustomGcodeScripts.modal.ejs'
+})
+%>
+<%- include(modal, {
+    modal:{
+        id:"printerStatistics", title:"Printer Statistics"
+    },
+    bodyFile:'./PrinterManager/printerStatistics.modal.ejs'
+})
+%>
 
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div id="saveArea" class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="printerLogsModal" tabindex="0" role="dialog" aria-labelledby="printerLogsModal"
-     aria-hidden="true" data-keyboard="false">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title" id="printerLogsLabel">Printers</h3>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span class="text-white" aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12 col-sm-12 col-md-3 col-lg-2 col-xl-2">
-                            <div class="list-group" id="list-tab" role="tablist">
-                                <a class="list-group-item list-group-item-action active" id="system-logs-list"
-                                   data-toggle="list" href="#system-logs" role="tab" aria-controls="panelview"><i
-                                            class="far fa-user"></i> OctoFarm <span id="logCount">(<i
-                                                class="fas fa-spinner fa-spin"></i>)</span></a>
-                                <a class="list-group-item list-group-item-action" id="system-error-list"
-                                   data-toggle="list" href="#system-error" role="tab" aria-controls="listview"><i
-                                            class="fas fa-exclamation-triangle"></i> Printer Errors <span
-                                            id="errorCount">(<i class="fas fa-spinner fa-spin"></i>)</span></a>
-                                <a class="list-group-item list-group-item-action" id="system-temperature-list"
-                                   data-toggle="list" href="#system-temperature" role="tab" aria-controls="listview"><i
-                                            class="fas fa-chart-line"></i> Printer Temperature <span id="tempCount">(<i
-                                                class="fas fa-spinner fa-spin"></i>)</span></a>
-                                <a class="list-group-item list-group-item-action" id="system-octologs-list"
-                                   data-toggle="list" href="#system-octologs" role="tab" aria-controls="listview"><i
-                                            class="fas fa-print"></i> OctoPrints Logs <span id="octoPrintCount">(<i
-                                                class="fas fa-spinner fa-spin"></i>)</span></a>
-                                <a class="list-group-item list-group-item-action" id="system-octoprint-list"
-                                   data-toggle="list" href="#system-octoprint" role="tab" aria-controls="listview"><i
-                                            class="fas fa-plug"></i> OctoPrints Plugin Logs <span id="octoCount">(<i
-                                                class="fas fa-spinner fa-spin"></i>)</span></a>
-                                <button class="btn btn-success" id="system-refresh-list" data-toggle="list" role="tab"
-                                        aria-controls="listview"><i class="fas fa-sync"></i> Refresh
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-12 col-md-9 col-lg-10 col-xl-10">
-                            <div class="tab-content" id="nav-tabContent">
-                                <div class="tab-pane fade show active" id="system-logs" role="tabpanel"
-                                     aria-labelledby="server-status-list">
-                                    <div class="row table-responsive-sm table-responsive-md">
-                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <table id="printerConnectionLogTable" class="table table-dark text-center">
-                                                <thead>
-                                                <tr>
-                                                    <th class=" sticky-table table-dark text-wrap">Date</th>
-                                                    <th scope="col" class=" sticky-table table-dark">Printer URL</th>
-                                                    <th scope="col" class=" sticky-table table-dark">Message</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody id="printerConnectionLogRows"
-                                                       style="height:100%; overflow-y:auto; font-family: monospace;">
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="system-error" role="tabpanel"
-                                     aria-labelledby="server-settings-list">
-
-                                    <div class="row table-responsive-sm table-responsive-md">
-                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <table id="printerErrorLogTable" class="table table-dark text-center">
-                                                <thead>
-                                                <tr>
-                                                    <th class=" sticky-table table-dark text-wrap">Date</th>
-                                                    <th scope="col" class=" sticky-table table-dark">Printer URL</th>
-                                                    <th scope="col" class=" sticky-table table-dark">Message</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody id="printerErrorLogRows"
-                                                       style="height:100%; overflow-y:auto; font-family: monospace;">
-                                                </tbody>
-                                            </table>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="system-temperature" role="tabpanel"
-                                     aria-labelledby="server-timeout">
-                                    <div class="row">
-                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <div id="printerTempChart"></div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="tab-pane fade" id="system-octoprint" role="tabpanel"
-                                     aria-labelledby="server-octoprint">
-                                    <div class="row table-responsive-sm table-responsive-md">
-                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <table id="octoprintLogsTable" class="table table-dark text-center">
-                                                <thead>
-                                                <tr>
-                                                    <th class=" sticky-table table-dark text-wrap">Date</th>
-                                                    <th scope="col" class=" sticky-table table-dark">Printer URL</th>
-                                                    <th scope="col" class=" sticky-table table-dark">Plugin</th>
-                                                    <th scope="col" class=" sticky-table table-dark">Message</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody id="octoprintLogsRows"
-                                                       style="height:100%; overflow-y:auto; font-family: monospace;">
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                </div>
-                                <div class="tab-pane fade" id="system-octologs" role="tabpanel"
-                                     aria-labelledby="server-octologs">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <select class="custom-select" id="octoPrintLogsSelect">
-
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row  table-responsive-sm table-responsive-md">
-                                        <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                            <table id="octologsLogsTable" class="table table-dark text-left">
-                                                <!--                                                    <thead>-->
-                                                <!--                                                    <tr>-->
-                                                <!--                                                        <th class="sticky-table table-dark text-wrap" style="width:150px;">Date</th>-->
-                                                <!--                                                        <th scope="col" class=" sticky-table table-dark">Logger</th>-->
-                                                <!--                                                        <th scope="col" class=" sticky-table table-dark">Type</th>-->
-                                                <!--                                                        <th scope="col" class=" sticky-table table-dark">Message</th>-->
-                                                <!--                                                    </tr>-->
-                                                <!--                                                    </thead>-->
-                                                <tbody id="octologsLogsRows"
-                                                       style="height:100%; overflow-y:auto; font-family: monospace;">
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <div id="saveArea" class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="printerSettingsModal" tabindex="-1" role="dialog"
-     aria-labelledby="printerSettingsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content bg-dark text-light">
-            <div class="modal-header px-3 pt-3 pb-2">
-                <h3 class="modal-title" id="printerSettingsSelection">Printer Settings: </h3>
-                <span id="printerSettingsIndex" value="" style="display: none;"></span>
-                <button id="printerSettingsModalBtn" type="button" class="close" data-dismiss="modal"
-                        aria-label="Close">
-                    <span class="text-white" aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
-                            <div class="list-group" id="list-tab" role="tablist">
-                                <a class="list-group-item list-group-item-action active" id="printer-connection-btn"
-                                   data-toggle="list" href="#printer-connection" role="tab" aria-controls="messages"><i
-                                            class="fas fa-plug"></i> Connection</a>
-                                <a class="list-group-item list-group-item-action" id="printer-cost-btn"
-                                   data-toggle="list" href="#printer-cost" role="tab" aria-controls="messages"><i
-                                            class="fas fa-dollar-sign"></i> Cost</a>
-                                <a class="list-group-item list-group-item-action" id="printer-profile-btn"
-                                   data-toggle="list" href="#printer-profile" role="tab" aria-controls="messages"><i
-                                            class="fas fa-tags"></i> Profile</a>
-                                <a class="list-group-item list-group-item-action" id="printer-power-btn"
-                                   data-toggle="list" href="#printer-power" role="tab" aria-controls="messages"><i
-                                            class="fas fa-plug"></i> Power</a>
-                                <a class="list-group-item list-group-item-action" id="printer-alerts-btn"
-                                   data-toggle="list" href="#printer-alerts" role="tab" aria-controls="messages"><i
-                                            class="fas fa-bell"></i> Alerts</a>
-                                <a class="list-group-item list-group-item-action" id="printer-gcode-btn"
-                                   data-toggle="list" href="#printer-gcode" role="tab" aria-controls="messages"><i
-                                            class="fas fa-pen"></i> Gcode Scripts</a>
-                                <a class="list-group-item list-group-item-action" id="printer-settings-btn"
-                                   data-toggle="list" href="#printer-settings" role="tab" aria-controls="messages"><i
-                                            class="fas fa-cog"></i>Other Settings</a>
-                                <span class="list-group-item list-group-item-action" id="printerSettingsFooter">
-
-                                </span>
-
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10">
-                            <div class="tab-content" id="nav-tabContent">
-                                <div class="tab-pane fade active show" id="printer-connection" role="tabpanel"
-                                     aria-labelledby="system-panel-view-list">
-                                    <p id="offlineMessage"></p>
-                                    <h5>OctoPrint Host</h5>
-                                    <hr>
-                                    <p>Set your OctoPrint Host connection details</p>
-                                    <div id="psPrinterConnection">
-                                        <form>
-                                            <div class="row pb-1">
-                                                <div class="col">
-                                                    <label for="psPrinterName">Printer Name:</label>
-                                                    <input id="psPrinterName" type="text" class="form-control"
-                                                           placeholder="OctoPrint User">
-                                                    <small class="form-text text-muted">Your current Printer Name.
-                                                        Saving this will update OctoPrints Settings => Appearance Name
-                                                        if available.</small>
-                                                </div>
-                                                <div class="col">
-                                                    <label for="psOctoPrintUser">OctoPrint User:</label>
-                                                    <input id="psOctoPrintUser" type="text" class="form-control"
-                                                           placeholder="OctoPrint User" disabled>
-                                                    <small class="form-text text-muted">Current OctoPrint User that
-                                                        OctoFarm is using to connect with. (automatic and not
-                                                        editable)</small>
-                                                </div>
-                                            </div>
-                                            <div class="row pb-1">
-                                                <div class="col">
-                                                    <label for="psPrinterURL">Printer URL:</label>
-                                                    <input id="psPrinterURL" type="text" class="form-control"
-                                                           placeholder="Printer URL">
-                                                    <small class="form-text text-muted">URL of OctoPrint Host inc. port.
-                                                        Defaults to "http://" if not specified.</small>
-                                                    <small>Example: <code>http://192.168.1.5:81</code></small>
-                                                </div>
-                                                <div class="col">
-                                                    <label for="psCamURL">Camera URL:</label>
-                                                    <input id="psCamURL" type="text" class="form-control"
-                                                           placeholder="Camera URL">
-                                                    <small class="form-text text-muted">URL of mjpeg camera stream.
-                                                        Defaults to "http://" if not specified.</small>
-                                                    <small>Example:
-                                                        <code>http://192.168.1.5/webcam/?action=stream</code></small>
-                                                </div>
-                                            </div>
-                                            <div class="row pb-2">
-                                                <div class="col">
-                                                    <label for="psAPIKEY">API Key:</label>
-                                                    <input id="psAPIKEY" type="text" class="form-control"
-                                                           placeholder="API Key">
-                                                    <small class="form-text text-muted">OctoPrints API Key. It's
-                                                        recquired to use the User/Application API Key for OctoPrint
-                                                        version 1.4.1+.</small>
-                                                </div>
-
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <h5>Serial Defaults</h5>
-                                    <hr>
-                                    <p>Set OctoPrints default serial connection settings. These will be saved to your
-                                        OctoPrint instance so it will always use these when connecting to your
-                                        printer.</p>
-                                    <div id="psConnectionDefaults" class="row">
-
-                                        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" id="psDefaultPortDrop">
-
-                                        </div>
-                                        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" id="psDefaultBaudDrop">
-
-                                        </div>
-                                        <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"
-                                             id="psDefaultProfileDrop">
-
-                                        </div>
-                                    </div>
-                                    <div id="psCurrentConnection" class="row">
-                                        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <h5>Current Status</h5>
-                                            <hr>
-                                            <button id="psHost" type="button" class="btn btn-warning mb-1 btn-block"
-                                                    href="#" target="_blank" disabled>Checking..
-                                            </button>
-                                            <button id="psStatus" type="button" class="btn btn-warning mb-1 btn-block"
-                                                    href="#" target="_blank" disabled>Checking..
-                                            </button>
-                                            <button id="psWebSocket" type="button"
-                                                    class="btn btn-warning mb-1 btn-block" href="#" target="_blank"
-                                                    disabled>Checking..
-                                            </button>
-                                        </div>
-                                        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <h5>API Status</h5>
-                                            <hr>
-                                            <button title="Click to re-sync your OctoPrint instance"
-                                                    class="btn btn-danger mb-1 btn-block" id="apiCheck"><i
-                                                        class="fas fa-link"></i></button>
-                                            <button title="Click to recheck printers Files"
-                                                    class="btn btn-danger mb-1 btn-block" id="filesCheck"><i
-                                                        class="fas fa-file-code"></i></button>
-                                            <button title="Click to recheck printers State"
-                                                    class="btn btn-danger mb-1 btn-block" id="stateCheck"><i
-                                                        class="fas fa-info-circle"></i></button>
-                                            <button title="Click to recheck printers Profile"
-                                                    class="btn btn-danger mb-1 btn-block" id="profileCheck"><i
-                                                        class="fas fa-id-card"></i></button>
-                                            <button title="Click to recheck printers Settings"
-                                                    class="btn btn-danger mb-1 btn-block" id="settingsCheck"><i
-                                                        class="fas fa-cog"></i></button>
-                                            <button title="Click to recheck printers System"
-                                                    class="btn btn-danger mb-1 btn-block" id="systemCheck"><i
-                                                        class="fas fa-server"></i></button>
-                                        </div>
-                                        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
-                                            <h5>Cleaner Status</h5>
-                                            <hr>
-                                            <button title="Printers Information cleaning status"
-                                                    class="btn btn-danger mb-1 btn-block" id="apiClean"><i
-                                                        class="fas fa-id-card"></i></button>
-                                            <button title="Printers Job Information cleaning status"
-                                                    class="btn btn-danger mb-1 btn-block" id="filesClean"><i
-                                                        class="fas fa-info-circle"></i></button>
-                                            <button title="Printers File Information cleaning status"
-                                                    class="btn btn-danger mb-1 btn-block" id="stateClean"><i
-                                                        class="fas fa-file-code"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="printer-profile" role="tabpanel"
-                                     aria-labelledby="system-panel-view-list">
-                                    <h5>Printer Profiles</h5>
-                                    <hr>
-                                    <p>Below is your current selected printer profile information. You may make edits to
-                                        it here and have it saved back in OctoPrint.</p>
-                                    <div id="psPrinterProfiles" class="row">
-
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="printer-cost" role="tabpanel"
-                                     aria-labelledby="system-panel-view-list">
-                                    <h5>Printer Costs</h5>
-                                    <hr>
-                                    <p>Below are the settings used to calculate the printer costs column in history and
-                                        on other views.</p>
-                                    <div id="psPrinterCost" class="row">
-
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="printer-alerts" role="tabpanel"
-                                     aria-labelledby="system-panel-view-list">
-                                    <h5>Alerts</h5>
-                                    <hr>
-                                    <p>List of Alerts activated on this printer.</p>
-                                    <p>To set these up go to System -> Alerts</p>
-                                    <div class="row">
-                                        <div class="col-12" id="psCustomAlertsTable">
-                                            <table id="customAltersTable"
-                                                   class="table table-sm table-dark table-striped table-responsive-sm table-responsive-md text-center">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">Active</th>
-                                                    <th scope="col" width="150px">Trigger</th>
-                                                    <th scope="col">Script</th>
-                                                    <th scope="col">Message</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody id="printerAltersTableBody"
-                                                       style="height:100%; overflow-y:auto;">
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="printer-power" role="tabpanel"
-                                     aria-labelledby="system-panel-view-list">
-                                    <h5>Power Commands</h5>
-                                    <hr>
-                                    <p>Setup your host/printer power commands here. Enabling these will add a Power menu
-                                        button next to printer control on all views.</p>
-                                    <div class="row">
-                                        <div class="col-12" id="psPowerCommands">
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="printer-gcode" role="tabpanel"
-                                     aria-labelledby="system-panel-view-list">
-                                    <h5>Gcode Scripts</h5>
-                                    <hr>
-                                    <p>NOTE: OctoPrint doesn't seem to update the API with this information straight
-                                        away. If it doesn't seem to update after clicking the "Save Changes" button then
-                                        please check there to see if your values have saved, you will need to use the
-                                        resync button on the interface for OctoFarm to detect the changes.</p>
-                                    <div id="psGcodeManagerGcode">
-
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="printer-settings" role="tabpanel"
-                                     aria-labelledby="system-settings-list">
-                                    <h5>Printer Settings</h5>
-                                    <hr>
-                                    <div class="row">
-                                        <div class="col-12 col-md-4" id="printerManagerSettings">
-                                            <h6><u>Camera Settings</u></h6>
-                                            <div id="cameraRotation">
-
-                                            </div>
-                                        </div>
-                                        <div class="col-12 col-md-4" id="printerManagerSettings">
-                                            <h6><u>Temperature Triggers</u></h6>
-                                            <div id="tempTriggers">
-
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="printerCustomGcodeScriptsModal" tabindex="-1" role="dialog"
-     aria-labelledby="printerCustomGcodeScriptsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content bg-dark text-light">
-            <div class="modal-header px-3 pt-3 pb-2">
-                Custom Gcode Scripts
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="row text-center">
-                        <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-2">
-                            <div class="form-group">
-                                <label for="gcodeScriptName">Name</label>
-                                <input type="text" class="form-control" id="gcodeScriptName"
-                                       placeholder="New script name">
-                            </div>
-                            <div class="form-group">
-                                <label for="gcodeScriptDescription">Description</label>
-                                <input type="text" class="form-control" id="gcodeScriptDescription"
-                                       placeholder="New script description">
-                            </div>
-                            <div class="form-group">
-                                <label for="gcodeScriptScript">Script</label>
-                                <textarea class="form-control" id="gcodeScriptScript" rows="3"></textarea>
-                                <small class="form-text text-muted">New lines will be treated as seperate
-                                    commands</small>
-                            </div>
-                            <button id="createNewScriptBtn" type="submit" class="btn btn-success">Create Script</button>
-                        </div>
-                        <div id="wrapper"
-                             class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-10 table-responsive-sm table-responsive-md">
-                            <table id="historyTableTop" class="table table-dark mx-auto w-auto text-center">
-                                <thead>
-                                <tr>
-                                    <th class="table-dark sticky-table table-dark d-none" scope="col"></th>
-                                    <th class="table-dark sticky-table table-dark" scope="col">Name</th>
-                                    <th class="table-dark sticky-table table-dark" scope="col">Description</th>
-                                    <th class="table-dark sticky-table table-dark" scope="col" width="400px">Script</th>
-                                    <th class="table-dark sticky-table table-dark" scope="col" min-width="100px">
-                                        Actions
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody id="gcodeScriptTable" data-jplist-group="history">
-
-                                </tbody>
-
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="printerStatisticsModal" tabindex="-1" role="dialog"
-     aria-labelledby="printerStatisticsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content bg-dark text-light">
-            <div class="modal-header px-3 pt-3 pb-2" id="printerStatisticsTitle">
-                Printer Statistics
-            </div>
-            <div class="modal-body">
-                <div class="container-fluid">
-                    <div class="row text-center" id="printerStatistics">
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script src="/assets/js/printerManagementRunner.min.js" type="module"></script>
-<script src="/assets/js/vendor/dragSort.js"></script>
+<script src="/assets/dist/printer-management.runner.min.js" type="module"></script>

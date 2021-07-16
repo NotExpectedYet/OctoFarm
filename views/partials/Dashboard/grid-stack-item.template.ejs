@@ -1,0 +1,43 @@
+<div class="grid-stack-item"
+<% if (tile.maxh) { %>
+     gs-max-h="<%= tile.maxh %>"
+        <% } %>
+     gs-id="<%= tile.id %>"
+     id="<%= tile.id %>" <%# Ease of use %>
+     gs-w="<%= tile.w %>"
+     gs-h="<%= tile.h %>"
+     gs-min-h="<%= tile.mh %>"
+     gs-min-w="<%= tile.mw %>">
+    <div class="grid-stack-item-content card text-white bg-dark">
+        <div class="card-header dashHeader p-0">
+            <button class="btn btn-secondary d-block ml-1 mr-1 p-1 float-left"
+                    type="button"
+                    href="#"
+                    aria-expanded="false"
+                    disabled>
+                <i class="fas <%= tile.i %>"></i>&nbsp;<%= tile.title %>
+            </button>
+            <span title="Drag to move this panel about" class="tag sortableList btn btn-light btn-sm float-right">
+                <i class="fas fa-grip-vertical"></i>
+            </span>
+
+            <% if (!!locals.titleFile) { %>
+                <%# Extra title elements %>
+                <%- include(titleFile) %>
+            <% } %>
+        </div>
+
+        <div class="card-body pb-0 <%= tile.c %>">
+            <% if (!!tile.bodyId) { %>
+                <div id="<%= tile.bodyId %>"></div>
+            <% } else { %>
+                <% if (!bodyFile) { %>
+                    <em> This widget failed to render due to missing 'tile.bodyId' or 'bodyFile' alternative </em>
+                <% } else { %>
+                    <%# More complex card-body content %>
+                    <%- include(bodyFile) %>
+                <% } %>
+            <% } %>
+        </div>
+    </div>
+</div>

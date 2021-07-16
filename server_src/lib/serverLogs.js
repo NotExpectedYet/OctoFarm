@@ -4,7 +4,7 @@ const { join } = require("path");
 const { createZipFile } = require("../utils/zip.utils.js");
 const { getLogsPath } = require("../utils/system-paths.utils.js");
 const {
-  generateOctoFarmSystemInformationTxt,
+  generateOctoFarmSystemInformationTxt
 } = require("../services/system-information.service.js");
 
 // Grab Logs
@@ -21,7 +21,7 @@ class Logs {
         path: logFilePath,
         size: stats?.size,
         modified: stats?.mtime,
-        created: stats?.birthtime,
+        created: stats?.birthtime
       };
       fileArray.push(logFile);
     }
@@ -45,7 +45,7 @@ class Logs {
       if (logPath?.name.includes(".log")) {
         const logFile = {
           name: logPath?.name,
-          path: logPath?.path,
+          path: logPath?.path
         };
         fileList.push(logFile);
       }

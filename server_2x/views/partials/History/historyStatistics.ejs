@@ -1,0 +1,117 @@
+
+<div class="row">
+  <div class="col-lg-12 text-center text-light">
+    <div class="row">
+      <div class="col-lg-2">
+        <b class="mt-1 pb-1"><i class="fas fa-print"></i> Status</b>
+        <p class="mb-0 pt-3">
+          <i class="fas fa-square text-success"></i>
+          <b>Completed: <%= printStatistics.completed %></b>
+          <i class="fas fa-square text-warning"></i>
+          <b>Cancelled: <%= printStatistics.cancelled %></b>
+          <i class="fas fa-square text-danger"></i>
+          <b>Failed: <%= printStatistics.failed %></b>
+          <br />
+        </p>
+        <div class="progress mb-0">
+          <div
+            class="progress-bar progress-bar-striped bg-success"
+            role="progressbar"
+            style="width: <%= printStatistics.completedPercent  %>% "
+            aria-valuenow=" <%= printStatistics.completedPercent %>%"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          >
+            <%= Math.round(printStatistics.completedPercent * 10 ) /10 %>%
+          </div>
+          <div
+            class="progress-bar progress-bar-striped bg-warning"
+            role="progressbar"
+            style="width: <%= printStatistics.cancelledPercent %>% "
+            aria-valuenow="<%= printStatistics.cancelledPercent %>%"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          >
+            <%= Math.round(printStatistics.cancelledPercent * 10 ) /10 %>%
+          </div>
+          <div
+          class="progress-bar progress-bar-striped bg-danger"
+          role="progressbar"
+          style="width: <%= printStatistics.failedPercent %>% "
+          aria-valuenow="<%= printStatistics.failedPercent %>%"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        >
+          <%= Math.round(printStatistics.failedPercent * 10 ) /10 %>%
+        </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <b class="mt-1">Prints</b>
+        <div class="row">
+          <div class="col-lg-6">
+            <b><i class="fas fa-clock"></i> Longest Print Time</b> <br />
+            <%= helpers.generateTime(printStatistics.longestPrintTime) %><br />
+            <b><i class="fas fa-clock"></i> Shortest Print Time</b> <br />
+            <%= helpers.generateTime(printStatistics.shortestPrintTime) %> <br />
+          </div>
+          <div class="col-lg-6">
+            <b><i class="fas fa-clock"></i> Average Print Time <br /></b><%=
+            helpers.generateTime(printStatistics.averagePrintTime) %><br />
+            <b><i class="fas fa-star"></i> Most Printed File <br /></b><%=
+            printStatistics.mostPrintedFile %><br />
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-1">
+        <b class="mt-1">Printers</b>
+        <div class="row">
+          <div class="col-lg-12">
+            <b><i class="fas fa-star"></i> Most Occurances</b> <br />
+            <%= printStatistics.printerMost %><br />
+            <b><i class="fas fa-star-half-alt"></i> Least Occurances</b> <br />
+            <%= printStatistics.printerLoad %> <br />
+          </div>
+
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <b class="mt-1">Filament</b>
+        <div class="row">
+          <div class="col-lg-6">
+            <b><i class="fas fa-weight"></i> Total Filament Usage</b> <br />
+            <%= printStatistics.totalFilamentUsage %><br />
+            <b><i class="fas fa-weight"></i> Average Filament Usage</b> <br />
+            <%= printStatistics.averageFilamentUsage %> <br />
+          </div>
+          <div class="col-lg-6">
+            <b><i class="fas fa-weight"></i> Highest Filament Usage <br /></b><%=
+            printStatistics.highestFilamentUsage %><br />
+            <b><i class="fas fa-weight"></i> Lowest Filament Usage <br /></b><%=
+            printStatistics.lowestFilamentUsage %><br />
+
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <b class="mt-1">Cost</b>
+        <div class="row">
+          <div class="col-lg-6">
+            <b><i class="fas fa-tag"></i>  Total Spool Cost</b> <br />
+            <%= printStatistics.totalSpoolCost %> <br />
+            <b><i class="fas fa-tag"></i>  Highest Spool Cost</b> <br />
+            <%= printStatistics.highestSpoolCost %><br />
+
+          </div>
+          <div class="col-lg-6">
+            <b><i class="fas fa-tag"></i>  Total Printer Cost</b> <br />
+            <%= printStatistics.totalPrinterCost %> <br />
+            <b><i class="fas fa-tag"></i>  Highest Printer Cost</b> <br />
+            <%= printStatistics.highestPrinterCost %><br />
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

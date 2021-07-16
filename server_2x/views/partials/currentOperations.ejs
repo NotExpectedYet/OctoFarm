@@ -1,0 +1,91 @@
+<div
+  id="currentOperations"
+  class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 p-0"
+>
+  <div class="card text-white bg-dark">
+    <div class="card-header dashHeader pt-1 pr-1 pl-0 pb-0">
+      <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-6 p-0">
+          <button
+            type="button"
+            class="btn btn-secondary d-block p-1"
+            href="#"
+            aria-expanded="false"
+            disabled
+          >
+            <i class="fas fa-star"></i> Current Operations
+          </button>
+        </div>
+        <div class="col-sm-6 col-md-67 col-lg-6 p-0">
+          <button id="offlineCount"
+            type="button"
+            class="btn btn-outline-danger float-right d-block ml-1 p-1"
+            href="#"
+            aria-expanded="false"
+            disabled
+          >
+            Offline: <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+          </button>
+          <button id="disconCount"
+                  type="button"
+                  class="btn btn-danger float-right d-block ml-1 p-1"
+                  href="#"
+                  aria-expanded="false"
+                  disabled
+          >
+            Disconnected: <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+          </button>
+          <button id="idleCount"
+            type="button"
+            class="btn btn-dark float-right d-block ml-1 p-1"
+            href="#"
+            aria-expanded="false"
+            disabled
+          >
+            Idle: <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+          </button>
+          <button id="activeCount"
+            type="button"
+            class="btn btn-warning float-right d-block ml-1 p-1"
+            href="#"
+            aria-expanded="false"
+            disabled
+          >
+            Active: <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+          </button>
+          <button id="completeCount"
+            type="button"
+            class="btn btn-success float-right ml-1 d-block p-1"
+            href="#"
+            aria-expanded="false"
+            disabled
+          >
+            Complete: <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+          </button>
+      </div>
+    </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12 p-0">
+          <div class="progress">
+            <div id="farmProgress"
+                 class="progress-bar progress-bar-striped bg-warning"
+                 role="progressbar"
+                 style="width: 0%"
+                 aria-valuenow="0%"
+                 aria-valuemin="0"
+                 aria-valuemax="100"
+            >
+              0%
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="card-body pt-0 pb-0 d-flex flex-row overflow-x" id="currentOperationsBody">
+
+    </div>
+  </div>
+</div>

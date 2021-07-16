@@ -12,8 +12,8 @@ ssdp.on("DeviceFound", (res) => {
     fetch(res.location, {
       method: "GET",
       headers: {
-        "Content-Type": "application/json",
-      },
+        "Content-Type": "application/json"
+      }
     })
       .then((response) => response.text())
       .then((data) => {
@@ -44,7 +44,7 @@ ssdp.on("DeviceFound", (res) => {
                 logger.info("Captured device", res.location);
                 discoveredDevices.push({
                   name: name,
-                  url: url,
+                  url: url
                 });
               }
             }
@@ -62,8 +62,8 @@ let searchForDevicesOnNetwork = async function () {
   discoveredDevices = [];
   ssdp.mSearch();
   function x() {
-    return new Promise(function(resolve, reject) {
-      setTimeout(function() {
+    return new Promise(function (resolve, reject) {
+      setTimeout(function () {
         ssdp.close;
         resolve(discoveredDevices);
       }, 20001);
@@ -73,5 +73,5 @@ let searchForDevicesOnNetwork = async function () {
 };
 
 module.exports = {
-  searchForDevicesOnNetwork,
+  searchForDevicesOnNetwork
 };

@@ -30,12 +30,12 @@ export default class PowerButton {
             buttons: {
               confirm: {
                 label: "Yes",
-                className: "btn-success",
+                className: "btn-success"
               },
               cancel: {
                 label: "No",
-                className: "btn-danger",
-              },
+                className: "btn-danger"
+              }
             },
             callback: async function (result) {
               if (result) {
@@ -45,26 +45,25 @@ export default class PowerButton {
                   "Power Off",
                   printer.powerSettings.powerOffCommand
                 );
-                if(printer.powerSettings.powerStatusURL !== ""){
+                if (printer.powerSettings.powerStatusURL !== "") {
                   await OctoPrintClient.getPowerStatus(
-                      printer,
-                      printer.powerSettings.powerStatusURL,
-                      printer.powerSettings.powerStatusCommand
+                    printer,
+                    printer.powerSettings.powerStatusURL,
+                    printer.powerSettings.powerStatusCommand
                   );
                   await OctoPrintClient.getPowerStatus(
-                      printer,
-                      printer.powerSettings.powerStatusURL,
-                      printer.powerSettings.powerStatusCommand
+                    printer,
+                    printer.powerSettings.powerStatusURL,
+                    printer.powerSettings.powerStatusCommand
                   );
                   await OctoPrintClient.getPowerStatus(
-                      printer,
-                      printer.powerSettings.powerStatusURL,
-                      printer.powerSettings.powerStatusCommand
+                    printer,
+                    printer.powerSettings.powerStatusURL,
+                    printer.powerSettings.powerStatusCommand
                   );
                 }
-
               }
-            },
+            }
           });
         });
       }
@@ -136,12 +135,12 @@ export default class PowerButton {
                 buttons: {
                   confirm: {
                     label: "Yes",
-                    className: "btn-success",
+                    className: "btn-success"
                   },
                   cancel: {
                     label: "No",
-                    className: "btn-danger",
-                  },
+                    className: "btn-danger"
+                  }
                 },
                 callback: async function (result) {
                   if (result) {
@@ -167,7 +166,7 @@ export default class PowerButton {
                       printer.powerSettings.powerStatusCommand
                     );
                   }
-                },
+                }
               });
             } else {
               const status = await OctoPrintClient.power(
@@ -213,9 +212,8 @@ export default class PowerButton {
         (printer.otherSettings.system.commands.systemShutdownCommand !== "" &&
           printer.otherSettings.system.commands.systemShutdownCommand !== null)
       ) {
-        document.getElementById(
-          element + printer._id
-        ).innerHTML = PowerButton.printerPowerBtn(printer._id);
+        document.getElementById(element + printer._id).innerHTML =
+          PowerButton.printerPowerBtn(printer._id);
         if (
           printer.otherSettings.system.commands.serverRestartCommand !== "" &&
           printer.otherSettings.system.commands.serverRestartCommand !== null
@@ -260,9 +258,8 @@ export default class PowerButton {
       if (printer.powerSettings.powerOnURL !== "") {
         if (!document.getElementById("printerPower-" + printer._id)) {
           if (document.getElementById(element + printer._id)) {
-            document.getElementById(
-              element + printer._id
-            ).innerHTML = PowerButton.printerPowerBtn(printer._id);
+            document.getElementById(element + printer._id).innerHTML =
+              PowerButton.printerPowerBtn(printer._id);
             PowerButton.powerButtons(printer);
           }
         } else {

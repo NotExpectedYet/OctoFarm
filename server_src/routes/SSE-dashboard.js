@@ -1,16 +1,15 @@
 const express = require("express");
 const router = express.Router();
+const { stringify } = require("flatted");
 const { ensureAuthenticated } = require("../config/auth");
-const { parse, stringify } = require("flatted/cjs");
-//Global store of dashboard info... wonder if there's a cleaner way of doing all this?!
+const { PrinterClean } = require("../lib/dataFunctions/printerClean.js");
+const { SettingsClean } = require("../lib/dataFunctions/settingsClean.js");
+const {
+  getDefaultDashboardSettings
+} = require("../lib/providers/settings.constants");
+
+// Global store of dashboard info... wonder if there's a cleaner way of doing all this?!
 let clientInformation = null;
-
-const printerClean = require("../lib/dataFunctions/printerClean.js");
-const PrinterClean = printerClean.PrinterClean;
-
-const settingsClean = require("../lib/dataFunctions/settingsClean.js");
-const ClientSettings = settingsClean.SettingsClean;
-
 let clientId = 0;
 const clients = {}; // <- Keep a map of attached clients
 let interval = false;
@@ -23,7 +22,7 @@ router.get("/get/", ensureAuthenticated, function (req, res) {
     "Cache-Control": "no-cache, no-store, must-revalidate",
     Pragma: "no-cache",
     Expires: 0,
-    Connection: "keep-alive",
+    Connection: "keep-alive"
   });
   res.write("\n");
   (function (clientId) {
@@ -33,88 +32,33 @@ router.get("/get/", ensureAuthenticated, function (req, res) {
     }); // <- Remove this client when he disconnects
     req.on("error", function () {
       delete clients[clientId];
-    }); // <- Remove this client when he disconnects
+    }); // <- Remove this client when he errors out
   })(++clientId);
-  //console.log("Client: " + Object.keys(clients));
 });
 
 if (interval === false) {
   interval = setInterval(async function () {
+    let clientsSettingsCache = await SettingsClean.returnClientSettings();
+    if (!clientsSettingsCache) {
+      await SettingsClean.start();
+      clientsSettingsCache = await SettingsClean.returnClientSettings();
+    }
+
+    let dashboardSettings = clientsSettingsCache.dashboard;
+    if (!dashboardSettings) {
+      dashboardSettings = getDefaultDashboardSettings();
+    }
+
     const currentOperations = await PrinterClean.returnCurrentOperations();
     const dashStatistics = await PrinterClean.returnDashboardStatistics();
-    const printerInformation = await PrinterClean.returnPrintersInformation();
-    let clientsSettings = await ClientSettings.returnClientSettings();
-    let dashboardSettings = null;
-    if (typeof clientSettings === "undefined") {
-      await ClientSettings.start();
-      clientsSettings = await ClientSettings.returnClientSettings();
-    }
-    if (typeof clientsSettings.dashboard === "undefined") {
-      dashboardSettings = {
-        defaultLayout: [
-          { x: 0, y: 0, width: 2, height: 5, id: "currentUtil" },
-          { x: 5, y: 0, width: 3, height: 5, id: "farmUtil" },
-          { x: 8, y: 0, width: 2, height: 5, id: "averageTimes" },
-          { x: 10, y: 0, width: 2, height: 5, id: "cumulativeTimes" },
-          { x: 2, y: 0, width: 3, height: 5, id: "currentStat" },
-          { x: 6, y: 5, width: 3, height: 5, id: "printerTemps" },
-          { x: 9, y: 5, width: 3, height: 5, id: "printerUtilisation" },
-          { x: 0, y: 5, width: 3, height: 5, id: "printerStatus" },
-          { x: 3, y: 5, width: 3, height: 5, id: "printerProgress" },
-          { x: 6, y: 10, width: 6, height: 9, id: "hourlyTemper" },
-          { x: 0, y: 10, width: 6, height: 9, id: "weeklyUtil" },
-          { x: 0, y: 19, width: 12, height: 8, id: "enviroData" },
-          {
-            x: 0,
-            y: 19,
-            width: 12,
-            height: 8,
-            id: "filamentUsageOverTime",
-          },
-          { x: 0, y: 19, width: 12, height: 8, id: "filamentUsageByDay" },
-          {
-            x: 0,
-            y: 19,
-            width: 12,
-            height: 8,
-            id: "historyCompletionByDay",
-          },
-        ],
-        savedLayout: [],
-        farmActivity: {
-          currentOperations: false,
-          cumulativeTimes: true,
-          averageTimes: true,
-        },
-        printerStates: {
-          printerState: true,
-          printerTemps: true,
-          printerUtilisation: true,
-          printerProgress: true,
-          currentStatus: true,
-        },
-        farmUtilisation: {
-          currentUtilisation: true,
-          farmUtilisation: true,
-        },
-        historical: {
-          weeklyUtilisation: true,
-          hourlyTotalTemperatures: false,
-          environmentalHistory: false,
-          filamentUsageOverTime: false,
-          filamentUsageByDay: false,
-          historyCompletionByDay: false,
-        },
-      };
-    } else {
-      dashboardSettings = clientsSettings.dashboard;
-    }
+    const printerInformation = await PrinterClean.listPrintersInformation();
     const infoDrop = {
-      printerInformation: printerInformation,
-      currentOperations: currentOperations,
-      dashStatistics: dashStatistics,
-      dashboardSettings: dashboardSettings,
+      printerInformation,
+      currentOperations,
+      dashStatistics,
+      dashboardSettings
     };
+
     clientInformation = await stringify(infoDrop);
     for (clientId in clients) {
       clients[clientId].write("retry:" + 10000 + "\n");

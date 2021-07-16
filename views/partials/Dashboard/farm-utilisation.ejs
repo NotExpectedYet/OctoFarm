@@ -1,0 +1,79 @@
+<p class="mb-2">
+    <span id="currentPrinterCount">
+        <i class="fas fa-square"></i>
+        <b>Printers </b>
+    </span>
+</p>
+<p class="mb-0 mt-1">
+    <span>
+        <i class="fas fa-square text-success"></i>
+        <b>Active Hours: </b>
+        <span id="activeHours">
+            <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+        </span>
+    </span>
+    <br>
+    <span>
+        <i class="fas fa-square text-danger"></i>
+        <b>Failed Hours: </b>
+        <span id="failedHours">
+            <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+        </span>
+    </span>
+    <br>
+    <span>
+        <i class="fas fa-square text-secondary"></i>
+        <b>Idle Hours: </b>
+        <span id="idleHours">
+            <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+        </span>
+    </span>
+    <br>
+    <span class="pb-4">
+        <i class="fas fa-square text-danger"></i>
+        <b>Offline Hours: </b>
+        <span id="offlineHours">
+            <i class="fa fa-spinner fa-spin" aria-hidden="true"></i>
+        </span>
+    </span>
+</p>
+<center>
+    <div class="progress mt-4">
+        <div id="activeProgress"
+             class="progress-bar progress-bar-striped bg-success"
+             role="progressbar"
+             style="width: 0% "
+             aria-valuenow="0%"
+             aria-valuemin="0"
+             aria-valuemax="100">
+            0%
+        </div>
+        <div id="failedProgress"
+             class="progress-bar progress-bar-striped bg-warning"
+             role="progressbar"
+             style="width: 0% "
+             aria-valuenow="0%"
+             aria-valuemin="0"
+             aria-valuemax="100">
+            0%
+        </div>
+        <div id="idleProgress"
+             class="progress-bar progress-bar-striped bg-secondary"
+             role="progressbar"
+             style="width: 0% "
+             aria-valuenow="0%"
+             aria-valuemin="0"
+             aria-valuemax="100">
+            0%
+        </div>
+        <div id="offlineProgress"
+             class="progress-bar progress-bar-striped bg-danger"
+             role="progressbar"
+             style="width: 0% "
+             aria-valuenow="0%"
+             aria-valuemin="0"
+             aria-valuemax="100">
+            0%
+        </div>
+    </div>
+</center>

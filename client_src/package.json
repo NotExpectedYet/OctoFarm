@@ -1,0 +1,73 @@
+{
+  "name": "@octofarm/client",
+  "version": "0.1.0-rc2-build5",
+  "description": "The website client for OctoFarm bundled using webpack.",
+  "scripts": {
+    "build": "webpack",
+    "prettier": "prettier --write \"./test/**/*.js\" \"./js/**/*.js\"",
+    "test": "jest --passWithNoTests",
+    "webpack": "webpack",
+    "webpack:prod": "webpack --mode=production",
+    "webpack:watch": "webpack --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OctoFarm/OctoFarm"
+  },
+  "bin": {
+    "octofarm": "./index.js"
+  },
+  "keywords": [
+    "octofarm",
+    "frontend",
+    "ui",
+    "website",
+    "javascript",
+    "3d-printing"
+  ],
+  "author": "David Zwart (davidzwa) & James Mackay (NotExpectedYet)",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.13.0",
+    "@babel/core": "^7.14.0",
+    "@babel/eslint-parser": "^7.13.8",
+    "@babel/plugin-transform-runtime": "^7.13.9",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.14.1",
+    "apexcharts": "^3.24.0",
+    "babel-jest": "^26.6.3",
+    "before-build-webpack": "^0.2.11",
+    "bootbox": "^5.4.0",
+    "bootstrap": "^4.3.1",
+    "css-loader": "^5.2.4",
+    "css-minimizer-webpack-plugin": "^2.0.0",
+    "eslint": "^7.26.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-ejs-js": "^0.1.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-promise": "^4.3.1",
+    "eslint-plugin-standard": "^4.1.0",
+    "file-loader": "^6.2.0",
+    "flatted": "^3.1.1",
+    "gridstack": "^4.2.2",
+    "html-loader": "^2.1.2",
+    "jest": "^26.6.3",
+    "jest-util": "^26.6.2",
+    "jplist-es6": "^1.2.0",
+    "jquery": "^3.5.1",
+    "lodash": "^4.17.21",
+    "mini-css-extract-plugin": "^1.6.0",
+    "noty": "^3.2.0-beta",
+    "prettier": "^2.3.0",
+    "source-map-loader": "^2.0.1",
+    "webpack": "5.36.2",
+    "webpack-cli": "^4.7.2"
+  },
+  "engine-strict": true,
+  "engines": {
+    "npm": ">= 6.10.0"
+  }
+}

@@ -1,0 +1,21 @@
+.*.swp
+._*
+.DS_Store
+.git
+.hg
+.npmrc
+.lock-wscript
+.svn
+.wafpickle-*
+config.gypi
+CVS
+npm-debug.log
+*.tgz
+
+# We dont want code in production
+webpack.config.js
+babel.config.js
+jest.config.js
+js
+css
+images

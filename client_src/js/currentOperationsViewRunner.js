@@ -1,4 +1,3 @@
-import "@babel/polyfill";
 import Calc from "./lib/functions/calc.js";
 
 import OctoPrintClient from "./lib/octoprint.js";
@@ -8,7 +7,7 @@ import UI from "./lib/functions/ui.js";
 let worker = null;
 
 function createWebWorker() {
-  worker = new Worker("/assets/js/workers/monitoringViewsWorker.min.js");
+  worker = new Worker("/assets/dist/monitoringViewsWorker.min.js");
   worker.onmessage = async function (event) {
     if (event.data != false) {
       // /printerInfo === event.data.printersInformation
@@ -186,9 +185,8 @@ function currentOperationsView(
       const progress = document.getElementById(
         "currentProgress-" + current.index
       );
-      document.getElementById(
-        "currentTime-" + current.index
-      ).innerHTML = Calc.generateTime(current.timeRemaining);
+      document.getElementById("currentTime-" + current.index).innerHTML =
+        Calc.generateTime(current.timeRemaining);
       progress.style = `width: ${current.progress}%`;
       progress.innerHTML = current.progress + "%";
       progress.className = `progress-bar progress-bar-striped bg-${current.progressColour}`;
@@ -259,9 +257,8 @@ function currentOperationsView(
         });
     }
 
-    document.getElementById(
-      "currentOpCard-" + current.index
-    ).style.order = index;
+    document.getElementById("currentOpCard-" + current.index).style.order =
+      index;
     const currentCards = document.querySelectorAll("[id^='currentOpCard-']");
     const curr = [];
     currentOperations.forEach((cur) => {

@@ -1,0 +1,11 @@
+<% if(typeof printerCount != 'undefined' && printerCount > 0 ) { %>
+    <% if(clientSettings.panelView.currentOp){ %> <%-
+    include('./partials/currentOperations.ejs') %> <% } %>
+    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+        <div id="printerArea" class="row">
+        </div>
+    </div>
+<% }else{ %>
+    <%- include('./addPrinters.ejs') %>
+<% } %>
+<script src="/assets/js/printerMapViewRunner.min.js" type="module"></script>

@@ -37,7 +37,7 @@ export async function selectFilament(printerId, spoolId, tool) {
   const data = {
     tool,
     printerId,
-    spoolId,
+    spoolId
   };
   const changedFilament = await OctoFarmclient.post("filament/select", data);
 }

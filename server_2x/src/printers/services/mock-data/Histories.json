@@ -1,0 +1,969 @@
+[
+  {
+    "_id": {
+      "$oid": "5f14968b11034c4ca49e7c69"
+    },
+    "printHistory": {
+      "historyIndex": 0,
+      "printerName": "PRINTER1",
+      "costSettings": {
+        "powerConsumption": 0.5,
+        "electricityCosts": 0.15,
+        "purchasePrice": 500,
+        "estimateLifespan": 43800,
+        "maintenanceCosts": 0.25
+      },
+      "success": true,
+      "fileName": "first_file.gcode",
+      "filePath": "path/first_file.gcode",
+      "startDate": "Sun Jul 19 2021 - 10:11:23",
+      "endDate": "Sun Jul 19 2023 - 13:52:59",
+      "thumbnail": "thumbs/thumb1.png",
+      "printTime": 13296,
+      "filamentSelection": [],
+      "previousFilamentSelection": [],
+      "job": {
+        "averagePrintTime": 13342.168540613191,
+        "lastPrintTime": 13296.053316639038,
+        "user": "_api",
+        "file": {
+          "origin": "local",
+          "name": "first_file.gcode",
+          "date": 1595025817,
+          "path": "path/first_file.gcode",
+          "display": "first_file.gcode",
+          "size": 6361164,
+          "thumbnail": "thumbs/thumb1.png?20200717174337",
+          "length": [
+            18648.094819996633
+          ]
+        },
+        "estimatedPrintTime": 10014.00194758631,
+        "filament": {
+          "tool0": {
+            "volume": 44.853924481365894,
+            "length": 18648.094819996633
+          }
+        }
+      },
+      "notes": ""
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5f14969411034c4ca49e7c6a"
+    },
+    "printHistory": {
+      "historyIndex": 1,
+      "printerName": "PRINTER2",
+      "costSettings": {
+        "powerConsumption": 0.5,
+        "electricityCosts": 0.15,
+        "purchasePrice": 500,
+        "estimateLifespan": 43800,
+        "maintenanceCosts": 0.25
+      },
+      "success": true,
+      "fileName": "second_file.gcode",
+      "filePath": "path/second_file.gcode",
+      "startDate": "Sun Jul 19 2020 - 10:11:20",
+      "endDate": "Sun Jul 19 2020 - 13:53:08",
+      "thumbnail": "thumbs/thumb2.png",
+      "printTime": 13308,
+      "filamentSelection": [],
+      "previousFilamentSelection": [],
+      "job": {
+        "averagePrintTime": 13364.106650517715,
+        "lastPrintTime": 13308.238792888005,
+        "user": "_api",
+        "file": {
+          "origin": "local",
+          "name": "second_file.gcode",
+          "date": 1594994304,
+          "path": "path/second_file.gcode",
+          "display": "second_file.gcode",
+          "size": 6361328,
+          "thumbnail": "thumbs/thumb2.png?20200717085824",
+          "length": [
+            18648.094389996553
+          ]
+        },
+        "estimatedPrintTime": 10018.322112052609,
+        "filament": {
+          "tool0": {
+            "volume": 44.8539234470945,
+            "length": 18648.094389996553
+          }
+        }
+      },
+      "notes": ""
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5f14c571119ff34fcaa23845"
+    },
+    "printHistory": {
+      "historyIndex": 2,
+      "printerName": "PRINTER3",
+      "costSettings": {
+        "powerConsumption": 0.5,
+        "electricityCosts": 0.15,
+        "purchasePrice": 500,
+        "estimateLifespan": 43800,
+        "maintenanceCosts": 0.25
+      },
+      "success": true,
+      "fileName": "third_file.gcode",
+      "filePath": "other_path/third_file.gcode",
+      "startDate": "Sun Jul 19 2020 - 16:59:07",
+      "endDate": "Sun Jul 19 2020 - 17:13:05",
+      "thumbnail": null,
+      "printTime": 838,
+      "filamentSelection": [],
+      "previousFilamentSelection": [],
+      "job": {
+        "averagePrintTime": 884.446230349936,
+        "lastPrintTime": 838.2967216449324,
+        "user": "_api",
+        "file": {
+          "origin": "local",
+          "name": "third_file.gcode",
+          "date": 1588176435,
+          "path": "other_path/third_file.gcode",
+          "display": "third_file.gcode",
+          "size": 21287,
+          "length": [
+            503.17929999999876
+          ]
+        },
+        "estimatedPrintTime": 760.4709266367871,
+        "filament": {
+          "tool0": {
+            "volume": 1.2102880503688136,
+            "length": 503.17929999999876
+          }
+        }
+      },
+      "notes": ""
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5f167406105af940147ec3c0"
+    },
+    "printHistory": {
+      "historyIndex": 16,
+      "printerName": "PRINTER1",
+      "costSettings": {
+        "powerConsumption": 0.5,
+        "electricityCosts": 0.15,
+        "purchasePrice": 500,
+        "estimateLifespan": 43800,
+        "maintenanceCosts": 0.25
+      },
+      "success": true,
+      "fileName": "file.gcode",
+      "filePath": "path/file.gcode",
+      "startDate": "Mon Jul 20 2020 - 18:12:40",
+      "endDate": "Mon Jul 20 2020 - 23:50:14",
+      "thumbnail": "thumbs/thumb.png",
+      "printTime": 20254,
+      "filamentSelection": [],
+      "previousFilamentSelection": [],
+      "job": {
+        "averagePrintTime": 20253.992776488012,
+        "lastPrintTime": 20253.992776488012,
+        "user": "_api",
+        "file": {
+          "origin": "local",
+          "name": "file.gcode",
+          "date": 1595286589,
+          "path": "path/file.gcode",
+          "display": "file.gcode",
+          "size": 4764928,
+          "thumbnail": "thumbs/thumb.png?20200720181156",
+          "length": null
+        },
+        "estimatedPrintTime": null,
+        "filament": null
+      },
+      "notes": ""
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5f1f81c11b1bec183919c704"
+    },
+    "printHistory": {
+      "historyIndex": 19,
+      "printerName": "PRINTER4",
+      "costSettings": {
+        "powerConsumption": 0.5,
+        "electricityCosts": 0.15,
+        "purchasePrice": 500,
+        "estimateLifespan": 43800,
+        "maintenanceCosts": 0.25
+      },
+      "success": true,
+      "fileName": "file.gcode",
+      "filePath": "path/file.gcode",
+      "startDate": "Mon Jul 27 2020 - 19:32:28",
+      "endDate": "Mon Jul 27 2020 - 20:39:12",
+      "thumbnail": null,
+      "printTime": 4004,
+      "filamentSelection": [],
+      "previousFilamentSelection": [],
+      "job": {
+        "averagePrintTime": 4004.040147397085,
+        "lastPrintTime": 4004.040147397085,
+        "user": "admin",
+        "file": {
+          "origin": "local",
+          "name": "file.gcode",
+          "date": 1595856333,
+          "path": "path/file.gcode",
+          "display": "file.gcode",
+          "size": 906613
+        },
+        "estimatedPrintTime": 3287.8819398228907,
+        "filament": {
+          "tool0": {
+            "volume": 15.548691311161003,
+            "length": 6464.394660000071
+          }
+        }
+      },
+      "notes": ""
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5f20a6351b1bec183919c706"
+    },
+    "printHistory": {
+      "historyIndex": 21,
+      "printerName": "PRINTER4",
+      "costSettings": {
+        "powerConsumption": 0.5,
+        "electricityCosts": 0.15,
+        "purchasePrice": 500,
+        "estimateLifespan": 43800,
+        "maintenanceCosts": 0.25
+      },
+      "success": true,
+      "fileName": "file.gcode",
+      "filePath": "path/file.gcode",
+      "startDate": "Tue Jul 28 2020 - 14:21:34",
+      "endDate": "Tue Jul 28 2020 - 17:27:01",
+      "thumbnail": null,
+      "printTime": 11127,
+      "filamentSelection": [],
+      "previousFilamentSelection": [],
+      "job": {
+        "averagePrintTime": 11127.488806228968,
+        "lastPrintTime": 11127.488806228968,
+        "user": "admin",
+        "file": {
+          "origin": "local",
+          "name": "file.gcode",
+          "date": 1595963859,
+          "path": "path/file.gcode",
+          "display": "file.gcode",
+          "size": 3441193
+        },
+        "estimatedPrintTime": null,
+        "filament": null
+      },
+      "notes": ""
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5f6425fdf933ed7451688497"
+    },
+    "printHistory": {
+      "historyIndex": 245,
+      "printerName": "PRINTER2",
+      "costSettings": {
+        "powerConsumption": 0.5,
+        "electricityCosts": 0.15,
+        "purchasePrice": 500,
+        "estimateLifespan": 43800,
+        "maintenanceCosts": 0.25
+      },
+      "success": true,
+      "fileName": "file.gcode",
+      "filePath": "path2/file.gcode",
+      "startDate": "Thu Sep 17 2020 - 18:23:23",
+      "endDate": "Thu Sep 17 2020 - 22:14:05",
+      "thumbnail": "thumbs/thumb.png",
+      "printTime": 13842,
+      "filamentSelection": [],
+      "previousFilamentSelection": [],
+      "job": {
+        "averagePrintTime": 13811.202917376067,
+        "lastPrintTime": 13841.86745197326,
+        "user": "admin",
+        "file": {
+          "origin": "local",
+          "name": "file.gcode",
+          "date": 1600299602,
+          "path": "path2/file.gcode",
+          "display": "file.gcode",
+          "size": 6421672,
+          "thumbnail": "thumbs/thumb.png?20200917004002",
+          "length": [
+            16784.36719999938
+          ]
+        },
+        "estimatedPrintTime": 10498.622579430934,
+        "filament": {
+          "tool0": {
+            "volume": 40.37113421629539,
+            "length": 16784.36719999938
+          }
+        }
+      },
+      "notes": ""
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "5fd8460823ce0645a633da07"
+    },
+    "printHistory": {
+      "historyIndex": 699,
+      "printerName": "PRINTER3",
+      "printerID": "5f14620e88c556488fdfb787",
+      "costSettings": {
+        "powerConsumption": 0.2,
+        "electricityCosts": 0.25,
+        "purchasePrice": 0,
+        "estimateLifespan": 0,
+        "maintenanceCosts": 0
+      },
+      "success": true,
+      "reason": null,
+      "fileName": "file.gcode",
+      "fileDisplay": null,
+      "filePath": "file.gcode",
+      "startDate": "Mon Dec 14 2020 - 19:45:15",
+      "endDate": "Mon Dec 14 2020 - 23:13:43",
+      "thumbnail": "thumbs/thumb.png",
+      "printTime": 12508,
+      "filamentSelection": [],
+      "previousFilamentSelection": [],
+      "job": {
+        "file": {
+          "name": "file.gcode",
+          "path": "path/file.gcode",
+          "display": "file.gcode",
+          "origin": "local",
+          "size": 5567740,
+          "date": 1607995106,
+          "thumbnail": "thumbs/thumb.png?20201214191826",
+          "length": [
+            11411.290749999993
+          ]
+        },
+        "estimatedPrintTime": 8870.761914983494,
+        "averagePrintTime": 12508.434024509043,
+        "lastPrintTime": 12508.434024509043,
+        "filament": {
+          "tool0": {
+            "length": 11411.290749999993,
+            "volume": 27.447370815948123
+          }
+        },
+        "user": "admin"
+      },
+      "notes": "",
+      "snapshot": "snapshots/snapshot.jpg",
+      "resends": null
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "6004f9e44511286271a4dd70"
+    },
+    "printHistory": {
+      "historyIndex": 853,
+      "printerIndex": null,
+      "costSettings": {
+        "powerConsumption": 0.2,
+        "electricityCosts": 0.25,
+        "purchasePrice": "0",
+        "estimateLifespan": 0,
+        "maintenanceCosts": 0
+      },
+      "printerID": "5f14621088c556488fdfb788",
+      "printerName": "PRINTER1",
+      "success": false,
+      "reason": "cancelled",
+      "fileName": "file.gcode",
+      "filePath": "path/file.gcode",
+      "startDate": "Sun Jan 17 2023 - 20:58:06",
+      "endDate": "Sun Jan 17 2023 - 21:00:51",
+      "thumbnail": "thumbs/thumb.png",
+      "printTime": 165,
+      "filamentSelection": [
+        {
+          "_id": "5fe20b8a14b64f6746a353bf",
+          "spools": {
+            "name": "PETG",
+            "profile": {
+              "index": null,
+              "manufacturer": "Overture",
+              "material": "PETG",
+              "density": "1.27",
+              "diameter": "1.75"
+            },
+            "price": "26.99",
+            "weight": "1000",
+            "used": "0",
+            "tempOffset": "0",
+            "fmID": null,
+            "material": "PETG"
+          },
+          "__v": 0
+        }
+      ],
+      "previousFilamentSelection": [
+        {
+          "_id": "5fe20b8a14b64f6746a353bf",
+          "spools": {
+            "name": "PETG",
+            "profile": "5fe20b6e14b64f6746a353b9",
+            "price": "26.99",
+            "weight": "1000",
+            "used": "0",
+            "tempOffset": "0",
+            "fmID": null,
+            "material": "PETG"
+          },
+          "__v": 0
+        }
+      ],
+      "job": {
+        "file": {
+          "name": "file.gcode",
+          "path": "path/file.gcode",
+          "display": "file.gcode",
+          "origin": "local",
+          "size": 4938479,
+          "date": 1610849477,
+          "thumbnail": "thumbs/thumb.png?20210117021117",
+          "length": [
+            20429.859949987236
+          ]
+        },
+        "estimatedPrintTime": 13018.768281201495,
+        "averagePrintTime": null,
+        "lastPrintTime": null,
+        "filament": {
+          "tool0": {
+            "length": 20429.859949987236,
+            "volume": 49.13957185476037
+          }
+        },
+        "user": "admin"
+      },
+      "notes": "",
+      "snapshot": "snapshots/snapshot.jpg",
+      "timelapse": "",
+      "resends": {
+        "count": 0,
+        "transmitted": 528601,
+        "ratio": 0
+      }
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "600dff0de2987835c4828a92"
+    },
+    "printHistory": {
+      "historyIndex": 914,
+      "printerName": "PRINTER2",
+      "printerID": "5f14622288c556488fdfb78a",
+      "costSettings": {
+        "powerConsumption": 0.2,
+        "electricityCosts": 0.25,
+        "purchasePrice": 0,
+        "estimateLifespan": 0,
+        "maintenanceCosts": 0
+      },
+      "success": true,
+      "reason": null,
+      "fileName": "file.gcode",
+      "fileDisplay": null,
+      "filePath": "path/file.gcode",
+      "startDate": "Sun Jan 24 2021 - 11:24:57",
+      "endDate": "Sun Jan 24 2021 - 17:13:16",
+      "thumbnail": "thumbs/thumb.png",
+      "printTime": 20900,
+      "filamentSelection": [
+        {
+          "_id": "5fe20b8a14b64f6746a353bf",
+          "spools": {
+            "name": "PETG",
+            "profile": {
+              "index": null,
+              "manufacturer": "Overture",
+              "material": "PETG",
+              "density": "1.27",
+              "diameter": "1.75"
+            },
+            "price": "26.99",
+            "weight": "1000",
+            "used": "0",
+            "tempOffset": "0",
+            "fmID": null,
+            "material": "PETG"
+          },
+          "__v": 0
+        }
+      ],
+      "previousFilamentSelection": [
+        {
+          "_id": "5fe20b8a14b64f6746a353bf",
+          "spools": {
+            "name": "PETG",
+            "profile": "5fe20b6e14b64f6746a353b9",
+            "price": "26.99",
+            "weight": "1000",
+            "used": "0",
+            "tempOffset": "0",
+            "fmID": null,
+            "material": "PETG"
+          },
+          "__v": 0
+        }
+      ],
+      "job": {
+        "file": {
+          "name": "file.gcode",
+          "path": "path/file.gcode",
+          "display": "file.gcode",
+          "origin": "local",
+          "size": 4556792,
+          "date": 1603485325,
+          "thumbnail": "thumbs/thumb.png?20201023213525",
+          "length": [
+            22422.7950600103
+          ]
+        },
+        "estimatedPrintTime": 17716.559339527903,
+        "averagePrintTime": 20893.441149471528,
+        "lastPrintTime": 20899.631334506907,
+        "filament": {
+          "tool0": {
+            "length": 22422.7950600103,
+            "volume": 53.93314255375649
+          }
+        },
+        "user": "admin"
+      },
+      "notes": "",
+      "snapshot": "snapshots/snapshot.jpg",
+      "resends": {
+        "count": 0,
+        "transmitted": 2609783,
+        "ratio": 0
+      }
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "603a414f00d1fc7930e179fa"
+    },
+    "printHistory": {
+      "historyIndex": 952,
+      "printerIndex": null,
+      "costSettings": {
+        "powerConsumption": 0.2,
+        "electricityCosts": 0.25,
+        "purchasePrice": 0,
+        "estimateLifespan": 0,
+        "maintenanceCosts": 0
+      },
+      "printerID": "6013cc3293a19af48eacb7f0",
+      "printerName": "PRINTER1",
+      "success": false,
+      "reason": "cancelled",
+      "fileName": "file.gcode",
+      "filePath": "file.gcode",
+      "startDate": "Sat Feb 27 2023 - 12:55:40",
+      "endDate": "Sat Feb 27 2023 - 12:55:43",
+      "thumbnail": null,
+      "printTime": 3,
+      "filamentSelection": [
+        {
+          "_id": "603a311900d1fc7930e177c8",
+          "spools": {
+            "name": "new",
+            "profile": {
+              "index": null,
+              "manufacturer": "53w5",
+              "material": "PLA",
+              "density": "1.24",
+              "diameter": "1.75"
+            },
+            "price": "66",
+            "weight": "1000",
+            "used": "0",
+            "tempOffset": "45",
+            "fmID": null,
+            "material": "PLA"
+          },
+          "__v": 0
+        }
+      ],
+      "previousFilamentSelection": [
+        {
+          "_id": "603a311900d1fc7930e177c8",
+          "spools": {
+            "name": "new",
+            "profile": "603a310e00d1fc7930e177c7",
+            "price": "66",
+            "weight": "1000",
+            "used": "0",
+            "tempOffset": "45",
+            "fmID": null,
+            "material": "PLA"
+          },
+          "__v": 0
+        }
+      ],
+      "job": {
+        "file": {
+          "name": "file.gcode",
+          "path": "file.gcode",
+          "display": "file.gcode",
+          "origin": "local",
+          "size": 3227734,
+          "date": 1609919794,
+          "length": [
+            16195.92339999955
+          ]
+        },
+        "estimatedPrintTime": 7099.200454855606,
+        "averagePrintTime": 464.27159347249835,
+        "lastPrintTime": 459.4876771909767,
+        "filament": {
+          "tool0": {
+            "length": 16195.92339999955,
+            "volume": 0
+          }
+        },
+        "user": "custom_user"
+      },
+      "notes": "",
+      "snapshot": null,
+      "timelapse": "",
+      "resends": {
+        "count": 29,
+        "transmitted": 256272,
+        "ratio": 0
+      }
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "605d9d150bc17a62d191c4c2"
+    },
+    "printHistory": {
+      "historyIndex": 973,
+      "costSettings": {
+        "powerConsumption": 0.5,
+        "electricityCosts": 0.15,
+        "purchasePrice": 500,
+        "estimateLifespan": 43800,
+        "maintenanceCosts": 0.25
+      },
+      "printerID": "6043866f0445f3fb66276552",
+      "printerName": "PRINTER4",
+      "success": false,
+      "reason": "cancelled",
+      "fileName": "file.gcode",
+      "filePath": "file.gcode",
+      "startDate": "Fri Mar 26 2023 - 08:35:55",
+      "endDate": "Fri Mar 26 2023 - 08:36:37",
+      "thumbnail": "",
+      "printTime": 42,
+      "filamentSelection": [
+        {
+          "_id": "603a311900d1fc7930e177c8",
+          "spools": {
+            "name": "new",
+            "profile": {
+              "index": null,
+              "manufacturer": "53w5",
+              "material": "PLA",
+              "density": "1.24",
+              "diameter": "1.75"
+            },
+            "price": "66.07",
+            "weight": "1000",
+            "used": "0",
+            "tempOffset": "45",
+            "fmID": null,
+            "material": "PLA"
+          },
+          "__v": 0
+        }
+      ],
+      "previousFilamentSelection": [
+        {
+          "_id": "603a311900d1fc7930e177c8",
+          "spools": {
+            "name": "new",
+            "profile": "603a310e00d1fc7930e177c7",
+            "price": "66.07",
+            "weight": "1000",
+            "used": "0",
+            "tempOffset": "45",
+            "fmID": null,
+            "material": "PLA"
+          },
+          "__v": 0
+        }
+      ],
+      "job": {
+        "file": {
+          "name": "file.gcode",
+          "path": "file.gcode",
+          "display": "file.gcode",
+          "origin": "local",
+          "size": 124307,
+          "date": 1616596079,
+          "thumbnail": "thumbs/thumb.png?20210324142759",
+          "length": [
+            688.4987299999997
+          ]
+        },
+        "estimatedPrintTime": 529.2216390923936,
+        "averagePrintTime": 58.202425627457906,
+        "lastPrintTime": 63.56619428601698,
+        "filament": {
+          "tool0": {
+            "length": 688.4987299999997,
+            "volume": 1.6560335165081432
+          }
+        },
+        "user": "octofarm_user"
+      },
+      "notes": "",
+      "snapshot": "",
+      "timelapse": "",
+      "resends": {
+        "count": 32,
+        "transmitted": 1549298,
+        "ratio": 0
+      }
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "605d9e100bc17a62d191c4eb"
+    },
+    "printHistory": {
+      "historyIndex": 974,
+      "costSettings": {
+        "powerConsumption": 0.5,
+        "electricityCosts": 0.15,
+        "purchasePrice": 500,
+        "estimateLifespan": 43800,
+        "maintenanceCosts": 0.25
+      },
+      "printerID": "6043866f0445f3fb66276552",
+      "printerName": "PRINTER4",
+      "success": false,
+      "reason": "cancelled",
+      "fileName": "file.gcode",
+      "filePath": "file.gcode",
+      "startDate": "Fri Mar 26 2021 - 08:40:11",
+      "endDate": "Fri Mar 26 2021 - 08:40:48",
+      "thumbnail": "",
+      "printTime": 37,
+      "filamentSelection": [
+        {
+          "_id": "603a311900d1fc7930e177c8",
+          "spools": {
+            "name": "new",
+            "profile": {
+              "index": null,
+              "manufacturer": "53w5",
+              "material": "PLA",
+              "density": "1.24",
+              "diameter": "1.75"
+            },
+            "price": "66.07",
+            "weight": "1000",
+            "used": "0",
+            "tempOffset": "45",
+            "fmID": null,
+            "material": "PLA"
+          },
+          "__v": 0
+        }
+      ],
+      "previousFilamentSelection": [
+        {
+          "_id": "603a311900d1fc7930e177c8",
+          "spools": {
+            "name": "new",
+            "profile": "603a310e00d1fc7930e177c7",
+            "price": "66.07",
+            "weight": "1000",
+            "used": "0",
+            "tempOffset": "45",
+            "fmID": null,
+            "material": "PLA"
+          },
+          "__v": 0
+        }
+      ],
+      "job": {
+        "file": {
+          "name": "file.gcode",
+          "path": "file.gcode",
+          "display": "file.gcode",
+          "origin": "local",
+          "size": 124307,
+          "date": 1616596079,
+          "thumbnail": "thumbs/thumb.png?20210324142759",
+          "length": [
+            688.4987299999997
+          ]
+        },
+        "estimatedPrintTime": 529.2216390923936,
+        "averagePrintTime": 58.202425627457906,
+        "lastPrintTime": 63.56619428601698,
+        "filament": {
+          "tool0": {
+            "length": 688.4987299999997,
+            "volume": 1.6560335165081432
+          }
+        },
+        "user": "octofarm_user"
+      },
+      "notes": "",
+      "snapshot": "",
+      "timelapse": "",
+      "resends": {
+        "count": 34,
+        "transmitted": 1549630,
+        "ratio": 0
+      }
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "605d9ee3a50e403dabc95f51"
+    },
+    "printHistory": {
+      "historyIndex": 975,
+      "printerName": "PRINTER4",
+      "printerID": "6043866f0445f3fb66276552",
+      "costSettings": {
+        "powerConsumption": 0.5,
+        "electricityCosts": 0.15,
+        "purchasePrice": 500,
+        "estimateLifespan": 43800,
+        "maintenanceCosts": 0.25
+      },
+      "success": true,
+      "fileName": "file.gcode",
+      "filePath": "file.gcode",
+      "startDate": "Fri Mar 26 2023 - 08:43:15",
+      "endDate": "Fri Mar 26 2023 - 08:44:19",
+      "thumbnail": "",
+      "printTime": 64,
+      "filamentSelection": [
+        {
+          "_id": "603a311900d1fc7930e177c8",
+          "spools": {
+            "name": "new",
+            "profile": {
+              "index": null,
+              "manufacturer": "53w5",
+              "material": "PLA",
+              "density": "1.24",
+              "diameter": "1.75"
+            },
+            "price": "66.07",
+            "weight": "1000",
+            "used": "0",
+            "tempOffset": "45",
+            "fmID": null,
+            "material": "PLA"
+          },
+          "__v": 0
+        }
+      ],
+      "previousFilamentSelection": [
+        {
+          "_id": "603a311900d1fc7930e177c8",
+          "spools": {
+            "name": "new",
+            "profile": "603a310e00d1fc7930e177c7",
+            "price": "66.07",
+            "weight": "1000",
+            "used": "0",
+            "tempOffset": "45",
+            "fmID": null,
+            "material": "PLA"
+          },
+          "__v": 0
+        }
+      ],
+      "job": {
+        "file": {
+          "name": "file.gcode",
+          "path": "file.gcode",
+          "display": "file.gcode",
+          "origin": "local",
+          "size": 124307,
+          "date": 1616596079,
+          "thumbnail": "thumbs/thumb.png?20210324142759",
+          "length": [
+            688.4987299999997
+          ]
+        },
+        "estimatedPrintTime": 529.2216390923936,
+        "averagePrintTime": 58.65013972575434,
+        "lastPrintTime": 63.57499480701517,
+        "filament": {
+          "tool0": {
+            "length": 688.4987299999997,
+            "volume": 1.6560335165081432
+          }
+        },
+        "user": "octofarm_user"
+      },
+      "notes": "",
+      "snapshot": "",
+      "resends": {
+        "count": 36,
+        "transmitted": 1551996,
+        "ratio": 0
+      }
+    },
+    "__v": 0
+  }
+]

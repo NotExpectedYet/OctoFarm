@@ -1,39 +1,37 @@
-const historyClean = require("./historyClean.js");
+"use strict";
 
-const { HistoryClean } = historyClean;
-// eslint-disable-next-line import/order
 const _ = require("lodash");
+const { DateTime } = require("luxon");
+const { getPrintCostNumeric } = require("../utils/print-cost.util");
+const { HistoryClean } = require("./historyClean.js");
+const { floatOrZero } = require("../utils/number.util");
 
 const cleanJobs = [];
 
 class JobClean {
-  static async getCompletionDate(printTimeLeft, completion) {
-    let currentDate = new Date();
-    let dateComplete = "";
+  static getCompletionDate(printTimeLeftSeconds, completion) {
     if (completion === 100) {
-      dateComplete = "No Active Job";
-    } else {
-      currentDate = currentDate.getTime();
-      const futureDateString = new Date(
-        currentDate + printTimeLeft * 1000
-      ).toDateString();
-      let futureTimeString = new Date(
-        currentDate + printTimeLeft * 1000
-      ).toTimeString();
-      futureTimeString = futureTimeString.substring(0, 5);
-      dateComplete = `${futureDateString}: ${futureTimeString}`;
+      return "No Active Job";
     }
-    return dateComplete;
+
+    const printDoneDT = DateTime.now().plus({ seconds: printTimeLeftSeconds });
+    return printDoneDT.toFormat("ccc LLL dd yyyy: HH:mm");
   }
 
-  static returnJob(p) {
+  static getCleanJobAtIndex(p) {
     return cleanJobs[p];
   }
 
-  static async generate(farmPrinter, selectedFilament) {
+  /**
+   * Generate current job report
+   * @param farmPrinter
+   * @param selectedFilament
+   * @returns {Promise<void>}
+   */
+  static generate(farmPrinter, selectedFilament) {
     const printer = farmPrinter;
 
-    if (typeof farmPrinter.systemChecks !== "undefined") {
+    if (!!farmPrinter.systemChecks) {
       farmPrinter.systemChecks.cleaning.job.status = "warning";
     }
 
@@ -52,92 +50,91 @@ class JobClean {
       printTimeRemaining: null,
       averagePrintTime: null,
       lastPrintTime: null,
-      thumbnail: null,
+      thumbnail: null
     };
-    if (typeof printer.job !== "undefined" && printer.job !== null) {
-      currentJob.fileName = printer.job.file.name;
-      const fileIndex = _.findIndex(printer.fileList.files, function (o) {
-        return o.name == printer.job.file.name;
+
+    const printerJob = printer.job;
+    if (!!printerJob) {
+      currentJob.fileName = printerJob.file.name;
+      const foundFile = _.find(printer.fileList.files, (o) => {
+        return o.name == printerJob.file.name;
       });
-      if (fileIndex > -1) {
-        currentJob.thumbnail = printer.fileList.files[fileIndex].thumbnail;
+      if (!!foundFile) {
+        currentJob.thumbnail = foundFile.thumbnail;
       }
-      currentJob.fileDisplay = printer.job.file.display;
-      currentJob.filePath = printer.job.file.path;
-      currentJob.averagePrintTime = printer.job.averagePrintTime;
-      currentJob.lastPrintTime = printer.job.lastPrintTime;
-      if (typeof printer.currentZ !== "undefined") {
+      currentJob.fileDisplay = printerJob.file.display;
+      currentJob.filePath = printerJob.file.path;
+      currentJob.averagePrintTime = printerJob.averagePrintTime;
+      currentJob.lastPrintTime = printerJob.lastPrintTime;
+      if (!!printer.currentZ) {
         currentJob.currentZ = printer.currentZ;
       }
-      currentJob.expectedPrinterCosts = await HistoryClean.getPrintCost(
-        printer.job.estimatedPrintTime,
+      currentJob.expectedPrinterCosts = getPrintCostNumeric(
+        printerJob.estimatedPrintTime,
         printer.costSettings
-      );
-      currentJob.expectedFilamentCosts = await HistoryClean.getSpool(
+      )?.toFixed(2);
+      // TODO selectedFilament should not be passed, instead the result of getSpool should be passed to this function as argument
+      currentJob.expectedFilamentCosts = HistoryClean.getSpool(
         selectedFilament,
-        printer.job,
+        printerJob,
         true,
-        printer.job.estimatedPrintTime
+        printerJob.estimatedPrintTime
       );
-      const numOr0 = (n) => (isNaN(n) ? 0 : parseFloat(n));
+
       let spoolCost = 0;
       let totalVolume = 0;
       let totalLength = 0;
       let totalWeight = 0;
-      if (
-        typeof currentJob.expectedFilamentCosts !== "undefined" &&
-        currentJob.expectedFilamentCosts !== null
-      ) {
+      if (!!currentJob.expectedFilamentCosts) {
         const keys = Object.keys(currentJob.expectedFilamentCosts);
-        for (let s = 0; s < currentJob.expectedFilamentCosts; s++) {
-          if (
-            typeof currentJob.expectedFilamentCosts[s][`tool${keys[s]}`] !==
-            "undefined"
-          ) {
-            spoolCost += numOr0(
-              currentJob.expectedFilamentCosts[s][`tool${keys[s]}`].cost
-            );
-            totalVolume += numOr0(
-              currentJob.expectedFilamentCosts[s][`tool${keys[s]}`].volume
-            );
-            totalLength += numOr0(
-              currentJob.expectedFilamentCosts[s][`tool${keys[s]}`].length
-            );
-            totalWeight += numOr0(
-              currentJob.expectedFilamentCosts[s][`tool${keys[s]}`].weight
-            );
+        for (let s = 0; s < currentJob.expectedFilamentCosts.length; s++) {
+          const toolFilamentCosts =
+            currentJob.expectedFilamentCosts[s][`tool${keys[s]}`];
+          if (!!toolFilamentCosts) {
+            spoolCost += floatOrZero(toolFilamentCosts.cost);
+            totalVolume += floatOrZero(toolFilamentCosts.volume);
+            totalLength += floatOrZero(toolFilamentCosts.length);
+            totalWeight += floatOrZero(toolFilamentCosts.weight);
           }
         }
       }
-      spoolCost = numOr0(spoolCost);
+      spoolCost = floatOrZero(spoolCost);
       currentJob.expectedTotals = {
+        // TODO String a good idea?
         totalCost: (
-          parseFloat(currentJob.expectedPrinterCosts) + parseFloat(spoolCost)
+          parseFloat(currentJob.expectedPrinterCosts) + spoolCost
         ).toFixed(2),
-        totalVolume: parseFloat(totalVolume),
-        totalLength: parseFloat(totalLength),
-        totalWeight: parseFloat(totalWeight),
-        spoolCost: parseFloat(spoolCost),
+        totalVolume,
+        totalLength,
+        totalWeight,
+        spoolCost
       };
     }
 
-    if (typeof printer.progress !== "undefined") {
-      currentJob.progress = Math.floor(printer.progress.completion);
-      currentJob.printTimeRemaining = printer.progress.printTimeLeft;
-      currentJob.printTimeElapsed = printer.progress.printTime;
-      currentJob.expectedPrintTime = Math.round((printer.progress.printTimeLeft + printer.progress.printTime)/1000)*1000;
-      currentJob.expectedCompletionDate = await JobClean.getCompletionDate(
-        printer.progress.printTimeLeft,
-        printer.progress.completion
+    const printerProgress = printer.progress;
+    if (!!printerProgress) {
+      currentJob.progress = Math.floor(printerProgress.completion);
+      currentJob.printTimeRemaining = printerProgress.printTimeLeft;
+      currentJob.printTimeElapsed = printerProgress.printTime;
+      currentJob.expectedPrintTime =
+        Math.round(
+          (printerProgress.printTimeLeft + printerProgress.printTime) / 1000
+        ) * 1000;
+      currentJob.expectedCompletionDate = JobClean.getCompletionDate(
+        printerProgress.printTimeLeft,
+        printerProgress.completion
       );
     }
-    if (typeof farmPrinter.systemChecks !== "undefined") {
-      farmPrinter.systemChecks.cleaning.job.status = "success";
-      farmPrinter.systemChecks.cleaning.job.date = new Date();
+
+    if (!!farmPrinter.systemChecks) {
+      const systemCleaningJob = farmPrinter.systemChecks.cleaning.job;
+      systemCleaningJob.status = "success";
+      systemCleaningJob.date = new Date();
     }
     cleanJobs[printer.sortIndex] = currentJob;
   }
 }
+
 module.exports = {
-  JobClean,
+  JobClean
 };

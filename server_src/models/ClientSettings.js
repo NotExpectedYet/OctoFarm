@@ -3,24 +3,24 @@ const mongoose = require("mongoose");
 const ClientSettingsSchema = new mongoose.Schema({
   dashboard: {
     type: Object,
-    required: false,
+    required: false
   },
   panelView: {
     type: Object,
-    required: false,
+    required: false
   },
   listView: {
     type: Object,
-    required: false,
+    required: false
   },
   cameraView: {
     type: Object,
-    required: false,
+    required: false
   },
   controlSettings: {
     type: Object,
-    require: false,
-  },
+    require: false
+  }
 });
 
 const ClientSettings = mongoose.model("ClientSettings", ClientSettingsSchema);

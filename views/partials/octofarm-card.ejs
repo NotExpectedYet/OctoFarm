@@ -1,0 +1,36 @@
+<div id="<%= tile.id %>" class="<%= tile.class %>">
+    <div class="card card-block d-flex text-white bg-dark h-100">
+        <div class="card-header dashHeader p-0 pt-1 mb-0">
+            <button
+                    type="button"
+                    class="btn btn-secondary"
+                    href="#"
+                    aria-expanded="false"
+                    disabled
+            >
+                <i class="fas <%= tile.i %>"></i> <%= tile.title %>
+            </button>
+
+            <% if(typeof status !== "undefined") { %>
+                <button
+                        type="button"
+                        class="btn btn-secondary float-right"
+                        href="#"
+                        aria-expanded="false"
+                        disabled
+                >
+                    <i class="fas <%= status.icon %>"></i> <%= status.title %> <span id="<%= status.id %>"><i class="fas fa-spinner fa-spin"></i></span>
+                </button>
+            <% } %>
+        </div>
+
+        <div class="card-body p-0">
+            <% if (!bodyFile) { %>
+                <em> This widget failed to render due to missing 'tile.bodyId' or 'bodyFile' alternative </em>
+            <% } else { %>
+                <%# More complex card-body content %>
+                <%- include(bodyFile) %>
+            <% } %>
+        </div>
+    </div>
+</div>

@@ -11,9 +11,12 @@
 /.build
 /.cache
 Makefile
-/node_modules
+/**/node_modules
 
+/client_2x
+/server_2x
 /screenshots
 /test
+
 /OctoFarm
 /logs

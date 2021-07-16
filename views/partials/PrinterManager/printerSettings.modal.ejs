@@ -1,0 +1,262 @@
+<div class="col-12 col-sm-12 col-md-12 col-lg-2 col-xl-2">
+    <div class="list-group" id="list-tab" role="tablist">
+        <a class="list-group-item list-group-item-action active notyet" id="printer-connection-btn"
+           data-toggle="list" href="#printer-connection" role="tab" aria-controls="messages"><i
+                    class="fas fa-plug"></i> Connection <i class="fas fa-spinner fa-spin"></i></a>
+        <a class="list-group-item list-group-item-action notyet" id="printer-cost-btn"
+           data-toggle="list" href="#printer-cost" role="tab" aria-controls="messages"><i
+                    class="fas fa-dollar-sign"></i> Cost <i class="fas fa-spinner fa-spin"></i></a>
+        <a class="list-group-item list-group-item-action notyet" id="printer-profile-btn"
+           data-toggle="list" href="#printer-profile" role="tab" aria-controls="messages"><i
+                    class="fas fa-tags"></i> Profile <i class="fas fa-spinner fa-spin"></i></a>
+        <a class="list-group-item list-group-item-action notyet" id="printer-power-btn"
+           data-toggle="list" href="#printer-power" role="tab" aria-controls="messages"><i
+                    class="fas fa-plug"></i> Power <i class="fas fa-spinner fa-spin"></i></a>
+        <a class="list-group-item list-group-item-action notyet" id="printer-alerts-btn"
+           data-toggle="list" href="#printer-alerts" role="tab" aria-controls="messages"><i
+                    class="fas fa-bell"></i> Alerts <i class="fas fa-spinner fa-spin"></i></a>
+        <a class="list-group-item list-group-item-action notyet" id="printer-gcode-btn"
+           data-toggle="list" href="#printer-gcode" role="tab" aria-controls="messages"><i
+                    class="fas fa-pen"></i> Gcode Scripts <i class="fas fa-spinner fa-spin"></i></a>
+        <a class="list-group-item list-group-item-action notyet" id="printer-settings-btn"
+           data-toggle="list" href="#printer-settings" role="tab" aria-controls="messages"><i
+                    class="fas fa-cog"></i>Other Settings <i class="fas fa-spinner fa-spin"></i></a>
+    </div>
+    <span id="printerSettingsFooter">
+
+                            </span>
+</div>
+<div class="col-12 col-sm-12 col-md-12 col-lg-10 col-xl-10">
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade active show" id="printer-connection" role="tabpanel"
+             aria-labelledby="system-panel-view-list">
+            <p id="offlineMessage"></p>
+            <h5>OctoPrint Host</h5>
+            <hr>
+            <p>Set your OctoPrint Host connection details</p>
+            <div id="psPrinterConnection">
+                <form>
+                    <div class="row pb-1">
+                        <div class="col-12 col-md-6">
+                            <label for="psPrinterName">Printer Name:</label>
+                            <input id="psPrinterName" type="text" class="form-control"
+                                   placeholder="OctoPrint User">
+                            <small class="form-text text-muted">Your current Printer Name.
+                                Saving this will update OctoPrints Settings => Appearance Name
+                                if available.</small>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="psOctoPrintUser">OctoPrint User:</label>
+                            <input id="psOctoPrintUser" type="text" class="form-control"
+                                   placeholder="OctoPrint User" disabled>
+                            <small class="form-text text-muted">Current OctoPrint User that
+                                OctoFarm is using to connect with. (automatic and not
+                                editable)</small>
+                        </div>
+                    </div>
+                    <div class="row pb-1">
+                        <div class="col-12 col-md-6">
+                            <label for="psPrinterURL">Printer URL:</label>
+                            <input id="psPrinterURL" type="text" class="form-control"
+                                   placeholder="Printer URL">
+                            <small class="form-text text-muted">URL of OctoPrint Host inc. port.
+                                Defaults to "http://" if not specified.</small>
+                            <small>Example: <code>http://192.168.1.5:81</code></small>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="psWebSocketProtocol">Printer WebSocket Protocol:</label>
+                            <select id="psWebSocketProtocol" class="custom-select">
+                                <option value="ws://">ws://</option>
+                                <option value="wss://">wss://</option>
+                            </select>
+                            <small class="form-text text-muted">Websocket connection protocol. Automatically selected based on Printer URL. Override here.</small>
+                            <small>Example: <code>"ws:// (http) " or "wss:// (https)" </code></small>
+                        </div>
+                    </div>
+                    <div class="row pb-2">
+                        <div class="col-12 col-md-6">
+                            <label for="psAPIKEY">API Key:</label>
+                            <input id="psAPIKEY" type="text" class="form-control"
+                                   placeholder="API Key">
+                            <small class="form-text text-muted">OctoPrints API Key. It's
+                                recquired to use the User/Application API Key for OctoPrint
+                                version 1.4.1+.</small>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="psCamURL">Camera URL:</label>
+                            <input id="psCamURL" type="text" class="form-control"
+                                   placeholder="Camera URL">
+                            <small class="form-text text-muted">URL of mjpeg camera stream.
+                                Defaults to "http://" if not specified.</small>
+                            <small>Example:
+                                <code>http://192.168.1.5/webcam/?action=stream</code></small>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <h5>Serial Defaults</h5>
+            <hr>
+            <p id="portNotAvailableMessage"></p>
+            <p>Set OctoPrints default serial connection settings. These will be saved to your
+                OctoPrint instance so it will always use these when connecting to your
+                printer.</p>
+            <div id="psConnectionDefaults" class="row">
+
+                <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" id="psDefaultPortDrop">
+
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4" id="psDefaultBaudDrop">
+
+                </div>
+                <div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4"
+                     id="psDefaultProfileDrop">
+
+                </div>
+            </div>
+            <div id="psCurrentConnection" class="row">
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <h5>Current Status</h5>
+                    <hr>
+                    <button id="psHost" type="button" class="btn btn-warning mb-1 btn-block"
+                            href="#" target="_blank" disabled> <i
+                                class="fas fa-spinner fa-spin"></i> Checking..
+                    </button>
+                    <button id="psStatus" type="button" class="btn btn-warning mb-1 btn-block"
+                            href="#" target="_blank" disabled> <i
+                                class="fas fa-spinner fa-spin"></i> Checking..
+                    </button>
+                    <button id="psWebSocket" type="button"
+                            class="btn btn-warning mb-1 btn-block" href="#" target="_blank"
+                            disabled> <i
+                                class="fas fa-spinner fa-spin"></i> Checking..
+                    </button>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <h5>API Status</h5>
+                    <hr>
+                    <button title="Click to re-sync your OctoPrint instance"
+                            class="btn btn-danger mb-1 btn-block" id="apiCheck"><i
+                                class="fas fa-link"></i></button>
+                    <button title="Click to recheck printers Files"
+                            class="btn btn-danger mb-1 btn-block" id="filesCheck"><i
+                                class="fas fa-file-code"></i></button>
+                    <button title="Click to recheck printers State"
+                            class="btn btn-danger mb-1 btn-block" id="stateCheck"><i
+                                class="fas fa-info-circle"></i></button>
+                    <button title="Click to recheck printers Profile"
+                            class="btn btn-danger mb-1 btn-block" id="profileCheck"><i
+                                class="fas fa-id-card"></i></button>
+                    <button title="Click to recheck printers Settings"
+                            class="btn btn-danger mb-1 btn-block" id="settingsCheck"><i
+                                class="fas fa-cog"></i></button>
+                    <button title="Click to recheck printers System"
+                            class="btn btn-danger mb-1 btn-block" id="systemCheck"><i
+                                class="fas fa-server"></i></button>
+                </div>
+                <div class="col-12 col-sm-12 col-md-12 col-lg-4 col-xl-4">
+                    <h5>Cleaner Status</h5>
+                    <hr>
+                    <button title="Printers Information cleaning status"
+                            class="btn btn-danger mb-1 btn-block" id="apiClean"><i
+                                class="fas fa-id-card"></i></button>
+                    <button title="Printers Job Information cleaning status"
+                            class="btn btn-danger mb-1 btn-block" id="filesClean"><i
+                                class="fas fa-info-circle"></i></button>
+                    <button title="Printers File Information cleaning status"
+                            class="btn btn-danger mb-1 btn-block" id="stateClean"><i
+                                class="fas fa-file-code"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="printer-profile" role="tabpanel"
+             aria-labelledby="system-panel-view-list">
+            <h5>Printer Profiles</h5>
+            <hr>
+            <p>Below is your current selected printer profile information. You may make edits to
+                it here and have it saved back in OctoPrint.</p>
+            <div id="psPrinterProfiles" class="row">
+
+            </div>
+        </div>
+        <div class="tab-pane fade" id="printer-cost" role="tabpanel"
+             aria-labelledby="system-panel-view-list">
+            <h5>Printer Costs</h5>
+            <hr>
+            <p>Below are the settings used to calculate the printer costs column in history and
+                on other views.</p>
+            <div id="psPrinterCost" class="row">
+
+            </div>
+        </div>
+        <div class="tab-pane fade" id="printer-alerts" role="tabpanel"
+             aria-labelledby="system-panel-view-list">
+            <h5>Alerts</h5>
+            <hr>
+            <p>List of Alerts activated on this printer.</p>
+            <p>To set these up go to System -> Alerts</p>
+            <div class="row">
+                <div class="col-12" id="psCustomAlertsTable">
+                    <table id="customAltersTable"
+                           class="table table-sm table-dark table-striped table-responsive-sm table-responsive-md text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col">Active</th>
+                            <th scope="col" width="150px">Trigger</th>
+                            <th scope="col">Script</th>
+                            <th scope="col">Message</th>
+                        </tr>
+                        </thead>
+                        <tbody id="printerAltersTableBody"
+                               style="height:100%; overflow-y:auto;">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="printer-power" role="tabpanel"
+             aria-labelledby="system-panel-view-list">
+            <h5>Power Commands</h5>
+            <hr>
+            <p>Setup your host/printer power commands here. Enabling these will add a Power menu
+                button next to printer control on all views.</p>
+            <div class="row">
+                <div class="col-12" id="psPowerCommands">
+
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="printer-gcode" role="tabpanel"
+             aria-labelledby="system-panel-view-list">
+            <h5>Gcode Scripts</h5>
+            <hr>
+            <p>NOTE: OctoPrint doesn't seem to update the API with this information straight
+                away. If it doesn't seem to update after clicking the "Save Changes" button then
+                please check there to see if your values have saved, you will need to use the
+                resync button on the interface for OctoFarm to detect the changes.</p>
+            <div id="psGcodeManagerGcode">
+
+            </div>
+        </div>
+        <div class="tab-pane fade" id="printer-settings" role="tabpanel"
+             aria-labelledby="system-settings-list">
+            <h5>Printer Settings</h5>
+            <hr>
+            <div class="row">
+                <div class="col-12 col-md-4" id="printerManagerSettings">
+                    <h6><u>Camera Settings</u></h6>
+                    <div id="cameraRotation">
+
+                    </div>
+                </div>
+                <div class="col-12 col-md-4" id="printerManagerSettings">
+                    <h6><u>Temperature Triggers</u></h6>
+                    <div id="tempTriggers">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
