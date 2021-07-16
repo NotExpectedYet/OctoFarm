@@ -25,7 +25,7 @@ class PrinterSseTask {
   async run() {
     const currentIssueList = this.#printerTickerStore.getIssueList();
     const printerStates = this.#printersStore.getPrinters();
-    const serializablePrinterStates = printerStates.map((s) => s.toFlat());
+    const serializablePrinterStates = printerStates.filter((s) => s.toFlat).map((s) => s.toFlat());
 
     // TODO remove this useless data client-side
     const printerControlList = serializablePrinterStates.map((sp) => ({

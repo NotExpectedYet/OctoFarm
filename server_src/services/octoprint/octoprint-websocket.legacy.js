@@ -1,26 +1,29 @@
 const { PrinterTickerStore } = require("../../state/printer-ticker.store");
+const WebSocket = require("ws");
 
-class WebSocketClient {
+class OctoprintWebsocketLegacy {
   number = 0; // Message number
   autoReconnectInterval = timeout.webSocketRetry; // ms
 
-  open(url, index) {
+  // Cross-correlation data to be passed for events or as input to callbacks
+  #url;
+  #index;
+
+  #instance;
+
+  constructor(url, index) {
+    this.#index = index;
+    this.#url = `${url}/sockjs/websocket`;
+    this.#instance = new WebSocket(this.#url, { followRedirects: true });
+  }
+
+  open() {
     try {
-      this.url = url;
-      this.index = index;
-
-      PrinterTickerStore.addIssue(
-        printert,
-        "Setting up the clients websocket connection",
-        "Active"
-      );
-
       // TODO printerstore
       printert.webSocket = "warning";
       printert.webSocketDescription =
         "Websocket Connected but in Tentative state until receiving data";
 
-      this.instance = new WebSocket(this.url, { followRedirects: true });
       this.instance.on("open", () => {
         this.isAlive = true;
         try {
@@ -304,7 +307,7 @@ class WebSocketClient {
     const data = {};
     const throt = {};
     data.auth = `${farmPrinters[this.index].currentUser}:${farmPrinters[this.index].sessionKey}`;
-    throt.throttle = parseInt((Polling.seconds * 1000) / 500);
+    throt.throttle = parseInt(Polling.seconds * 2);
 
     this.instance.send(JSON.stringify(data));
     this.instance.send(JSON.stringify(throt));
@@ -727,4 +730,4 @@ function heartBeat(index) {
   farmPrinters[index].ws.isAlive = true;
 }
 
-module.exports = WebSocketClient;
+module.exports = OctoprintWebsocketLegacy;

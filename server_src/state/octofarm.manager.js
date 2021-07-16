@@ -2,8 +2,6 @@ const Logger = require("../handlers/logger.js");
 
 const Printers = require("../models/Printer.js");
 const softwareUpdateChecker = require("../services/octofarm-update.service");
-const PrinterService = require("../services/printer.service");
-const WebSocketClient = require("../services/octoprint/octoprint-websocket.service");
 const { NotImplementedException } = require("../exceptions/runtime.exceptions");
 const {
   getPowerSettingsDefault,
