@@ -1,3 +1,4 @@
+const { NotImplementedException } = require("../exceptions/runtime.exceptions");
 const { getSystemChecksDefault, mapStateToColor } = require("../constants/state.constants");
 
 /**
@@ -17,12 +18,16 @@ class PrinterStateModel {
 
   #webSocket = "danger";
   #webSocketDescription = "Websocket unconnected";
-  #wsClient; // :WebSocketClient
+  #websocketAdapter;
+  #websocketAdapterType;
+  #sessionUser;
   #sessionKey;
 
   #stepRate = 10;
   #systemChecks = getSystemChecksDefault();
   #alerts = null;
+
+  #entityData;
 
   // We could split this off to a substate cache container as this data is hot from OP
   #gcodeScripts;
@@ -34,8 +39,11 @@ class PrinterStateModel {
   // New idea to enable/disable printers
   // enabled = false;
 
-  constructor(id) {
-    this.#id = id.toString();
+  constructor(printerDocument) {
+    this.#id = printerDocument._id.toString();
+    this.#entityData = Object.freeze({
+      ...printerDocument._doc
+    });
   }
 
   get id() {
@@ -64,22 +72,24 @@ class PrinterStateModel {
       alerts: this.#alerts,
 
       // Hot OP data
-      octoPrintVersion: "versione",
       octoPrintSystemInfo: {
         "printer.firmware": "klippah"
       },
       currentProfile: {}, // TODO this should not decide client 'Printer' column (octoPrintSystemInfo)
+      otherSettings: {}, //? temperatureTriggers + webcamSettings
       octoPi: {
         version: "sure",
         model: "American Pi"
       },
 
-      // Unmapped data - comes from database model so needs work
-      sortIndex: 0,
-      printerName: "asd",
-      group: "yeah",
+      // Related document query - cached from db
       groups: [],
-      otherSettings: {}
+
+      // Unmapped data - comes from database model so needs work
+      octoPrintVersion: this.#entityData.octoPrintVersion,
+      sortIndex: this.#entityData.sortIndex,
+      printerName: this.#entityData.settingsApperance.name,
+      group: this.#entityData.group
     });
   }
 
@@ -94,6 +104,71 @@ class PrinterStateModel {
 
     this.#webSocket = "danger";
     this.#webSocketDescription = "Websocket closed";
+  }
+
+  getLoginDetails() {
+    return {
+      printerURL: this.#entityData.printerURL,
+      apikey: this.#entityData.apikey
+    };
+  }
+
+  setWebsocketState(state) {
+    // A function to be implemented for setting the state of the websocket quickly mapping to description and colour
+    // state: "tentative_boot", "tentative_preconnect", "tentative_postconnect", etc.
+
+    throw new NotImplementedException();
+  }
+
+  setWebsocketTentativeState() {
+    this.#webSocket = "info";
+    this.#webSocketDescription = "Awaiting current websocket attempt to end...";
+  }
+
+  bindWebSocketAdapter(adapterType) {
+    if (!!this.#websocketAdapter) {
+      throw new Error(
+        `This websocket adapter was already bound with type '${
+          this.#websocketAdapterType
+        }'. Please reset it first with 'resetWebSocketAdapter' if you're switching over dynamically.`
+      );
+    }
+    if (!this.#sessionUser || !this.#sessionKey) {
+      throw new Error(
+        "Printer State 'bindWebSocketAdapter' was called without 'sessionUser' or 'sessionKey' set-up correctly."
+      );
+    }
+
+    this.#websocketAdapterType = adapterType?.name;
+    this.#websocketAdapter = new adapterType({
+      id: this.id,
+      webSocketURL: this.#entityData.webSocketURL,
+      currentUser: this.#sessionUser.name,
+      sessionkey: this.#sessionKey.session,
+      throttle: 2
+    });
+  }
+
+  /**
+   * Connect the adapter to the configured transport using the constructor printer document and the bindWebSocketAdapter calls
+   */
+  connectAdapter() {
+    if (!this.#websocketAdapter) {
+      throw new Error(
+        `The websocket adapter was not provided. Please reset it first with 'bindWebSocketAdapter' to connect to it.`
+      );
+    }
+    this.#websocketAdapter.start();
+  }
+
+  resetWebSocketAdapter() {
+    // Call any closing message handlers now
+    // ...
+    this.#websocketAdapter.close();
+
+    // Reset
+    this.#websocketAdapter = undefined;
+    this.#websocketAdapterType = undefined;
   }
 
   resetSystemChecksState() {
@@ -120,17 +195,13 @@ class PrinterStateModel {
     this.#systemChecks.api.status = "warning";
   }
 
-  setWebsocketTentativeState() {
-    this.#webSocket = "info";
-    this.#webSocketDescription = "Awaiting current websocket attempt to end...";
-  }
-
   setApiSuccessState() {
     this.#systemChecks.api.status = "success";
     this.#systemChecks.api.date = new Date();
   }
 
-  setApiLoginSuccessState(sessionKey) {
+  setApiLoginSuccessState(sessionUser, sessionKey) {
+    this.#sessionUser = sessionUser;
     this.#sessionKey = sessionKey;
 
     this.#hostState = "Online";
@@ -146,17 +217,6 @@ class PrinterStateModel {
   setSystemSuccessState(success = true) {
     this.#systemChecks.system.status = success ? "success" : "danger";
     this.#systemChecks.system.date = new Date();
-  }
-
-  attachWebsocketClient(ws) {
-    this.#wsClient = ws;
-  }
-
-  openWebsocket() {
-    if (!this.#wsClient) {
-      throw new Error("Websocket client was not bound to this ");
-    }
-    this.#wsClient.open();
   }
 }
 

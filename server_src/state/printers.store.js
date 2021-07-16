@@ -5,8 +5,6 @@ const { PrinterTickerStore } = require("./printer-ticker.store");
 const Logger = require("../handlers/logger.js");
 const PrinterStateModel = require("./printer-state.model");
 const PrinterService = require("../services/printer.service");
-const OctoprintWebsocketAdapter = require("../services/octoprint/octoprint-websocket.adapter");
-const { OctoprintApiClientService } = require("../services/octoprint/octoprint-api-client.service");
 const { NotFoundException } = require("../exceptions/runtime.exceptions");
 
 const logger = new Logger("OctoFarm-PrintersStore");
@@ -54,26 +52,9 @@ class PrintersStore {
       sort: { sortIndex: 1 }
     });
 
-    this.#printerStates = await printerDocs.map(async (p) => {
-      this.octoPrintService = new OctoprintApiClientService();
-      const loginResponse = await this.octoPrintService.login(p, true).then((r) => r.json());
-      if (!loginResponse?.session) {
-        throw new Error("OctoPrint login didnt return a sessionKey.");
-      }
-      const wsAdapter = new OctoprintWebsocketAdapter(
-        p._id,
-        p.webSocketURL,
-        loginResponse.name,
-        loginResponse.session
-      );
-
-      wsAdapter.start();
-
-      return new PrinterStateModel(p._id);
-    });
+    this.#printerStates = printerDocs.map((p) => new PrinterStateModel(p));
 
     logger.info(`Loaded ${this.#printerStates.length} printer states`);
-
     this.generatePrinterGroups();
   }
 

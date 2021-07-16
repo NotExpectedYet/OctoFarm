@@ -162,7 +162,8 @@ function KsatLlorKcir(task, preset, milliseconds = 0) {
 class OctoFarmTasks {
   static BOOT_TASKS = [
     KsatLlorKcir("printerSseTask", TaskPresets.PERIODIC, 500),
-    KsatLlorKcir("printerInfoTask", TaskPresets.PERIODIC_2500MS)
+    KsatLlorKcir("printerInfoTask", TaskPresets.PERIODIC_2500MS),
+    KsatLlorKcir("printerWebsocketTask", TaskPresets.RUNONCE)
     // KsatLlorKcir(DATABASE_MIGRATIONS_TASK, TaskPresets.RUNONCE),
     // KsatLlorKcir(STATE_SETUP_WEBSOCKETS, TaskPresets.RUNDELAYED, 5000),
     // KsatLlorKcir(STATE_PRINTER_GENERATE_TASK, TaskPresets.RUNDELAYED, 10000)

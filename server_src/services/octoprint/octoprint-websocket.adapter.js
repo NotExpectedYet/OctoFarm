@@ -1,6 +1,7 @@
 const HexNutClient = require("hexnut-client");
 const handle = require("hexnut-handle");
 const ws = require("ws");
+const GenericWebsocketAdapter = require("../../handlers/generic-websocket.adapter");
 const { OP_WS_MSG, OP_WS_SKIP } = require("./constants/websocket.constants");
 const {
   octoprintParseMiddleware,
@@ -8,18 +9,21 @@ const {
   matchHeaderMiddleware
 } = require("./utils/websocket.utils");
 
-class OctoprintWebsocketAdapter {
-  #id;
-  #webSocketURL;
+class OctoPrintWebSocketAdapter extends GenericWebsocketAdapter {
+  // Provided by base class
+  // #id;
+  // #webSocketURL;
+
+  // Our OctoPrint data
   #currentUser;
   #sessionKey;
   #throttle;
 
   #client;
 
-  constructor(id, webSocketURL, currentUser, sessionkey, throttle) {
-    this.#id = id.toString();
-    this.#webSocketURL = webSocketURL;
+  constructor({ id, webSocketURL, currentUser, sessionkey, throttle }) {
+    super({ id: id.toString(), webSocketURL });
+
     this.#currentUser = currentUser;
     this.#sessionKey = sessionkey;
     this.#throttle = throttle;
@@ -31,6 +35,9 @@ class OctoprintWebsocketAdapter {
     this.#client = new HexNutClient({ followRedirects: true }, ws);
   }
 
+  /**
+   * @override This implements the opening/connecting action of our base class
+   */
   start() {
     this.#client.use(
       handle.connect((ctx) => {
@@ -63,7 +70,14 @@ class OctoprintWebsocketAdapter {
       console.log(`OP Message received '${ctx.message.header}'`);
     });
 
-    this.#client.connect(`${this.#webSocketURL}/sockjs/websocket`);
+    this.#client.connect(`${this.websocketURL}/sockjs/websocket`);
+  }
+
+  /**
+   * @override This implements the closing/disposing action of our base class
+   */
+  close() {
+    this.#client.close();
   }
 
   #onConnection(ctx) {
@@ -87,4 +101,4 @@ class OctoprintWebsocketAdapter {
   }
 }
 
-module.exports = OctoprintWebsocketAdapter;
+module.exports = OctoPrintWebSocketAdapter;

@@ -20,6 +20,8 @@ class ServerSentEventsHandler {
     req.on("error", () => {
       delete this.#clients[this.#clientId];
     });
+
+    // TODO isnt this index tracker prone to bugs? What if an older client closes its connection?
     this.#clientId++;
   }
 

@@ -25,6 +25,7 @@ const UserTokenService = require("./services/authentication/user-token.service")
 const ServerSentEventsHandler = require("./handlers/sse.handler");
 const PrinterInfoTask = require("./tasks/printer-info.task");
 const PrinterTickerStore = require("./state/printer-ticker.store");
+const PrinterWebsocketTask = require("./tasks/printer-websocket.task");
 const { PrinterSseTask } = require("./tasks/printer-sse.task");
 const { AppConstants } = require("./app.constants");
 
@@ -73,7 +74,9 @@ container.register({
   printerViewSSEHandler: awilix.asClass(ServerSentEventsHandler).singleton(),
   // Task bound to send on SSE Handler
   printerSseTask: awilix.asClass(PrinterSseTask).singleton(),
-  printerInfoTask: awilix.asClass(PrinterInfoTask).singleton()
+  printerInfoTask: awilix.asClass(PrinterInfoTask).singleton(),
+  // This task is a quick task (~100ms per printer)
+  printerWebsocketTask: awilix.asClass(PrinterWebsocketTask).singleton()
 });
 
 module.exports = container;

@@ -139,7 +139,6 @@ class TaskManagerService {
   async timeTask(taskId, handler) {
     let taskState = this.taskStates[taskId];
     taskState.started = Date.now();
-
     if (typeof handler === "string") {
       const taskService = this.#container[handler];
       await taskService.run();
