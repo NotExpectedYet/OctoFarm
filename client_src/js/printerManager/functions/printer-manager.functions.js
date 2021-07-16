@@ -1,6 +1,6 @@
 import UI from "../../lib/functions/ui";
 import OctoFarmClient from "../../lib/octofarm_client.js";
-import { updateConnectionLog } from "../connection-log";
+import { checkIfLoaderExistsAndRemove, updateConnectionLog } from "../connection-log";
 import { createOrUpdatePrinterTableRow } from "../printer-data";
 import PowerButton from "../../lib/modules/powerButton";
 import PrinterManager from "../../lib/modules/printerManager";
@@ -20,6 +20,8 @@ export function workerEventFunction(data) {
     if (!modalVisibility) {
       if (data.currentTickerList.length > 0) {
         updateConnectionLog(data.currentTickerList);
+      } else {
+        checkIfLoaderExistsAndRemove(true);
       }
       if (data.printersInformation.length > 0) {
         createOrUpdatePrinterTableRow(data.printersInformation, data.printerControlList);

@@ -24,6 +24,7 @@ const JobClean = require("./state/data/jobClean");
 const UserTokenService = require("./services/authentication/user-token.service");
 const ServerSentEventsHandler = require("./handlers/sse.handler");
 const PrinterInfoTask = require("./tasks/printer-info.task");
+const PrinterTickerStore = require("./state/printer-ticker.store");
 const { PrinterSseTask } = require("./tasks/printer-sse.task");
 const { AppConstants } = require("./app.constants");
 
@@ -57,6 +58,7 @@ container.register({
   printerService: awilix.asClass(PrinterService),
   printerGroupService: awilix.asClass(PrinterGroupService),
   printersStore: awilix.asClass(PrintersStore).singleton(),
+  printerTickerStore: awilix.asClass(PrinterTickerStore).singleton(),
   farmStatisticsService: awilix.asClass(FarmStatisticsService),
   fileClean: awilix.asClass(FileClean).singleton(),
   historyCache: awilix.asClass(HistoryCache).singleton(),

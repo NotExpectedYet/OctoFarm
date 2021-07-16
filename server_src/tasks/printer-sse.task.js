@@ -4,6 +4,7 @@ const Logger = require("../handlers/logger");
 class PrinterSseTask {
   #printerViewSSEHandler;
   #printersStore;
+  #printerTickerStore;
 
   #aggregateSizeCounter = 0;
   #aggregateWindowLength = 100;
@@ -11,9 +12,10 @@ class PrinterSseTask {
   #rounding = 2;
   #logger = new Logger("Printer-SSE-task");
 
-  constructor({ printerViewSSEHandler, printersStore }) {
+  constructor({ printerViewSSEHandler, printerTickerStore, printersStore }) {
     this.#printerViewSSEHandler = printerViewSSEHandler;
     this.#printersStore = printersStore;
+    this.#printerTickerStore = printerTickerStore;
   }
 
   byteCount(s) {
@@ -21,22 +23,23 @@ class PrinterSseTask {
   }
 
   async run() {
-    //     const printersInformation = await PrinterClean.listPrintersInformation();
-    //     const printerControlList = await PrinterClean.returnPrinterControlList();
     //     const currentTickerList = await PrinterTicker.returnIssue();
-    //
-    //     const infoDrop = {
-    //       printersInformation,
-    //       printerControlList,
-    //       currentTickerList
-    //     };
 
+    const currentIssueList = this.#printerTickerStore.getIssueList();
     const printerStates = this.#printersStore.getPrinters();
     const serializablePrinterStates = printerStates.map((s) => s.toFlat());
+
+    // TODO remove this useless data client-side
+    const printerControlList = serializablePrinterStates.map((sp) => ({
+      printerName: sp.printerName,
+      printerID: sp._id,
+      state: sp.printerState.colour
+    }));
+
     const sseData = {
       printersInformation: serializablePrinterStates,
-      printerControlList: [],
-      currentTickerList: []
+      printerControlList: printerControlList,
+      currentTickerList: currentIssueList
     };
 
     const serializedData = JSON.stringify(sseData);
@@ -50,7 +53,7 @@ class PrinterSseTask {
       const summedPayloadSize = this.#aggregateSizes.reduce((t, n) => (t += n));
       const averagePayloadSize = summedPayloadSize / 1000 / this.#aggregateWindowLength;
       this.#logger.info(
-        `Printer SSE transmitted ${averagePayloadSize.toFixed(this.#rounding)} kB [${
+        `Printer SSE metrics ${averagePayloadSize.toFixed(this.#rounding)} kB [${
           this.#aggregateWindowLength
         } TX avg].`
       );

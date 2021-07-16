@@ -61,8 +61,8 @@ function updatePrinterColumn(printer) {
   const printerPrinterInformation = document.getElementById(
     `printerPrinterInformation-${printer._id}`
   );
-  if (typeof printer.octoPrintSystemInfo !== "undefined") {
-    if (typeof printer.currentProfile !== "undefined" && printer.currentProfile !== null) {
+  if (!!printer.octoPrintSystemInfo) {
+    if (!!printer.currentProfile) {
       if (typeof printer.octoPrintSystemInfo["printer.firmware"] === "undefined") {
         UI.doesElementNeedUpdating(
           '<small title="Please connect and resync to display printer firmware">Unknown</small>',

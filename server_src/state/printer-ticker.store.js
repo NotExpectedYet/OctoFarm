@@ -1,17 +1,16 @@
-const currentIssues = [];
-const octoprintLogs = [];
-
 class PrinterTickerStore {
+  #currentIssues = [];
+  #octoprintLogs = [];
+
+  #lastIssueId = -1;
+  #lastLogId = -1;
+
   constructor({}) {}
 
   addOctoPrintLog(printer, message, state, plugin) {
-    let id = null;
-    if (octoprintLogs.length === 0) {
-      //first issue
-      id = 0;
-    } else {
-      id = octoprintLogs[octoprintLogs.length - 1].id + 1;
-    }
+    let id = this.#lastLogId + 1;
+    this.#lastLogId++;
+
     const newLog = {
       id: id,
       date: new Date(),
@@ -21,20 +20,16 @@ class PrinterTickerStore {
       state: state,
       pluginDisplay: plugin
     };
-    octoprintLogs.push(newLog);
-    if (octoprintLogs.length >= 2000) {
-      octoprintLogs.shift();
+    this.#octoprintLogs.push(newLog);
+    if (this.#octoprintLogs.length >= 2000) {
+      this.#octoprintLogs.shift();
     }
   }
 
   addIssue(printer, message, state) {
-    let id = null;
-    if (currentIssues.length === 0) {
-      //first issue
-      id = 0;
-    } else {
-      id = currentIssues[currentIssues.length - 1].id + 1;
-    }
+    let id = this.#lastIssueId + 1;
+    this.#lastIssueId++;
+
     const newIssue = {
       id: id,
       date: Date.now(),
@@ -43,28 +38,19 @@ class PrinterTickerStore {
       printer: printer.printerURL,
       state: state
     };
-    currentIssues.push(newIssue);
-    if (currentIssues.length >= 10000) {
-      currentIssues.shift();
+    this.#currentIssues.push(newIssue);
+    if (this.#currentIssues.length >= 10000) {
+      this.#currentIssues.shift();
     }
   }
 
-  removeIssue(id) {
-    const index = _.findIndex(currentIssues, function (o) {
-      return o.id == id;
-    });
-    currentIssues.splice(index, 1);
-  }
-
   returnOctoPrintLogs() {
-    return octoprintLogs;
+    return this.#octoprintLogs;
   }
 
-  returnIssue() {
-    return currentIssues;
+  getIssueList() {
+    return this.#currentIssues;
   }
 }
 
-module.exports = {
-  PrinterTickerStore
-};
+module.exports = PrinterTickerStore;

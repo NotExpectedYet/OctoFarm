@@ -26,7 +26,7 @@ class PrintersStore {
   }
 
   /**
-   * Return a frozen copy of all printers
+   * Return a mutable copy of all frozen printers states
    */
   getPrinters() {
     return this.#printerStates;

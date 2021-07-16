@@ -24,8 +24,12 @@ class PrinterStateModel {
   #systemChecks = getSystemChecksDefault();
   #alerts = null;
 
-  // We could split this off to a separate cache container
+  // We could split this off to a substate cache container as this data is hot from OP
   #gcodeScripts;
+  #octoPrintVersion;
+  #octoPrintSystemInfo;
+  #currentProfile;
+  #octoPi;
 
   // New idea to enable/disable printers
   // enabled = false;
@@ -59,7 +63,18 @@ class PrinterStateModel {
       systemChecks: this.#systemChecks,
       alerts: this.#alerts,
 
-      // Unmapped data
+      // Hot OP data
+      octoPrintVersion: "versione",
+      octoPrintSystemInfo: {
+        "printer.firmware": "klippah"
+      },
+      currentProfile: {}, // TODO this should not decide client 'Printer' column (octoPrintSystemInfo)
+      octoPi: {
+        version: "sure",
+        model: "American Pi"
+      },
+
+      // Unmapped data - comes from database model so needs work
       sortIndex: 0,
       printerName: "asd",
       group: "yeah",
