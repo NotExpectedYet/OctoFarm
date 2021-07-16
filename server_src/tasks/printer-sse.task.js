@@ -23,8 +23,6 @@ class PrinterSseTask {
   }
 
   async run() {
-    //     const currentTickerList = await PrinterTicker.returnIssue();
-
     const currentIssueList = this.#printerTickerStore.getIssueList();
     const printerStates = this.#printersStore.getPrinters();
     const serializablePrinterStates = printerStates.map((s) => s.toFlat());
@@ -38,7 +36,7 @@ class PrinterSseTask {
 
     const sseData = {
       printersInformation: serializablePrinterStates,
-      printerControlList: printerControlList,
+      printerControlList,
       currentTickerList: currentIssueList
     };
 
