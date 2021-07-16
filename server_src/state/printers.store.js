@@ -11,14 +11,16 @@ const logger = new Logger("OctoFarm-PrintersStore");
 
 class PrintersStore {
   #settingsStore;
+  #printerTickerStore;
   #printerService;
 
   #printerStates;
   #farmPrintersGroups;
 
-  constructor({ settingsStore, printerService }) {
+  constructor({ settingsStore, printerTickerStore, printerService }) {
     this.#settingsStore = settingsStore;
     this.#printerService = printerService;
+    this.#printerTickerStore = printerTickerStore;
 
     // Store collections
     this.#printerStates = [];
@@ -73,7 +75,7 @@ class PrintersStore {
     this.validateState();
 
     this.#printerStates.forEach((printer) => {
-      PrinterTickerStore.addIssue(printer, "Initiating Printer...", "Active");
+      this.#printerTickerStore.addIssue(printer, "Initiating Printer...", "Active");
       PrinterClean.generate(printer, this.#settingsStore.filamentManager);
     });
   }
