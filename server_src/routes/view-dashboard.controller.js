@@ -4,7 +4,6 @@ const { ensureAuthenticated } = require("../middleware/auth");
 const { createController } = require("awilix-express");
 const prettyHelpers = require("../../views/partials/functions/pretty.js");
 const ServerSentEventsHandler = require("../handlers/sse.handler");
-const { PrinterClean } = require("../state/data/printerClean");
 
 class ViewDashboard {
   #serverVersion;
@@ -25,7 +24,7 @@ class ViewDashboard {
     const printers = this.#printersStore.getPrinters();
     const clientSettings = await this.#settingsStore.getClientSettings();
 
-    const dashStatistics = await PrinterClean.returnDashboardStatistics();
+    const dashStatistics = [];
     let dashboardSettings = clientSettings?.dashboard || getDefaultDashboardSettings();
 
     res.render("dashboard", {

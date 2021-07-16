@@ -6,7 +6,7 @@ const isDocker = require("is-docker");
 const envUtils = require("../utils/env.utils");
 const { validateMongoURL } = require("../utils/validators");
 const { AppConstants } = require("../app.constants");
-const { fetchMongoDBConnectionString } = require("../../app-env");
+const { fetchMongoDBConnectionString } = require("../app-env");
 
 const { createController } = require("awilix-express");
 

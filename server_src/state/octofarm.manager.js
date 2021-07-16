@@ -10,8 +10,7 @@ const {
   getWolPowerSubSettingsDefault
 } = require("../constants/state.constants");
 const { OctoprintApiClientService } = require("../services/octoprint/octoprint-api-client.service");
-const { HistoryCollection } = require("../runners/history.runner.js");
-const { PrinterClean } = require("./data/printerClean.js");
+const { HistoryCollection } = require("../services/history.runner.js");
 const { JobClean } = require("./data/jobClean.js");
 const { PrinterTickerStore } = require("./printer-ticker.store.js");
 

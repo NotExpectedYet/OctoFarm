@@ -6,7 +6,7 @@ const requestBody = {
 
 const dbHandler = require("../db-handler");
 const supertest = require("supertest");
-const { setupTestApp } = require("../../app-test");
+const { setupTestApp } = require("../../server_src/app-test");
 
 let request;
 

@@ -1,11 +1,10 @@
-const { parse } = require("flatted");
+import { parse } from "flatted";
 
 let source = null;
 
 async function asyncParse(str) {
   try {
-    const info = parse(str);
-    return info;
+    return JSON.parse(str);
   } catch (e) {
     return false;
   }

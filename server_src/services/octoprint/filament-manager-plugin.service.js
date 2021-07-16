@@ -1,18 +1,18 @@
-const filamentClean = require("../state/data/filamentClean.js");
+const filamentClean = require("../../state/data/filamentClean.js");
 
 const { FilamentClean } = filamentClean;
 
-const Logger = require("../handlers/logger.js");
+const Logger = require("../../handlers/logger.js");
 
 const logger = new Logger("OctoFarm-FilamentManager");
 
-const Spool = require("../models/Filament.js");
-const Profile = require("../models/Profiles.js");
+const Spool = require("../../models/Filament.js");
+const Profile = require("../../models/Profiles.js");
 const fetch = require("node-fetch");
-class FilamentManagerPlugin {
+class FilamentManagerPluginService {
   static async filamentManagerReSync(addSpool) {
     try {
-      const { Runner } = require("../state/octofarm.manager.js");
+      const { Runner } = require("../../state/octofarm.manager.js");
       const printerList = Runner.returnFarmPrinters();
       let printer = null;
       for (let i = 0; i < printerList.length; i++) {
@@ -150,5 +150,5 @@ class FilamentManagerPlugin {
 }
 
 module.exports = {
-  FilamentManagerPlugin
+  FilamentManagerPlugin: FilamentManagerPluginService
 };

@@ -2,7 +2,7 @@ jest.mock("../../../server_src/services/octoprint/octoprint-api.service");
 const dbHandler = require("../../db-handler");
 const { getSystemChecksDefault } = require("../../../server_src/constants/state.constants");
 const { PrintersStore } = require("../../../server_src/state/printers.store");
-const { ensureSystemSettingsInitiated } = require("../../../app-core");
+const { ensureSystemSettingsInitiated } = require("../../../server_src/app-core");
 
 beforeAll(async () => {
   await dbHandler.connect();

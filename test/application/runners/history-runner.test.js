@@ -34,7 +34,7 @@ describe("History:Runner", () => {
   jest.mock("../../../server_src/utils/download.util");
   // FS should be mocked as late as possible in order to give MongoDB Memory Server a chance
   jest.mock("fs");
-  const { HistoryCollection } = require("../../../server_src/runners/history.runner");
+  const { HistoryCollection } = require("../../../server_src/services/history.runner");
 
   const basePath = "./images/historyCollection";
 

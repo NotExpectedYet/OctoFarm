@@ -6,11 +6,16 @@ const logger = new Logger("OctoFarm-TaskManager");
 
 /**
  * Manage immediate or delayed tasks and recurring jobs.
- * Note: this class ought NOT TO BE USED FOR (A)SYNCHRONOUS WORK in REQUEST MIDDLEWARE
  */
 class TaskManagerService {
   jobScheduler = new ToadScheduler();
   taskStates = {};
+
+  #container;
+
+  constructor(container) {
+    this.#container = container;
+  }
 
   validateInput(taskId, workload, schedulerOptions) {
     if (!taskId) {
@@ -18,19 +23,38 @@ class TaskManagerService {
         "Task ID was not provided. Cant register task or schedule job."
       );
     }
+    const prefix = `Job '${workload.name || "anonymous"}' with ID '${taskId}'`;
     if (!!this.taskStates[taskId]) {
       throw new JobValidationException(
-        `Task ID with taskId '${taskId}' was already registered. Cant register a key twice.`,
+        `${prefix} was already registered. Cant register a key twice.`,
         taskId
       );
     }
+
     if (typeof workload !== "function") {
-      throw new JobValidationException(
-        `Job '${
-          workload.name || "anonymous"
-        }' with taskId '${taskId}' is not a callable function and can't be scheduled.`,
-        taskId
-      );
+      if (typeof workload !== "string") {
+        throw new JobValidationException(
+          `${prefix} is not a callable nor a string dependency to lookup. It can't be scheduled.`,
+          taskId
+        );
+      }
+
+      let resolvedService;
+      try {
+        resolvedService = this.#container[workload];
+      } catch (e) {
+        throw new JobValidationException(
+          `${prefix} is not a registered awilix dependency. It can't be scheduled.`,
+          taskId
+        );
+      }
+
+      if (typeof resolvedService?.run !== "function") {
+        throw new JobValidationException(
+          `${prefix} was resolved but it doesn't have a 'run(..)' method to call.`,
+          taskId
+        );
+      }
     }
 
     if (
@@ -74,14 +98,15 @@ class TaskManagerService {
    * Create a recurring job
    * Tip: use the options properties `runImmediately` and `seconds/milliseconds/minutes/hours/days`
    */
-  registerJobOrTask({ id: taskID, task: asyncTaskCallback, preset: schedulerOptions }) {
+  registerJobOrTask({ id: taskID, task: asyncTaskCallbackOrToken, preset: schedulerOptions }) {
     try {
-      this.validateInput(taskID, asyncTaskCallback, schedulerOptions);
+      this.validateInput(taskID, asyncTaskCallbackOrToken, schedulerOptions);
     } catch (e) {
-      logger.error(e, schedulerOptions);
+      logger.error(e.stack, schedulerOptions);
       return;
     }
-    const timedTask = this.getSafeTimedTask(taskID, asyncTaskCallback);
+
+    const timedTask = this.getSafeTimedTask(taskID, asyncTaskCallbackOrToken);
 
     this.taskStates[taskID] = {
       options: schedulerOptions
@@ -115,7 +140,12 @@ class TaskManagerService {
     let taskState = this.taskStates[taskId];
     taskState.started = Date.now();
 
-    await handler();
+    if (typeof handler === "string") {
+      const taskService = this.#container[handler];
+      await taskService.run();
+    } else {
+      await handler();
+    }
     taskState.duration = Date.now() - taskState.started;
 
     if (taskState.options?.logFirstCompletion !== false && !taskState?.firstCompletion) {

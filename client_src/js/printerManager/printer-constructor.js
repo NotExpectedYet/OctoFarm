@@ -21,6 +21,7 @@ class Printer {
     this.group = group;
   }
 }
+
 export class PrintersManagement {
   constructor(printerURL, camURL, apikey, group, name) {
     this.printer = new Printer(printerURL, camURL, apikey, group, name);

@@ -4,17 +4,17 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const passport = require("passport");
 const expressLayouts = require("express-ejs-layouts");
-const Logger = require("./server_src/handlers/logger.js");
-const container = require("./server_src/container");
+const Logger = require("./handlers/logger.js");
+const container = require("./container");
 const { scopePerRequest, loadControllers } = require("awilix-express");
-const { OctoFarmTasks } = require("./server_src/tasks");
+const { OctoFarmTasks } = require("./tasks");
 const { getViewsPath } = require("./app-env");
 
 function setupExpressServer() {
   let app = express();
 
   const userTokenService = container.resolve("userTokenService");
-  require("./server_src/middleware/passport.js")(passport, userTokenService);
+  require("./middleware/passport.js")(passport, userTokenService);
 
   app.use(express.json());
 
@@ -68,12 +68,13 @@ async function ensureSystemSettingsInitiated() {
 }
 
 function serveOctoFarmRoutes(app) {
-  const routePath = "./server_src/routes";
-  app.use("/filament", require(`${routePath}/filament`, { page: "route" }));
-  app.use("/history", require(`${routePath}/history`, { page: "route" }));
+  const routePath = "./routes";
 
-  app.use(loadControllers("server_src/routes/settings/*.controller.js", { cwd: __dirname }));
-  app.use(loadControllers("server_src/routes/*.controller.js", { cwd: __dirname }));
+  // TODO overhaul this in your own time
+  app.use("/filament", require(`${routePath}/filament`, { page: "route" }));
+
+  app.use(loadControllers(`${routePath}/settings/*.controller.js`, { cwd: __dirname }));
+  app.use(loadControllers(`${routePath}/*.controller.js`, { cwd: __dirname }));
 
   app.get("*", function (req, res) {
     const path = req.originalUrl;
@@ -97,13 +98,13 @@ function serveOctoFarmRoutes(app) {
 async function serveOctoFarmNormally(app, quick_boot = false) {
   if (!quick_boot) {
     logger.info("Initialising FarmInformation...");
-    const printerClean = container.resolve("printerClean");
-    await printerClean.initFarmInformation();
 
     const octofarmManager = container.resolve("octofarmManager");
-    await octofarmManager.init();
-
     const printersStore = container.resolve("printersStore");
+    // If we want to init the farm temp heatmap, call the cache for that instead
+    // await printerClean.initFarmInformation();
+
+    await octofarmManager.init();
     await printersStore.loadPrintersStore();
 
     const taskManagerService = container.resolve("taskManagerService");

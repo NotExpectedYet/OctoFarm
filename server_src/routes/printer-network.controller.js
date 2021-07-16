@@ -12,7 +12,7 @@ class PrinterNetworkController {
   }
 
   async scanSsdp(req, res) {
-    const { searchForDevicesOnNetwork } = require("../../server_src/runners/autoDiscovery.js");
+    const { searchForDevicesOnNetwork } = require("../services/autoDiscovery.js");
     let devices = await searchForDevicesOnNetwork();
     res.json(devices);
   }

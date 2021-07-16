@@ -7,12 +7,12 @@ const Logger = require("../handlers/logger.js");
 const filamentProfiles = require("../models/Profiles.js");
 const ServerSettings = require("../models/ServerSettings.js");
 const Spool = require("../models/Filament.js");
-const { FilamentManagerPlugin } = require("./filamentManagerPlugin.js");
-const { ScriptRunner } = require("../services/script-check.service.js");
+const { FilamentManagerPlugin } = require("./octoprint/filament-manager-plugin.service.js");
+const { ScriptRunner } = require("./script-check.service.js");
 const MjpegDecoder = require("mjpeg-decoder");
 const { downloadImage, downloadFromOctoPrint } = require("../utils/download.util");
 const { getHistoryCache } = require("../state/data/history.cache");
-const { writePoints } = require("../services/influx-export.service.js");
+const { writePoints } = require("./influx-export.service.js");
 
 const logger = new Logger("OctoFarm-HistoryCollection");
 let counter = 0;

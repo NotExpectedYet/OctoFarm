@@ -167,31 +167,31 @@ describe("PrinterClean", function () {
   });
 
   it("should run checkTempRange util with expected temperature state", async () => {
-    let tempState = PrinterClean.checkTempRange(1, 2, 3, 4, 5);
+    let tempState = checkTempRange(1, 2, 3, 4, 5);
     expect(tempState).toBe("tempOffline");
 
-    tempState = PrinterClean.checkTempRange("Active", 2, 3, 4, 5);
+    tempState = checkTempRange("Active", 2, 3, 4, 5);
     expect(tempState).toBe("tempSuccess");
 
-    tempState = PrinterClean.checkTempRange("Idle", 2, 3, 4, 5);
+    tempState = checkTempRange("Idle", 2, 3, 4, 5);
     expect(tempState).toBe("tempSuccess");
 
-    tempState = PrinterClean.checkTempRange("Complete", 2, 3, 4, 5);
+    tempState = checkTempRange("Complete", 2, 3, 4, 5);
     expect(tempState).toBe("tempCool");
 
-    tempState = PrinterClean.checkTempRange("Complete", 2, 30, 4, 5);
+    tempState = checkTempRange("Complete", 2, 30, 4, 5);
     expect(tempState).toBe("tempCooling");
   });
 
   it("should run getProgressColour util with expected responses", async () => {
-    expect(PrinterClean.getProgressColour(0)).toEqual("dark");
-    expect(PrinterClean.getProgressColour(24)).toEqual("secondary");
-    expect(PrinterClean.getProgressColour(25)).toEqual("primary");
-    expect(PrinterClean.getProgressColour(50)).toEqual("primary");
-    expect(PrinterClean.getProgressColour(51)).toEqual("info");
-    expect(PrinterClean.getProgressColour(75)).toEqual("info");
-    expect(PrinterClean.getProgressColour(76)).toEqual("warning");
-    expect(PrinterClean.getProgressColour(100)).toEqual("success");
+    expect(mapProgressToColor(0)).toEqual("dark");
+    expect(mapProgressToColor(24)).toEqual("secondary");
+    expect(mapProgressToColor(25)).toEqual("primary");
+    expect(mapProgressToColor(50)).toEqual("primary");
+    expect(mapProgressToColor(51)).toEqual("info");
+    expect(mapProgressToColor(75)).toEqual("info");
+    expect(mapProgressToColor(76)).toEqual("warning");
+    expect(mapProgressToColor(100)).toEqual("success");
   });
 
   it("should return with empty octoprint versions array", async () => {

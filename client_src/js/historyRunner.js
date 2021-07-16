@@ -35,7 +35,7 @@ export default class History {
     document.getElementById("wrapper").classList.remove("d-none");
     document.getElementById("historyToolbar").classList.remove("d-none");
 
-    let historyStatistics = await OctoFarmclient.get("history/statisticsData");
+    let historyStatistics = await OctoFarmclient.getHistoryStatistics();
     historyStatistics = await historyStatistics.json();
     let historyGraphData = historyStatistics.history.historyByDay;
 

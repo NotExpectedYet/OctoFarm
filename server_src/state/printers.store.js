@@ -1,8 +1,6 @@
 const _ = require("lodash");
 const Printers = require("../models/Printer.js");
-const { NotImplementedException } = require("../exceptions/runtime.exceptions");
 const { getFilterDefaults } = require("../constants/state.constants");
-const { PrinterClean } = require("./data/printerClean");
 const { PrinterTickerStore } = require("./printer-ticker.store");
 const Logger = require("../handlers/logger.js");
 const PrinterStateModel = require("./printer-state.model");
@@ -25,6 +23,13 @@ class PrintersStore {
     // Store collections
     this.#printerStates = [];
     this.#farmPrintersGroups = [];
+  }
+
+  /**
+   * Return a frozen copy of all printers
+   */
+  getPrinters() {
+    return this.#printerStates;
   }
 
   validateState() {
@@ -158,19 +163,9 @@ class PrintersStore {
   //   PrinterClean.generate(printer, serverSettings.filamentManager);
   // }
 
-  /**
-   * Find and return a frozen copy of the printer
-   */
-  findPrinter(id) {
-    throw new NotImplementedException();
-  }
-
-  /**
-   * Return a frozen copy of all printers
-   */
-  getPrinters() {
-    return this.#printerStates;
-  }
+  // returnAllOctoPrintVersions() {
+  //   return this.#printersInformation.map((printer) => printer.octoPrintVersion);
+  // }
 }
 
 module.exports = PrintersStore;

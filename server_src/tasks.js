@@ -3,16 +3,6 @@ const { Runner } = require("./state/octofarm.manager");
 const { FilamentClean } = require("./state/data/filamentClean");
 const { initHistoryCache } = require("./state/data/history.cache");
 const { TaskPresets } = require("./task.presets");
-const { PrinterClean } = require("./state/data/printerClean");
-
-const PRINTER_CLEAN_TASK = async () => {
-  const serverSettings = require("./services/server-settings.service");
-  const printersInformation = PrinterClean.listPrintersInformation();
-  await PrinterClean.sortCurrentOperations(printersInformation);
-
-  await PrinterClean.statisticsStart();
-  await PrinterClean.createPrinterList(printersInformation, serverSettings.filamentManager);
-};
 
 const CRASH_TEST_TASK = async () => {
   throw new Error("big error");
@@ -66,8 +56,6 @@ const WEBSOCKET_HEARTBEAT_TASK = () => {
 };
 
 const SSE_TASK = () => {
-  //   if (interval === false) {
-  //   interval = setInterval(async function () {
   //     const currentOperations = await PrinterClean.returnCurrentOperations();
   //     let printersInformation = await PrinterClean.listPrintersInformation();
   //     printersInformation = await filterMe(printersInformation);
@@ -93,8 +81,6 @@ const SSE_TASK = () => {
   //     clients.forEach((c, index) => {
   //       c.res.write("data: " + clientInformation + "\n\n");
   //     });
-  //   }, 500);
-  // }
 };
 
 const SSE_DASHBOARD = () => {
@@ -130,47 +116,26 @@ const SSE_DASHBOARD = () => {
   // }
 };
 
-const SSE_PRINTERS = () => {
-  // if (interval === false) {
-  //   interval = setInterval(async function () {
-  //     const printersInformation = await PrinterClean.listPrintersInformation();
-  //     const printerControlList = await PrinterClean.returnPrinterControlList();
-  //     const currentTickerList = await PrinterTicker.returnIssue();
-  //
-  //     const infoDrop = {
-  //       printersInformation,
-  //       printerControlList,
-  //       currentTickerList
-  //     };
-  //     clientInformation = await stringify(infoDrop);
-  //     for (clientId in clients) {
-  //       clients[clientId].write("retry:" + 10000 + "\n");
-  //       clients[clientId].write("data: " + clientInformation + "\n\n"); // <- Push a message to a single attached client
-  //     }
-  //   }, 500);
-  // }
-};
-
 const STATE_TRACK_COUNTERS = async () => {
   await Runner.trackCounters();
 };
 
 // TODO we'll have to pool this with a network, event-loop or CPU budget in mind
 const STATE_SETUP_WEBSOCKETS = async () => {
-  for (let i = 0; i < farmPrinters.length; i++) {
-    // Make sure runners are created ready for each printer to pass between...
-    await Runner.setupWebSocket(farmPrinters[i]._id);
-    PrinterClean.generate(farmPrinters[i], systemSettings.filamentManager);
-  }
+  // for (let i = 0; i < farmPrinters.length; i++) {
+  //   // Make sure runners are created ready for each printer to pass between...
+  //   await Runner.setupWebSocket(farmPrinters[i]._id);
+  //   PrinterClean.generate(farmPrinters[i], systemSettings.filamentManager);
+  // }
   // FilamentClean.start(systemSettings.filamentManager);
 };
 
 const STATE_PRINTER_GENERATE_TASK = async () => {
-  for (let index = 0; index < farmPrinters.length; index++) {
-    if (typeof farmPrinters[index] !== "undefined") {
-      PrinterClean.generate(farmPrinters[index], systemSettings.filamentManager);
-    }
-  }
+  // for (let index = 0; index < farmPrinters.length; index++) {
+  //   if (typeof farmPrinters[index] !== "undefined") {
+  //     PrinterClean.generate(farmPrinters[index], systemSettings.filamentManager);
+  //   }
+  // }
 };
 
 const DATABASE_MIGRATIONS_TASK = async () => {
@@ -188,7 +153,7 @@ const DATABASE_MIGRATIONS_TASK = async () => {
 function KsatLlorKcir(task, preset, milliseconds = 0) {
   preset.milliseconds = preset.milliseconds || milliseconds;
   return {
-    id: task.name,
+    id: task.name || task,
     task,
     preset
   };
@@ -196,15 +161,16 @@ function KsatLlorKcir(task, preset, milliseconds = 0) {
 
 class OctoFarmTasks {
   static BOOT_TASKS = [
-    KsatLlorKcir(PRINTER_CLEAN_TASK, TaskPresets.PERIODIC_2500MS),
-    KsatLlorKcir(DATABASE_MIGRATIONS_TASK, TaskPresets.RUNONCE),
+    KsatLlorKcir("printerSseTask", TaskPresets.PERIODIC, 500),
+    KsatLlorKcir("printerInfoTask", TaskPresets.PERIODIC_2500MS)
+    // KsatLlorKcir(DATABASE_MIGRATIONS_TASK, TaskPresets.RUNONCE),
     // KsatLlorKcir(STATE_SETUP_WEBSOCKETS, TaskPresets.RUNDELAYED, 5000),
-    KsatLlorKcir(STATE_PRINTER_GENERATE_TASK, TaskPresets.RUNDELAYED, 10000),
-    KsatLlorKcir(STATE_PRINTER_GENERATE_TASK, TaskPresets.PERIODIC, 20000),
-    KsatLlorKcir(HISTORY_CACHE_TASK, TaskPresets.RUNONCE),
-    KsatLlorKcir(FILAMENT_CLEAN_TASK, TaskPresets.RUNONCE),
-    KsatLlorKcir(GITHUB_UPDATE_CHECK_TASK, TaskPresets.RUNDELAYED, 1000),
-    KsatLlorKcir(STATE_TRACK_COUNTERS, TaskPresets.PERIODIC, 30000)
+    // KsatLlorKcir(STATE_PRINTER_GENERATE_TASK, TaskPresets.RUNDELAYED, 10000)
+    // KsatLlorKcir(STATE_PRINTER_GENERATE_TASK, TaskPresets.PERIODIC, 20000),
+    // KsatLlorKcir(HISTORY_CACHE_TASK, TaskPresets.RUNONCE),
+    // KsatLlorKcir(FILAMENT_CLEAN_TASK, TaskPresets.RUNONCE),
+    // KsatLlorKcir(GITHUB_UPDATE_CHECK_TASK, TaskPresets.RUNDELAYED, 1000),
+    // KsatLlorKcir(STATE_TRACK_COUNTERS, TaskPresets.PERIODIC, 30000)
   ];
 }
 

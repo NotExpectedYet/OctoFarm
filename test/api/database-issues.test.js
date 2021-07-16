@@ -1,7 +1,7 @@
 const supertest = require("supertest");
-const { setupExpressServer } = require("../../app-core");
-const { setupEnvConfig } = require("../../app-env");
-const { serveDatabaseIssueFallbackRoutes } = require("../../app-fallbacks");
+const { setupExpressServer } = require("../../server_src/app-core");
+const { setupEnvConfig } = require("../../server_src/app-env");
+const { serveDatabaseIssueFallbackRoutes } = require("../../server_src/app-fallbacks");
 
 let server;
 

@@ -18,11 +18,13 @@ const SystemInfoBundleService = require("./services/system-info-bundle.service")
 const GithubClientService = require("./services/github-client.service");
 const HistoryService = require("./services/history.service");
 const FarmStatisticsService = require("./services/farm-statistics.service");
-const PrinterClean = require("./state/data/printerClean");
 const FileClean = require("./state/data/fileClean");
 const HistoryCache = require("./state/data/history.cache");
 const JobClean = require("./state/data/jobClean");
 const UserTokenService = require("./services/authentication/user-token.service");
+const ServerSentEventsHandler = require("./handlers/sse.handler");
+const PrinterInfoTask = require("./tasks/printer-info.task");
+const { PrinterSseTask } = require("./tasks/printer-sse.task");
 const { AppConstants } = require("./app.constants");
 
 // Create the container and set the injectionMode to PROXY (which is also the default).
@@ -56,17 +58,20 @@ container.register({
   printerGroupService: awilix.asClass(PrinterGroupService),
   printersStore: awilix.asClass(PrintersStore).singleton(),
   farmStatisticsService: awilix.asClass(FarmStatisticsService),
-  printerClean: awilix.asClass(PrinterClean).singleton(),
   fileClean: awilix.asClass(FileClean).singleton(),
   historyCache: awilix.asClass(HistoryCache).singleton(),
-  // Needs a bit of a nudge to become a singleton (it constructs things itself now)
-  // historyClean: awilix.asClass(HistoryClean).singleton(),
   historyService: awilix.asClass(HistoryService),
   jobClean: awilix.asClass(JobClean),
 
   influxSetupService: awilix.asClass(InfluxExportService).singleton(),
   scriptCheckService: awilix.asClass(ScriptCheckService),
-  scriptsService: awilix.asClass(ScriptsService)
+  scriptsService: awilix.asClass(ScriptsService),
+
+  // Provided handlers shared with controllers
+  printerViewSSEHandler: awilix.asClass(ServerSentEventsHandler).singleton(),
+  // Task bound to send on SSE Handler
+  printerSseTask: awilix.asClass(PrinterSseTask).singleton(),
+  printerInfoTask: awilix.asClass(PrinterInfoTask).singleton()
 });
 
 module.exports = container;

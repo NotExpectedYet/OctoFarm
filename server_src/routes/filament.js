@@ -1,34 +1,17 @@
 const express = require("express");
-
-const router = express.Router();
+const Logger = require("../handlers/logger.js");
 const fetch = require("node-fetch");
 const _ = require("lodash");
 const { ensureAuthenticated } = require("../middleware/auth");
 const Spool = require("../models/Filament.js");
 const Profiles = require("../models/Profiles.js");
 const ServerSettings = require("../models/ServerSettings.js");
+const { SettingsClean } = require("../state/settings.store.js");
+const { FilamentClean } = require("../state/data/filamentClean.js");
+const { FilamentManagerPlugin } = require("../services/octoprint/filament-manager-plugin.service");
 
-const settingsClean = require("../state/settings.store.js");
-
-const { SettingsClean } = settingsClean;
-
-const printerClean = require("../state/data/printerClean.js");
-
-const { PrinterClean } = printerClean;
-
-const Logger = require("../handlers/logger.js");
-
+const router = express.Router();
 const logger = new Logger("OctoFarm-FilamentManager");
-
-const filamentClean = require("../state/data/filamentClean.js");
-
-const { FilamentClean } = filamentClean;
-
-const filamentManagerPlugin = require("../runners/filamentManagerPlugin.js");
-
-const { FilamentManagerPlugin } = filamentManagerPlugin;
-
-module.exports = router;
 
 router.get("/get/printerList", ensureAuthenticated, async (req, res) => {
   const printerList = await PrinterClean.returnFilamentList();
@@ -628,3 +611,5 @@ router.post("/disableFilamentPlugin", ensureAuthenticated, async (req, res) => {
   // Return success
   res.send({ status: true });
 });
+
+module.exports = router;

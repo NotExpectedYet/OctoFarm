@@ -3,7 +3,6 @@
 const _ = require("lodash");
 const { DateTime } = require("luxon");
 const { getPrintCostNumeric } = require("../../utils/print-cost.util");
-const { HistoryClean } = require("./historyClean.js");
 const { floatOrZero } = require("../../utils/number.util");
 
 class JobClean {

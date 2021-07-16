@@ -2,7 +2,6 @@ const { ensureCurrentUserAndGroup } = require("../middleware/users");
 const { ensureAuthenticated } = require("../middleware/auth");
 const { createController } = require("awilix-express");
 const prettyHelpers = require("../../views/partials/functions/pretty.js");
-const ServerSentEventsHandler = require("../handlers/sse.handler");
 
 class ViewPrinters {
   #serverVersion;
@@ -10,13 +9,20 @@ class ViewPrinters {
   #octoFarmPageTitle;
   #octofarmUpdateService;
 
-  #sseHandler = new ServerSentEventsHandler({});
+  #sseHandler;
 
-  constructor({ serverVersion, octoFarmPageTitle, printersStore, octofarmUpdateService }) {
+  constructor({
+    serverVersion,
+    octoFarmPageTitle,
+    printersStore,
+    printerViewSSEHandler,
+    octofarmUpdateService
+  }) {
     this.#serverVersion = serverVersion;
     this.#printersStore = printersStore;
     this.#octoFarmPageTitle = octoFarmPageTitle;
     this.#octofarmUpdateService = octofarmUpdateService;
+    this.#sseHandler = printerViewSSEHandler;
   }
 
   async index(req, res) {

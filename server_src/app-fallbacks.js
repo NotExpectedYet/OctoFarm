@@ -2,11 +2,11 @@ const express = require("express");
 const expressLayouts = require("express-ejs-layouts");
 const session = require("express-session");
 const flash = require("connect-flash");
-const { AppConstants } = require("./server_src/app.constants");
+const { AppConstants } = require("./app.constants");
 const dotenv = require("dotenv");
 const path = require("path");
 
-const Logger = require("./server_src/handlers/logger.js");
+const Logger = require("./handlers/logger.js");
 const { loadControllers } = require("awilix-express");
 const logger = new Logger("OctoFarm-Fallback-Server");
 const routePath = "server_src/routes";

@@ -5,7 +5,6 @@ const prettyHelpers = require("../../views/partials/functions/pretty.js");
 const ServerSentEventsHandler = require("../handlers/sse.handler");
 const { getFilter } = require("../state/sorting.state");
 const { getSorting } = require("../state/sorting.state");
-const { PrinterClean } = require("../state/data/printerClean");
 
 class ViewDashboard {
   #serverVersion;
@@ -25,8 +24,8 @@ class ViewDashboard {
   getCommonMetadata() {
     return {
       printGroups: this.#printersStore.getPrinterGroups(),
-      currentChanges: { currentSort: getSorting(), currentFilter: getFilter() },
-      dashboardStatistics: PrinterClean.returnDashboardStatistics()
+      currentChanges: { currentSort: getSorting(), currentFilter: getFilter() }
+      // dashboardStatistics: PrinterClean.returnDashboardStatistics()
     };
   }
 

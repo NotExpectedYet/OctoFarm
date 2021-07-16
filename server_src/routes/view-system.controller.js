@@ -5,7 +5,7 @@ const { ensureAuthenticated } = require("../middleware/auth");
 const { ensureCurrentUserAndGroup } = require("../middleware/users");
 const { getDefaultDashboardSettings } = require("../constants/client-settings.constants");
 const OctoFarmManager = require("../state/octofarm.manager");
-const { fetchMongoDBConnectionString } = require("../../app-env");
+const { fetchMongoDBConnectionString } = require("../app-env");
 const { isPm2, isNodemon, isNode } = require("../utils/env.utils.js");
 
 const viewSystem = ({

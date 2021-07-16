@@ -23,7 +23,7 @@ RUN apk add --no-cache --virtual .build-deps \
     python3
 
 WORKDIR /tmp/app
-COPY package.json .
+COPY ../package.json .
 RUN npm install --only=production
 
 RUN apk del .build-deps
@@ -31,7 +31,7 @@ RUN apk del .build-deps
 FROM base as runtime
 
 COPY --chown=octofarm:octofarm --from=compiler /tmp/app/node_modules /app/node_modules
-COPY --chown=octofarm:octofarm . /app
+COPY --chown=octofarm:octofarm .. /app
 RUN rm -rf /tmp/app
 
 USER octofarm

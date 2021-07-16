@@ -9,7 +9,7 @@ const {
 } = require("../../server_src/constants/filter-sorting.constants");
 const { getSorting } = require("../../server_src/state/sorting.state");
 const { getFilter } = require("../../server_src/state/sorting.state");
-const { setupTestApp } = require("../../app-test");
+const { setupTestApp } = require("../../server_src/app-test");
 
 let request;
 

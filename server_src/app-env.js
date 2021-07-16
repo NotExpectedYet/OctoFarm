@@ -2,19 +2,19 @@ const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
 const isDocker = require("is-docker");
-const envUtils = require("./server_src/utils/env.utils");
+const envUtils = require("./utils/env.utils");
 const dotenv = require("dotenv");
-const { AppConstants } = require("./server_src/app.constants");
+const { AppConstants } = require("./app.constants");
 
-const Logger = require("./server_src/handlers/logger.js");
+const Logger = require("./handlers/logger.js");
 const logger = new Logger("OctoFarm-Environment", false);
 
 // Constants and definition
 const instructionsReferralURL = "https://github.com/OctoFarm/OctoFarm/blob/master/README.md"; // TODO replace with environment setup markdown
 const deprecatedConfigFolder = "./config";
 const deprecatedConfigFilePath = deprecatedConfigFolder + "/db.js";
-const packageJsonPath = "./package.json";
-const dotEnvPath = "./.env";
+const packageJsonPath = path.join(__dirname, "../package.json");
+const dotEnvPath = path.join(__dirname, "../.env");
 
 /**
  * Set and write the environment name to file, if applicable
@@ -83,7 +83,7 @@ function removeFolderIfEmpty(folder) {
 }
 
 function setupPackageJsonVersionOrThrow() {
-  const result = envUtils.verifyPackageJsonRequirements(__dirname);
+  const result = envUtils.verifyPackageJsonRequirements(path.join(__dirname, "../"));
   if (!result) {
     if (envUtils.isPm2()) {
       // TODO test this works under docker as well
@@ -225,7 +225,7 @@ function ensurePortSet() {
 function setupEnvConfig(skipDotEnv = false) {
   if (!skipDotEnv) {
     // This needs to be CWD of app.js, so be careful not to move this call.
-    dotenv.config({ path: path.join(__dirname, ".env") });
+    dotenv.config({ path: dotEnvPath });
     logger.info("✓ Parsed environment and (optional) .env file");
   }
 
@@ -240,7 +240,7 @@ function setupEnvConfig(skipDotEnv = false) {
 
 function getViewsPath() {
   logger.debug("Running in directory:", __dirname);
-  const viewsPath = path.join(__dirname, "./views");
+  const viewsPath = path.join(__dirname, "../views");
   if (!fs.existsSync(viewsPath)) {
     if (isDocker()) {
       throw new Error(

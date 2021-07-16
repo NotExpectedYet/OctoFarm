@@ -1,6 +1,6 @@
 const dbHandler = require("../db-handler");
 const supertest = require("supertest");
-const { setupTestApp } = require("../../app-test");
+const { setupTestApp } = require("../../server_src/app-test");
 const isDocker = require("is-docker");
 const { AppConstants } = require("../../server_src/app.constants");
 

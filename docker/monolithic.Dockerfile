@@ -13,7 +13,7 @@ RUN apt-get clean
 # Remove unwanted files
 RUN rm -rf /var/lib/apt/lists/
 
-COPY . /app
+COPY .. /app
 WORKDIR /app
 
 RUN npm ci --production
@@ -21,6 +21,6 @@ RUN npm install -g pm2
 
 EXPOSE 4000
 
-COPY docker/monolithic-entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY monolithic-entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 ENTRYPOINT ["bash", "/usr/local/bin/entrypoint.sh"]

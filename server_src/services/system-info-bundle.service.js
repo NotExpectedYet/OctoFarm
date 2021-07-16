@@ -3,7 +3,6 @@ const { writeFileSync } = require("fs");
 const { getLogsPath } = require("../utils/system-paths.utils.js");
 const { isPm2, isNodemon, isNode } = require("../utils/env.utils.js");
 const isDocker = require("is-docker");
-const { PrinterClean } = require("../state/data/printerClean.js");
 const prettyHelpers = require("../../views/partials/functions/pretty.js");
 const { AppConstants } = require("../app.constants");
 const currentVersion = process?.env[AppConstants.VERSION_KEY];

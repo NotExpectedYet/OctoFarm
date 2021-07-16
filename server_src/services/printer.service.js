@@ -81,6 +81,47 @@ class PrinterService {
   //   await printer.save();
   // }
 
+  // async sortConnection(current) {
+  //   if (!current) return null;
+  //   return {
+  //     baudrate: current.baudrate,
+  //     port: current.port,
+  //     printerProfile: current.printerProfile
+  //   };
+  // }
+
+  // grabPrinterName(printer) {
+  //   let name = null;
+  //   if (!!printer.settingsAppearance) {
+  //     if (printer.settingsAppearance.name === "" || printer.settingsAppearance.name === null) {
+  //       name = printer.printerURL;
+  //     } else {
+  //       name = printer.settingsAppearance.name;
+  //     }
+  //   } else {
+  //     name = printer.printerURL;
+  //   }
+  //   return name;
+  // }
+
+  // static sortOtherSettings(temp, webcam, system) {
+  //   const otherSettings = {
+  //     temperatureTriggers: null,
+  //     webCamSettings: null
+  //   };
+  //   if (typeof temp !== "undefined") {
+  //     otherSettings.temperatureTriggers = temp;
+  //   }
+  //   if (typeof webcam !== "undefined") {
+  //     otherSettings.webCamSettings = webcam;
+  //   }
+  //   if (typeof system !== "undefined") {
+  //     otherSettings.system = system;
+  //   }
+  //
+  //   return otherSettings;
+  // }
+
   static updateSortIndex = async (printerId, sortIndex) => {
     const filter = { _id: printerId };
     const update = { sortIndex };

@@ -7,15 +7,22 @@ try {
 
 if (!!majorVersion && majorVersion < 14) {
   // Dont require this in the normal flow (or NODE_ENV can not be fixed before start)
-  const { serveNodeVersionFallback, setupFallbackExpressServer } = require("./app-fallbacks");
+  const {
+    serveNodeVersionFallback,
+    setupFallbackExpressServer
+  } = require("./server_src/app-fallbacks");
 
   const octoFarmServer = setupFallbackExpressServer();
   serveNodeVersionFallback(octoFarmServer);
 } else {
-  const { setupEnvConfig, fetchMongoDBConnectionString, fetchOctoFarmPort } = require("./app-env");
+  const {
+    setupEnvConfig,
+    fetchMongoDBConnectionString,
+    fetchOctoFarmPort
+  } = require("./server_src/app-env");
 
   function bootAutoDiscovery() {
-    require("./server_src/runners/autoDiscovery.js");
+    require("./server_src/services/auto-discovery.service.js");
   }
 
   // Set environment/.env file and NODE_ENV if not set. Will call startup checks.
@@ -25,7 +32,7 @@ if (!!majorVersion && majorVersion < 14) {
     setupExpressServer,
     serveOctoFarmNormally,
     ensureSystemSettingsInitiated
-  } = require("./app-core");
+  } = require("./server_src/app-core");
 
   const mongoose = require("mongoose");
   const Logger = require("./server_src/handlers/logger.js");
@@ -55,7 +62,7 @@ if (!!majorVersion && majorVersion < 14) {
     })
     .catch(async (err) => {
       logger.error(err.stack);
-      const { serveDatabaseIssueFallback } = require("./app-fallbacks");
+      const { serveDatabaseIssueFallback } = require("./server_src/app-fallbacks");
       serveDatabaseIssueFallback(octoFarmServer, fetchOctoFarmPort());
     });
 
