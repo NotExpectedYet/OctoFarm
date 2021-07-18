@@ -63,6 +63,7 @@
     "passport-local": "^1.0.0",
     "passport-remember-me": "0.0.1",
     "request": "^2.88.2",
+    "rxjs": "^7.2.0",
     "semver": "^6.3.0",
     "simple-git": "^2.38.0",
     "systeminformation": "^5.7.7",

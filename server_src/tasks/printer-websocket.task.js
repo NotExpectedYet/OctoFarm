@@ -7,6 +7,8 @@ class PrinterWebsocketTask {
   #settingsStore;
   #octoPrintService;
 
+  #$event;
+
   #logger = new Logger("Printer-Websocket-Task");
 
   constructor({ printersStore, settingsStore }) {

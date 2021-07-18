@@ -11,8 +11,8 @@ module.exports = class GenericWebsocketAdapter {
   // #sessionKey;
   // #throttle;
 
-  // The adapter instance is saved here
-  #client;
+  // The adapter instance is saved here create your own private version
+  // #client;
 
   constructor({ id, webSocketURL /*, currentUser, sessionkey, throttle */ }) {
     this.#id = id.toString();

@@ -2,9 +2,12 @@ const HexNutClient = require("hexnut-client");
 const handle = require("hexnut-handle");
 const ws = require("ws");
 const GenericWebsocketAdapter = require("../../handlers/generic-websocket.adapter");
+const { Subject, Observable } = require("rxjs");
 const { OP_WS_MSG, OP_WS_SKIP } = require("./constants/websocket.constants");
 const {
+  octoPrintWebSocketRawDebug,
   octoprintParseMiddleware,
+  octoPrintWebSocketPostDebug,
   skipAnyHeaderInMiddleware,
   matchHeaderMiddleware
 } = require("./utils/websocket.utils");
@@ -20,6 +23,13 @@ class OctoPrintWebSocketAdapter extends GenericWebsocketAdapter {
   #throttle;
 
   #client;
+  messageSubject = new Subject();
+  patternObs = new Observable((subscriber) => {
+    subscriber.next(1);
+    subscriber.next(2);
+    subscriber.next(3);
+    subscriber.complete();
+  });
 
   constructor({ id, webSocketURL, currentUser, sessionkey, throttle }) {
     super({ id: id.toString(), webSocketURL });
@@ -35,10 +45,21 @@ class OctoPrintWebSocketAdapter extends GenericWebsocketAdapter {
     this.#client = new HexNutClient({ followRedirects: true }, ws);
   }
 
+  getMessageSubject() {
+    return this.patternObs;
+  }
+
   /**
    * @override This implements the opening/connecting action of our base class
    */
   start() {
+    if (!this.#currentUser || !this.#sessionKey) {
+      throw new Error(
+        `#currentUser: ${this.#currentUser} or #sessionKey ${
+          this.#sessionKey
+        } not set. Adapter failed to start.`
+      );
+    }
     this.#client.use(
       handle.connect((ctx) => {
         const data = { auth: `${this.#currentUser}:${this.#sessionKey}` };
@@ -58,8 +79,12 @@ class OctoPrintWebSocketAdapter extends GenericWebsocketAdapter {
     this.#client.onerror += (e, ctx) => {
       console.log("ws error");
     };
+
+    // Decide your recipe for adjusting to OctoPrint messages
+    this.#client.use(octoPrintWebSocketRawDebug);
     this.#client.use(octoprintParseMiddleware);
     this.#client.use(skipAnyHeaderInMiddleware(OP_WS_SKIP));
+    this.#client.use(octoPrintWebSocketPostDebug);
     this.#client.use(matchHeaderMiddleware(OP_WS_MSG.connected, this.#onConnection));
     this.#client.use(matchHeaderMiddleware(OP_WS_MSG.current, this.#handleCurrentMessage));
     this.#client.use(matchHeaderMiddleware(OP_WS_MSG.history, this.#handleHistoryMessage));
@@ -68,9 +93,11 @@ class OctoPrintWebSocketAdapter extends GenericWebsocketAdapter {
 
     this.#client.use((ctx) => {
       console.log(`OP Message received '${ctx.message.header}'`);
+      this.messageSubject.next(ctx.message);
     });
 
-    this.#client.connect(`${this.websocketURL}/sockjs/websocket`);
+    const constructedUrl = new URL("/sockjs/websocket", this.websocketURL);
+    this.#client.connect(constructedUrl);
   }
 
   /**
@@ -85,19 +112,23 @@ class OctoPrintWebSocketAdapter extends GenericWebsocketAdapter {
   }
 
   #handleCurrentMessage(ctx) {
-    // console.log(`Received current event '${ctx.message.header}'`);
+    console.log(`Received current event '${ctx.message.header}'`);
+    this.messageSubject.next(ctx.message);
   }
 
   #handleHistoryMessage(ctx) {
     // console.log(`Received history event '${ctx.message.header}'`);
+    this.messageSubject.next(ctx.message);
   }
 
   #handleTimelapseMessage(ctx) {
     // console.log(`Received timelapse event '${ctx.message.header}'`);
+    this.messageSubject.next(ctx.message);
   }
 
   #handleEventMessage(ctx) {
-    // console.log(`Received timelapse event '${ctx.message.header}'`);
+    console.log(`Received event '${ctx.message.header}'`);
+    this.messageSubject.next(ctx.message);
   }
 }
 

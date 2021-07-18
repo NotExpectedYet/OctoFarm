@@ -1,5 +1,6 @@
 const { stringify } = require("flatted");
 const Logger = require("../handlers/logger");
+const { byteCount } = require("../utils/benchmark.util");
 
 class PrinterSseTask {
   #printerViewSSEHandler;
@@ -16,10 +17,6 @@ class PrinterSseTask {
     this.#printerViewSSEHandler = printerViewSSEHandler;
     this.#printersStore = printersStore;
     this.#printerTickerStore = printerTickerStore;
-  }
-
-  byteCount(s) {
-    return encodeURI(s).split(/%..|./).length - 1;
   }
 
   async run() {
@@ -41,7 +38,7 @@ class PrinterSseTask {
     };
 
     const serializedData = JSON.stringify(sseData);
-    const transportDataSize = this.byteCount(serializedData);
+    const transportDataSize = byteCount(serializedData);
     this.updateAggregator(transportDataSize);
     this.#printerViewSSEHandler.send(serializedData);
   }

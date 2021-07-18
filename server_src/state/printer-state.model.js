@@ -19,6 +19,7 @@ class PrinterStateModel {
   #webSocket = "danger";
   #webSocketDescription = "Websocket unconnected";
   #websocketAdapter;
+  #messageSource;
   #websocketAdapterType;
   #sessionUser;
   #sessionKey;
@@ -143,10 +144,28 @@ class PrinterStateModel {
     this.#websocketAdapter = new adapterType({
       id: this.id,
       webSocketURL: this.#entityData.webSocketURL,
-      currentUser: this.#sessionUser.name,
-      sessionkey: this.#sessionKey.session,
+      currentUser: this.#sessionUser,
+      sessionkey: this.#sessionKey,
       throttle: 2
     });
+
+    this.#messageSource = this.#websocketAdapter.getMessageSubject();
+    this.#messageSource.subscribe(
+      (r) => {
+        console.log("RxJS Subject WS msg");
+        this.handleWebsocketMessage(r);
+      },
+      (e) => {
+        console.log("RxJS Subject WS error");
+      },
+      (c) => {
+        console.log("RxJS Subject WS complete");
+      }
+    );
+  }
+
+  handleWebsocketMessage(msg) {
+    console.log("ws msg RX", msg);
   }
 
   /**
@@ -161,6 +180,9 @@ class PrinterStateModel {
     this.#websocketAdapter.start();
   }
 
+  /**
+   * Reset the type of adapter provided, saving/sending state, disposing and closing the sockets.
+   */
   resetWebSocketAdapter() {
     // Call any closing message handlers now
     // ...
