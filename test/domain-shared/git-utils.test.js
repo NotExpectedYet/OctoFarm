@@ -1,10 +1,6 @@
 describe("GitUtils", () => {
   const scenarioModifiedOutput = {
-    modified: [
-      "package-lock.json",
-      "package.json",
-      "server_src/lib/serverCommands.js"
-    ],
+    modified: ["package-lock.json", "package.json", "server_src/lib/serverCommands.js"],
     ahead: 0,
     behind: 0
   };

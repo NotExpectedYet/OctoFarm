@@ -3,8 +3,7 @@ const testPath = "../../";
 jest.mock("mjpeg-decoder");
 const decoderMock = require("mjpeg-decoder");
 const dbHandler = require(testPath + "db-handler");
-const octoPrintApiServicePath =
-  rootPath + "server_src/services/octoprint/octoprint-api.service";
+const octoPrintApiServicePath = rootPath + "server_src/services/octoprint/octoprint-api.service";
 jest.mock(octoPrintApiServicePath);
 const { OctoprintApiService } = require(octoPrintApiServicePath);
 const { OctoprintApiClientService } = require(rootPath +
@@ -35,9 +34,7 @@ describe("History:Runner", () => {
   jest.mock("../../../server_src/utils/download.util");
   // FS should be mocked as late as possible in order to give MongoDB Memory Server a chance
   jest.mock("fs");
-  const {
-    HistoryCollection
-  } = require("../../../server_src/runners/history.runner");
+  const { HistoryCollection } = require("../../../server_src/services/history.runner");
 
   const basePath = "./images/historyCollection";
 
@@ -52,8 +49,7 @@ describe("History:Runner", () => {
     "http://url.myurl/?asd=123", // Python/OP doesnt like closed routes...
     "http://url.myurl?asd=123"
   ];
-  const testId =
-    'totally.illegal id with code fs.removeFile("~/.ssh/authorizedKeys")';
+  const testId = 'totally.illegal id with code fs.removeFile("~/.ssh/authorizedKeys")';
   const totallyInvalidServerSettings = {};
 
   it("should be able to download an OctoPrint timelapse", async () => {
@@ -64,34 +60,24 @@ describe("History:Runner", () => {
       totallyInvalidServerSettings
     );
 
-    expect(response).toContain(
-      `${basePath}/timelapses/${testId}-${testFilename}`
-    );
+    expect(response).toContain(`${basePath}/timelapses/${testId}-${testFilename}`);
   });
 
   it("should prevent downloading an OctoPrint thumbnail with wrong URL", async () => {
     await expect(
       async () =>
-        await HistoryCollection.grabThumbnail(
-          testIllegalURL,
-          testFilename,
-          testId,
-          { apikey: goodAPIKey }
-        ).toThrow()
+        await HistoryCollection.grabThumbnail(testIllegalURL, testFilename, testId, {
+          apikey: goodAPIKey
+        }).toThrow()
     );
   });
 
   it("should be able to download an OctoPrint thumbnail", async () => {
     for (let url of testCorrectURLs) {
-      const response = await HistoryCollection.grabThumbnail(
-        url,
-        testFilename,
-        testId,
-        { apikey: goodAPIKey }
-      );
-      expect(response).toContain(
-        `${basePath}/thumbs/${testId}-${testFilename}`
-      );
+      const response = await HistoryCollection.grabThumbnail(url, testFilename, testId, {
+        apikey: goodAPIKey
+      });
+      expect(response).toContain(`${basePath}/thumbs/${testId}-${testFilename}`);
     }
   });
 
@@ -105,9 +91,7 @@ describe("History:Runner", () => {
       testImage
     );
 
-    expect(response).toContain(
-      `${basePath}/snapshots/${testId}-${testImage}.jpg`
-    );
+    expect(response).toContain(`${basePath}/snapshots/${testId}-${testImage}.jpg`);
   });
 
   it("should fail resyncFilament without OctoPrint Connector service", async () => {
@@ -122,9 +106,7 @@ describe("History:Runner", () => {
       ]
     };
 
-    await expect(
-      async () => await HistoryCollection.resyncFilament(printer)
-    ).rejects.toContain(
+    await expect(async () => await HistoryCollection.resyncFilament(printer)).rejects.toContain(
       "OctoPrint Client Connector not instantiated. Report please."
     );
   });
@@ -142,9 +124,7 @@ describe("History:Runner", () => {
     const opClientMock = new OctoprintApiClientService({});
     await HistoryCollection.inject(opClientMock);
 
-    await expect(
-      async () => await HistoryCollection.resyncFilament(printer)
-    ).not.toThrow();
+    await expect(async () => await HistoryCollection.resyncFilament(printer)).not.toThrow();
 
     // The try catch in the code prevents rejection but also makes the error hard to spot
     // rejects.toContain(
@@ -167,9 +147,7 @@ describe("History:Runner", () => {
     const opClientMock = new OctoprintApiClientService({});
     await HistoryCollection.inject(opClientMock);
 
-    await expect(
-      async () => await HistoryCollection.resyncFilament(printer)
-    ).not.toThrow();
+    await expect(async () => await HistoryCollection.resyncFilament(printer)).not.toThrow();
 
     // The try catch in the code prevents rejection but also makes the error hard to spot
     // .rejects.toContain(
@@ -193,9 +171,7 @@ describe("History:Runner", () => {
     const opClientMock = new OctoprintApiClientService({});
     await HistoryCollection.inject(opClientMock);
 
-    await expect(
-      async () => await HistoryCollection.resyncFilament(printer)
-    ).not.toThrow();
+    await expect(async () => await HistoryCollection.resyncFilament(printer)).not.toThrow();
 
     // The try catch in the code prevents rejection but also makes the error hard to spot
     // .rejects.toContain(

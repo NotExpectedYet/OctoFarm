@@ -1,6 +1,4 @@
-const {
-  FilamentClean
-} = require("../../../server_src/lib/dataFunctions/filamentClean");
+const { FilamentClean } = require("../../../server_src/state/data/filamentClean");
 
 const dbHandler = require("../../db-handler");
 

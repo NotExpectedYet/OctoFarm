@@ -1,32 +1,26 @@
 const { OPClientErrors } = require("./octoprint-service.constants");
-const {
-  checkPluginManagerAPIDeprecation
-} = require("../../utils/compatibility.utils");
+const { checkPluginManagerAPIDeprecation } = require("../../utils/compatibility.utils");
 const { OctoprintApiService } = require("./octoprint-api.service");
 
 const octoPrintBase = "/";
 const apiBase = octoPrintBase + "api";
 const apiSettingsPart = apiBase + "/settings";
 const apiFile = (path) => apiBase + "/files/local/" + path;
-const apiFiles = (recursive = true) =>
-  apiBase + "/files?recursive=" + recursive;
+const apiFiles = (recursive = true) => apiBase + "/files?recursive=" + recursive;
 const apiConnection = apiBase + "/connection";
 const apiPrinterProfiles = apiBase + "/printerprofiles";
 const apiSystem = apiBase + "/system";
 const apiSystemInfo = apiSystem + "/info";
 const apiSystemCommands = apiSystem + "/commands";
 const apiUsers = apiBase + "/users";
-const apiLogin = (passive = true) =>
-  apiBase + "/login" + (passive ? "?passive=true" : "");
+const apiLogin = (passive = true) => apiBase + "/login" + (passive ? "?passive=true" : "");
 
 const apiPluginManager = apiBase + "/plugin/pluginmanager";
-const apiPluginManagerRepository1_6_0 =
-  octoPrintBase + "plugin/pluginmanager/repository";
+const apiPluginManagerRepository1_6_0 = octoPrintBase + "plugin/pluginmanager/repository";
 const apiSoftwareUpdateCheck = (force) =>
   octoPrintBase + "plugin/softwareupdate/check" + (force ? "?force=true" : "");
 const apiPluginPiSupport = apiBase + "/plugin/pi_support";
-const apiPluginFilamentManagerSpecificSpool =
-  apiBase + "/plugin/filamentmanager/spools";
+const apiPluginFilamentManagerSpecificSpool = apiBase + "/plugin/filamentmanager/spools";
 
 const printerValidationErrorMessage = "printer apiKey or URL undefined";
 
@@ -55,6 +49,19 @@ class OctoprintApiClientService extends OctoprintApiService {
       return await this.get(printer.printerURL, printer.apikey, route);
       // .then(r => r.json());
     }
+  }
+
+  async checkApiKeyIsGlobal(printer, retry = false) {
+    return this.getWithOptionalRetry(printer, apiSettingsPart, retry)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data?.api) {
+          throw new Error(
+            "OctoPrint API did not respond in an expected manner [checkApiKeyIsGlobal]"
+          );
+        }
+        return data.api.key === printer.apikey;
+      });
   }
 
   async getSettings(printer, retry = false) {
@@ -92,13 +99,9 @@ class OctoprintApiClientService extends OctoprintApiService {
   }
 
   async getPluginManager(printer, retry = false) {
-    const printerManagerApiCompatible = checkPluginManagerAPIDeprecation(
-      printer.octoPrintVersion
-    );
+    const printerManagerApiCompatible = checkPluginManagerAPIDeprecation(printer.octoPrintVersion);
 
-    const route = printerManagerApiCompatible
-      ? apiPluginManagerRepository1_6_0
-      : apiPluginManager;
+    const route = printerManagerApiCompatible ? apiPluginManagerRepository1_6_0 : apiPluginManager;
 
     return this.getWithOptionalRetry(printer, route, retry);
   }
@@ -112,11 +115,21 @@ class OctoprintApiClientService extends OctoprintApiService {
   }
 
   async getSoftwareUpdateCheck(printer, force, retry = false) {
-    return this.getWithOptionalRetry(
-      printer,
-      apiSoftwareUpdateCheck(force),
-      retry
-    );
+    return this.getWithOptionalRetry(printer, apiSoftwareUpdateCheck(force), retry);
+  }
+
+  async getAdminUserOrDefault(printer) {
+    const response = await this.getUsers(printer, true);
+    if (response.status != 200) throw "Didnt get 200 response";
+
+    const data = await response.json();
+    let opAdminUserName = "admin";
+    if (!!data?.users && Array.isArray(data)) {
+      const adminUser = data.users.find((user) => !!user.admin);
+      if (!adminUser) opAdminUserName = adminUser.name;
+    }
+
+    return opAdminUserName;
   }
 
   async getUsers(printer, retry = false) {

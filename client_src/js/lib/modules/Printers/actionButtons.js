@@ -94,13 +94,9 @@ function init(printer, element) {
     printerQuickDisconnected(printer._id);
   }
   if (printer.printerState.colour.category === "Offline") {
-    document.getElementById(
-      "printerQuickConnect-" + printer._id
-    ).disabled = true;
+    document.getElementById("printerQuickConnect-" + printer._id).disabled = true;
   } else {
-    document.getElementById(
-      "printerQuickConnect-" + printer._id
-    ).disabled = false;
+    document.getElementById("printerQuickConnect-" + printer._id).disabled = false;
   }
   addEventListeners(printer);
   return true;
@@ -180,11 +176,7 @@ function addEventListeners(printer) {
               let data = {
                 command: "disconnect"
               };
-              let post = await OctoPrintClient.post(
-                printer,
-                "connection",
-                data
-              );
+              let post = await OctoPrintClient.post(printer, "connection", data);
               if (typeof post !== "undefined") {
                 if (post.status === 204) {
                   UI.createAlert(
@@ -245,14 +237,10 @@ function checkQuickConnectState(printer) {
       printer.connectionOptions.baudratePreference === null ||
       printer.connectionOptions.printerProfilePreference === null
     ) {
-      document.getElementById(
-        "printerQuickConnect-" + printer._id
-      ).disabled = true;
+      document.getElementById("printerQuickConnect-" + printer._id).disabled = true;
     }
   } else {
-    document.getElementById(
-      "printerQuickConnect-" + printer._id
-    ).disabled = true;
+    document.getElementById("printerQuickConnect-" + printer._id).disabled = true;
   }
 
   if (
@@ -272,9 +260,4 @@ function checkQuickConnectState(printer) {
   }
 }
 
-export {
-  init,
-  printerQuickConnected,
-  printerQuickDisconnected,
-  checkQuickConnectState
-};
+export { init, printerQuickConnected, printerQuickDisconnected, checkQuickConnectState };

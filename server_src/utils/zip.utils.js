@@ -1,15 +1,13 @@
 const { createWriteStream, createReadStream } = require("fs");
 const { join } = require("path");
 const archiver = require("archiver");
-const Logger = require("../lib/logger.js");
+const Logger = require("../handlers/logger.js");
 
 const logger = new Logger("OctoFarm-Server");
 
 const { getLogsPath } = require("../utils/system-paths.utils.js");
 
-const {
-  checkIfFileFileExistsAndDeleteIfSo
-} = require("../utils/file.utils.js");
+const { checkIfFileFileExistsAndDeleteIfSo } = require("../utils/file.utils.js");
 
 async function createZipFile(fileName, filePaths) {
   // create a file to stream archive data to.

@@ -1,6 +1,4 @@
-const farmStatisticsService = jest.createMockFromModule(
-  "../farm-statistics.service"
-);
+const farmStatisticsService = jest.createMockFromModule("../farm-statistics.service");
 const realModule = jest.requireActual("../farm-statistics.service");
 
 let testFarmStatistics = [];

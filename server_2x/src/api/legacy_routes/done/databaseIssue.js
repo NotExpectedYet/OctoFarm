@@ -1,7 +1,0 @@
-const express = require("express");
-
-const router = express.Router();
-router.get("/", (req, res) =>
-  res.render("database", { page: "Database Warning" })
-);
-module.exports = router;

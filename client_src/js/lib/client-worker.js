@@ -45,9 +45,7 @@ export function createClientSSEWorker(url, workerEventFunction) {
         "Sorry web workers are not supported in your browser, please check the supported browser list.",
         0
       );
-      console.error(
-        `Couldn't create the web worker, please log a github issue... <br> ${e}`
-      );
+      console.error(`Couldn't create the web worker, please log a github issue... <br> ${e}`);
     }
   } else {
     // Sorry! No Web Worker support..

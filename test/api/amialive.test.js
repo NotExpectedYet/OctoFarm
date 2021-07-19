@@ -1,6 +1,6 @@
 const dbHandler = require("../db-handler");
 const supertest = require("supertest");
-const { setupTestApp } = require("../../app-test");
+const { setupTestApp } = require("../../server_src/app-test");
 const isDocker = require("is-docker");
 const { AppConstants } = require("../../server_src/app.constants");
 
@@ -18,10 +18,8 @@ const softwareUpdateChecker = require("../../server_src/services/octofarm-update
 
 describe("AmIAlive Endpoint", () => {
   it("should return ok and no update", async () => {
-    process.env[AppConstants.VERSION_KEY] =
-      require("../../package.json").version;
-    process.env.testlatest_package_version =
-      require("../../package.json").version;
+    process.env[AppConstants.VERSION_KEY] = require("../../package.json").version;
+    process.env.testlatest_package_version = require("../../package.json").version;
 
     await softwareUpdateChecker.syncLatestOctoFarmRelease();
 

@@ -12,10 +12,7 @@ async function updateBtnOnClick(printerID) {
       i: printerID
     };
 
-    const printer = await OctoFarmClient.post(
-      printerBase + printerInfoURL,
-      data
-    );
+    const printer = await OctoFarmClient.post(printerBase + printerInfoURL, data);
 
     let pluginsToUpdate = [];
     let autoSelect = [];
@@ -47,12 +44,7 @@ async function updateBtnOnClick(printerID) {
     }
   } catch (e) {
     console.error(e);
-    UI.createAlert(
-      "error",
-      `Unable to grab latest printer information: ${e}`,
-      0,
-      "clicked"
-    );
+    UI.createAlert("error", `Unable to grab latest printer information: ${e}`, 0, "clicked");
   }
 }
 
@@ -119,11 +111,7 @@ export async function updateOctoPrintPlugins(pluginList, printer) {
   }
 }
 
-export async function octoPrintPluginInstallAction(
-  printer,
-  pluginList,
-  action
-) {
+export async function octoPrintPluginInstallAction(printer, pluginList, action) {
   let cleanAction = action.charAt(0).toUpperCase() + action.slice(1);
   if (action === "install") {
     cleanAction = cleanAction + "ing";
@@ -148,11 +136,7 @@ export async function octoPrintPluginInstallAction(
         };
       }
 
-      const post = await OctoPrintClient.post(
-        printer,
-        "plugin/pluginmanager",
-        postData
-      );
+      const post = await OctoPrintClient.post(printer, "plugin/pluginmanager", postData);
       alert.close();
       if (post.status === 409) {
         UI.createAlert(
@@ -162,12 +146,7 @@ export async function octoPrintPluginInstallAction(
           "Clicked"
         );
       } else if (post.status === 400) {
-        UI.createAlert(
-          "error",
-          "Malformed request... please log an issue...",
-          4000,
-          "Clicked"
-        );
+        UI.createAlert("error", "Malformed request... please log an issue...", 4000, "Clicked");
       } else if (post.status === 200) {
         let response = await post.json();
         if (response.needs_restart || response.needs_refresh) {

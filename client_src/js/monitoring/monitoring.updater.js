@@ -118,10 +118,7 @@ function imageOrCamera(printer) {
         rotate90
       });
     } else {
-      if (
-        typeof printer.currentJob !== "undefined" &&
-        printer.currentJob.thumbnail != null
-      ) {
+      if (typeof printer.currentJob !== "undefined" && printer.currentJob.thumbnail != null) {
         return drawCamera({
           url: printer.printerURL + "/" + printer.currentJob.thumbnail,
           flipV,
@@ -138,10 +135,7 @@ function imageOrCamera(printer) {
       }
     }
   } else {
-    if (
-      typeof printer.currentJob !== "undefined" &&
-      printer.currentJob.thumbnail != null
-    ) {
+    if (typeof printer.currentJob !== "undefined" && printer.currentJob.thumbnail != null) {
       return drawCamera({
         url: printer.printerURL + "/" + printer.currentJob.thumbnail,
         flipV,
@@ -162,15 +156,11 @@ function drawListView(printer, clientSettings) {
 
   if (printer.currentProfile !== null) {
     for (let e = 0; e < printer.currentProfile.extruder.count; e++) {
-      toolList +=
-        '<div class="btn-group btn-block m-0" role="group" aria-label="Basic example">';
+      toolList += '<div class="btn-group btn-block m-0" role="group" aria-label="Basic example">';
       toolList += `<button type="button" class="btn btn-secondary btn-sm" disabled><b>Tool ${e} </b></button><button disabled id="${printer._id}-spool-${e}" type="button" class="btn btn-secondary  btn-sm"> No Spool </button><button id="${printer._id}-temperature-${e}" type="button" class="btn btn-secondary btn-sm" disabled><i class="far fa-circle "></i> 0°C <i class="fas fa-bullseye"></i> 0°C</button>`;
       toolList += "</div>";
     }
-    if (
-      printer.currentProfile.heatedBed &&
-      printer.currentProfile.heatedChamber
-    ) {
+    if (printer.currentProfile.heatedBed && printer.currentProfile.heatedChamber) {
       environment = `<small
       id="bedTemp-${printer._id}"
     class="mb-0 float-right"
@@ -265,8 +255,7 @@ function drawPanelView(printer, clientSettings) {
   let environment = "";
   if (printer.currentProfile !== null) {
     for (let e = 0; e < printer.currentProfile.extruder.count; e++) {
-      toolList +=
-        '<div class="btn-group btn-block m-0" role="group" aria-label="Basic example">';
+      toolList += '<div class="btn-group btn-block m-0" role="group" aria-label="Basic example">';
       toolList += `<button type="button" class="btn btn-secondary btn-sm" disabled><b>Tool ${e} </b></button><button disabled id="${printer._id}-spool-${e}" type="button" class="btn btn-secondary  btn-sm"> No Spool </button><button id="${printer._id}-temperature-${e}" type="button" class="btn btn-secondary btn-sm" disabled><i class="far fa-circle "></i> 0°C <i class="fas fa-bullseye"></i> 0°C</button>`;
       toolList += "</div>";
     }
@@ -543,13 +532,11 @@ function drawCameraView(printer, clientSettings) {
 
 function addListeners(printer) {
   //For now Control has to be seperated
-  document
-    .getElementById(`printerButton-${printer._id}`)
-    .addEventListener("click", async () => {
-      const printerInfo = getPrinterInfo();
-      const controlList = getControlList();
-      await PrinterManager.init(printer._id, printerInfo, controlList);
-    });
+  document.getElementById(`printerButton-${printer._id}`).addEventListener("click", async () => {
+    const printerInfo = getPrinterInfo();
+    const controlList = getControlList();
+    await PrinterManager.init(printer._id, printerInfo, controlList);
+  });
 
   //Play button listeners
   let playBtn = document.getElementById("play-" + printer._id);
@@ -651,16 +638,10 @@ function grabElements(printer) {
       resume: document.getElementById("resume-" + printer._id),
       camera: document.getElementById("camera-" + printer._id),
       currentFile: document.getElementById("currentFile-" + printer._id),
-      currentFilament: document.getElementById(
-        "currentFilament-" + printer._id
-      ),
+      currentFilament: document.getElementById("currentFilament-" + printer._id),
       state: document.getElementById("state-" + printer._id),
-      printTimeElapsed: document.getElementById(
-        "printTimeElapsed-" + printer._id
-      ),
-      remainingPrintTime: document.getElementById(
-        "remainingTime-" + printer._id
-      ),
+      printTimeElapsed: document.getElementById("printTimeElapsed-" + printer._id),
+      remainingPrintTime: document.getElementById("remainingTime-" + printer._id),
       cameraContain: document.getElementById("cameraContain-" + printer._id),
       progress: document.getElementById("progress-" + printer._id),
       bed: document.getElementById("badTemp-" + printer._id),
@@ -702,23 +683,14 @@ async function updateState(printer, clientSettings, view) {
 
   //Printer
   checkQuickConnectState(printer);
-  elements.control.disabled =
-    printer.printerState.colour.category === "Offline";
-  UI.doesElementNeedUpdating(
-    printer.printerState.state,
-    elements.state,
-    "innerHTML"
-  );
+  elements.control.disabled = printer.printerState.colour.category === "Offline";
+  UI.doesElementNeedUpdating(printer.printerState.state, elements.state, "innerHTML");
 
   let stateCategory = printer.printerState.colour.category;
   if (stateCategory === "Error!") {
     stateCategory = "Offline";
   }
-  UI.doesElementNeedUpdating(
-    cleanName(printer.printerName),
-    elements.name,
-    "innerHTML"
-  );
+  UI.doesElementNeedUpdating(cleanName(printer.printerName), elements.name, "innerHTML");
 
   switch (view) {
     case "list":
@@ -766,9 +738,7 @@ async function updateState(printer, clientSettings, view) {
         </small>
         <br>
         <small title="Expected Print Time">
-            <i class="fas fa-clock"></i> ${Calc.generateTime(
-              printer.currentJob.expectedPrintTime
-            )}
+            <i class="fas fa-clock"></i> ${Calc.generateTime(printer.currentJob.expectedPrintTime)}
         </small>
       `;
       let remainingPrintTimeFormat = `
@@ -779,16 +749,10 @@ async function updateState(printer, clientSettings, view) {
         </small>
         <br>
         <small title="Estimated Time of Arrival">
-        <i class="fas fa-calendar-alt"></i> ${
-          printer.currentJob.expectedCompletionDate
-        }
+        <i class="fas fa-calendar-alt"></i> ${printer.currentJob.expectedCompletionDate}
         </small>
       `;
-      UI.doesElementNeedUpdating(
-        printTimeElapsedFormat,
-        elements.printTimeElapsed,
-        "innerHTML"
-      );
+      UI.doesElementNeedUpdating(printTimeElapsedFormat, elements.printTimeElapsed, "innerHTML");
       UI.doesElementNeedUpdating(
         remainingPrintTimeFormat,
         elements.remainingPrintTime,
@@ -803,9 +767,7 @@ async function updateState(printer, clientSettings, view) {
         </small>
         <br>
         <small title="Expected Print Time">
-            <i class="fas fa-clock"></i> ${Calc.generateTime(
-              printer.currentJob.expectedPrintTime
-            )}
+            <i class="fas fa-clock"></i> ${Calc.generateTime(printer.currentJob.expectedPrintTime)}
         </small>
       `;
       let remainingPrintTimeFormat = `
@@ -817,11 +779,7 @@ async function updateState(printer, clientSettings, view) {
         <i class="fas fa-calendar-alt"></i> Complete!
         </small>
       `;
-      UI.doesElementNeedUpdating(
-        printTimeElapsedFormat,
-        elements.printTimeElapsed,
-        "innerHTML"
-      );
+      UI.doesElementNeedUpdating(printTimeElapsedFormat, elements.printTimeElapsed, "innerHTML");
       UI.doesElementNeedUpdating(
         remainingPrintTimeFormat,
         elements.remainingPrintTime,
@@ -846,11 +804,7 @@ async function updateState(printer, clientSettings, view) {
         <i class="fas fa-calendar-alt"></i> No Active Print
         </small>
       `;
-      UI.doesElementNeedUpdating(
-        printTimeElapsedFormat,
-        elements.printTimeElapsed,
-        "innerHTML"
-      );
+      UI.doesElementNeedUpdating(printTimeElapsedFormat, elements.printTimeElapsed, "innerHTML");
       UI.doesElementNeedUpdating(
         remainingPrintTimeFormat,
         elements.remainingPrintTime,
@@ -879,19 +833,10 @@ async function updateState(printer, clientSettings, view) {
     //No Job reset
     UI.doesElementNeedUpdating(0 + "%", elements.progress, "innerHTML");
     elements.progress.style.width = 0 + "%";
-    UI.doesElementNeedUpdating(
-      printTimeElapsedFormat,
-      elements.printTimeElapsed,
-      "innerHTML"
-    );
-    UI.doesElementNeedUpdating(
-      remainingPrintTimeFormat,
-      elements.remainingPrintTime,
-      "innerHTML"
-    );
+    UI.doesElementNeedUpdating(printTimeElapsedFormat, elements.printTimeElapsed, "innerHTML");
+    UI.doesElementNeedUpdating(remainingPrintTimeFormat, elements.remainingPrintTime, "innerHTML");
     elements.currentFile.setAttribute("title", "No File Selected");
-    elements.currentFile.innerHTML =
-      '<i class="fas fa-file-code"></i> ' + "No File Selected";
+    elements.currentFile.innerHTML = '<i class="fas fa-file-code"></i> ' + "No File Selected";
   }
 
   if (printer.tools !== null) {
@@ -899,9 +844,7 @@ async function updateState(printer, clientSettings, view) {
     for (let t = 0; t < toolKeys.length; t++) {
       if (toolKeys[t].includes("tool")) {
         const toolNumber = toolKeys[t].replace("tool", "");
-        if (
-          document.getElementById(printer._id + "-temperature-" + toolNumber)
-        ) {
+        if (document.getElementById(printer._id + "-temperature-" + toolNumber)) {
           checkTemps(
             document.getElementById(printer._id + "-temperature-" + toolNumber),
             printer.tools[0][toolKeys[t]].actual,
@@ -960,10 +903,7 @@ async function updateState(printer, clientSettings, view) {
   let hideClosed = "";
   let hideOffline = "";
 
-  if (
-    typeof clientSettings.panelView.hideOff !== "undefined" &&
-    clientSettings.panelView.hideOff
-  ) {
+  if (typeof clientSettings.panelView.hideOff !== "undefined" && clientSettings.panelView.hideOff) {
     hideOffline = "hidden";
   }
   if (
@@ -1064,10 +1004,7 @@ async function updateState(printer, clientSettings, view) {
     if (elements.row.classList.contains(hideOffline)) {
       elements.row.classList.remove(hideOffline);
     }
-    if (
-      printer.currentJob !== null &&
-      printer.currentJob.fileName !== "No File Selected"
-    ) {
+    if (printer.currentJob !== null && printer.currentJob.fileName !== "No File Selected") {
       if (view === "camera") {
         elements.start.classList.remove("hidden");
         elements.stop.classList.add("hidden");
@@ -1218,34 +1155,19 @@ export async function initMonitoring(printers, clientSettings, view) {
         let printerPanel = document.getElementById("panel-" + printers[p]._id);
         if (!printerPanel) {
           if (view === "panel") {
-            let printerHTML = await drawPanelView(
-              printers[p],
-              clientSettings,
-              view
-            );
+            let printerHTML = await drawPanelView(printers[p], clientSettings, view);
             printerArea.insertAdjacentHTML("beforeend", printerHTML);
           } else if (view === "list") {
-            let printerHTML = await drawListView(
-              printers[p],
-              clientSettings,
-              view
-            );
+            let printerHTML = await drawListView(printers[p], clientSettings, view);
             printerArea.insertAdjacentHTML("beforeend", printerHTML);
           } else if (view === "camera") {
-            let printerHTML = await drawCameraView(
-              printers[p],
-              clientSettings,
-              view
-            );
+            let printerHTML = await drawCameraView(printers[p], clientSettings, view);
             printerArea.insertAdjacentHTML("beforeend", printerHTML);
           }
           //Update the printer panel to the actual one
           printerPanel = document.getElementById("panel-" + printers[p]._id);
           //Setup Action Buttons
-          await actionButtonInit(
-            printers[p],
-            `printerActionBtns-${printers[p]._id}`
-          );
+          await actionButtonInit(printers[p], `printerActionBtns-${printers[p]._id}`);
           //Add page listeners
           addListeners(printers[p]);
           //Grab elements

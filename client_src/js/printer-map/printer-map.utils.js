@@ -36,9 +36,7 @@ export function parseGroupLocation(printer) {
   for (var i = 0; i < groupStartNames.length; i++) {
     if (printer.group.toLowerCase().indexOf(groupStartNames[i]) > -1) {
       hasGroupStartName = true;
-      printerGroupCut = printer.group
-        .toLowerCase()
-        .replace(groupStartNames[i], "");
+      printerGroupCut = printer.group.toLowerCase().replace(groupStartNames[i], "");
     }
   }
 
@@ -57,10 +55,7 @@ export function parseGroupLocation(printer) {
 }
 
 export function combineSubAndNormalCoords(coord, subCoord) {
-  return [
-    coord[0] * groupWidth + subCoord[0],
-    coord[1] * groupHeight + subCoord[1]
-  ];
+  return [coord[0] * groupWidth + subCoord[0], coord[1] * groupHeight + subCoord[1]];
 }
 
 export function findPrinterWithBlockCoordinate(parsedPrinters, coordinateXY) {
@@ -69,18 +64,12 @@ export function findPrinterWithBlockCoordinate(parsedPrinters, coordinateXY) {
   }
   return parsedPrinters
     .filter((pm) => !!pm?.realCoord)
-    .find(
-      (pm) =>
-        pm?.realCoord[0] === coordinateXY[0] &&
-        pm?.realCoord[1] === coordinateXY[1]
-    );
+    .find((pm) => pm?.realCoord[0] === coordinateXY[0] && pm?.realCoord[1] === coordinateXY[1]);
 }
 
 export function convertPrinterURLToXYCoordinate(printer) {
   if (!printer) return [-1, -1];
-  const printerIPPort = printer.printerURL
-    .replace("http://", "")
-    .replace("https://", "");
+  const printerIPPort = printer.printerURL.replace("http://", "").replace("https://", "");
   const splitIPPort = printerIPPort.split(":");
   if (!splitIPPort) {
     return;
@@ -103,10 +92,7 @@ export function convertPrinterURLToXYCoordinate(printer) {
   return [parsedPort < 2 ? 1 : 0, parsedPort === 3 || parsedPort === 0 ? 1 : 0];
 }
 
-export function findOldFiles(
-  fileList,
-  filterCriteriumDays = oldFileCriteriumDays
-) {
+export function findOldFiles(fileList, filterCriteriumDays = oldFileCriteriumDays) {
   if (!fileList) return [];
   return fileList.filter(
     (f) => Date.now() / 1000 > f.uploadDate + filterCriteriumDays * 24 * 60 * 60
@@ -121,15 +107,10 @@ export function printerStorageRatio(printer) {
   return printer.storage.free / printer.storage.total;
 }
 
-export function calculatePrinterSystemStorageStats(
-  printer,
-  oldFilesCriteriumDays = 14
-) {
+export function calculatePrinterSystemStorageStats(printer, oldFilesCriteriumDays = 14) {
   const fileList = printer.fileList.fileList;
   const clearedStorageAllFiles = fileListStorageSize(fileList);
-  const clearedStorageOldFiles = fileListStorageSize(
-    findOldFiles(fileList, oldFilesCriteriumDays)
-  );
+  const clearedStorageOldFiles = fileListStorageSize(findOldFiles(fileList, oldFilesCriteriumDays));
   return {
     storageTotal: printer.storage.total,
     storageFree: printer.storage.free,

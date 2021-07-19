@@ -17,12 +17,7 @@ async function newGcodeScript(newScript) {
     }
   }
   if (errors.length !== 0) {
-    UI.createAlert(
-      "error",
-      "You have blank fields sony jim!, sort them out...",
-      3000,
-      "Clicked"
-    );
+    UI.createAlert("error", "You have blank fields sony jim!, sort them out...", 3000, "Clicked");
     return false;
   } else {
     let lines = newScript.gcode.match(/[^\r\n]+/g);
@@ -35,33 +30,19 @@ async function newGcodeScript(newScript) {
     });
     if (newScript.id) {
       try {
-        const post = await OctoFarmClient.post(
-          "settings/customGcode/edit",
-          newScript
-        );
+        const post = await OctoFarmClient.post("settings/customGcode/edit", newScript);
         console.info(post);
       } catch (e) {
         console.error(e);
-        UI.createAlert(
-          "error",
-          "Unable to create scripts table... please check logs: ",
-          e
-        );
+        UI.createAlert("error", "Unable to create scripts table... please check logs: ", e);
       }
     } else {
       try {
-        const post = await OctoFarmClient.post(
-          "settings/customGcode",
-          newScript
-        );
+        const post = await OctoFarmClient.post("settings/customGcode", newScript);
         drawScriptTable(post);
       } catch (e) {
         console.error(e);
-        UI.createAlert(
-          "error",
-          "Unable to create scripts table... please check logs: ",
-          e
-        );
+        UI.createAlert("error", "Unable to create scripts table... please check logs: ", e);
       }
     }
   }
@@ -72,28 +53,22 @@ function editScript(script) {
   document.getElementById(`script_name_${script._id}`).disabled = false;
   document.getElementById(`script_desc_${script._id}`).disabled = false;
   document.getElementById(`script_lines_${script._id}`).disabled = false;
-  document.getElementById(`script_name_${script._id}`).value =
-    document.getElementById(`script_name_${script._id}`).placeholder;
-  document.getElementById(`script_desc_${script._id}`).value =
-    document.getElementById(`script_desc_${script._id}`).placeholder;
-  document.getElementById(`script_lines_${script._id}`).value =
-    document.getElementById(`script_lines_${script._id}`).placeholder;
-  document
-    .getElementById(`editScript-${script._id}`)
-    .classList.toggle("d-none");
-  document
-    .getElementById(`saveScript-${script._id}`)
-    .classList.toggle("d-none");
+  document.getElementById(`script_name_${script._id}`).value = document.getElementById(
+    `script_name_${script._id}`
+  ).placeholder;
+  document.getElementById(`script_desc_${script._id}`).value = document.getElementById(
+    `script_desc_${script._id}`
+  ).placeholder;
+  document.getElementById(`script_lines_${script._id}`).value = document.getElementById(
+    `script_lines_${script._id}`
+  ).placeholder;
+  document.getElementById(`editScript-${script._id}`).classList.toggle("d-none");
+  document.getElementById(`saveScript-${script._id}`).classList.toggle("d-none");
 }
 async function deleteScript(script) {
   try {
     await OctoFarmClient.get("settings/customGcode/delete/" + script._id);
-    UI.createAlert(
-      "success",
-      "Successfully deleted your script...",
-      3000,
-      "Clicked"
-    );
+    UI.createAlert("success", "Successfully deleted your script...", 3000, "Clicked");
     document.getElementById("scriptRow-" + script._id).remove();
   } catch (e) {
     console.error(e);
@@ -115,24 +90,23 @@ async function saveScript(script) {
   };
   const save = await newGcodeScript(newScript);
   if (save) {
-    document.getElementById(`script_name_${script._id}`).placeholder =
-      document.getElementById(`script_name_${script._id}`).value;
-    document.getElementById(`script_desc_${script._id}`).placeholder =
-      document.getElementById(`script_desc_${script._id}`).value;
-    document.getElementById(`script_lines_${script._id}`).placeholder =
-      document.getElementById(`script_lines_${script._id}`).value;
+    document.getElementById(`script_name_${script._id}`).placeholder = document.getElementById(
+      `script_name_${script._id}`
+    ).value;
+    document.getElementById(`script_desc_${script._id}`).placeholder = document.getElementById(
+      `script_desc_${script._id}`
+    ).value;
+    document.getElementById(`script_lines_${script._id}`).placeholder = document.getElementById(
+      `script_lines_${script._id}`
+    ).value;
     document.getElementById(`script_name_${script._id}`).value = "";
     document.getElementById(`script_desc_${script._id}`).value = "";
     document.getElementById(`script_lines_${script._id}`).value = "";
     document.getElementById(`script_name_${script._id}`).disabled = true;
     document.getElementById(`script_desc_${script._id}`).disabled = true;
     document.getElementById(`script_lines_${script._id}`).disabled = true;
-    document
-      .getElementById(`editScript-${script._id}`)
-      .classList.toggle("d-none");
-    document
-      .getElementById(`saveScript-${script._id}`)
-      .classList.toggle("d-none");
+    document.getElementById(`editScript-${script._id}`).classList.toggle("d-none");
+    document.getElementById(`saveScript-${script._id}`).classList.toggle("d-none");
   }
 }
 
@@ -144,25 +118,16 @@ function drawScriptTable(script) {
     scriptLines += `${e}\n`;
   });
 
-  scriptTable.insertAdjacentHTML(
-    "beforeend",
-    customGcodeScriptTemplate(script, scriptLines)
-  );
-  document
-    .getElementById("deleteScript-" + script._id)
-    .addEventListener("click", async (e) => {
-      await deleteScript(script);
-    });
-  document
-    .getElementById("editScript-" + script._id)
-    .addEventListener("click", async (e) => {
-      editScript(script);
-    });
-  document
-    .getElementById("saveScript-" + script._id)
-    .addEventListener("click", async (e) => {
-      await saveScript(script);
-    });
+  scriptTable.insertAdjacentHTML("beforeend", customGcodeScriptTemplate(script, scriptLines));
+  document.getElementById("deleteScript-" + script._id).addEventListener("click", async (e) => {
+    await deleteScript(script);
+  });
+  document.getElementById("editScript-" + script._id).addEventListener("click", async (e) => {
+    editScript(script);
+  });
+  document.getElementById("saveScript-" + script._id).addEventListener("click", async (e) => {
+    await saveScript(script);
+  });
 }
 
 createNewScriptBtn.addEventListener("click", async (e) => {
@@ -187,10 +152,6 @@ export async function loadCustomGcodeScriptsModel() {
     });
   } catch (e) {
     console.error(e);
-    UI.createAlert(
-      "error",
-      "Unable to create scripts table... please check logs: ",
-      e
-    );
+    UI.createAlert("error", "Unable to create scripts table... please check logs: ", e);
   }
 }

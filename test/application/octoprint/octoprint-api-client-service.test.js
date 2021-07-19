@@ -25,9 +25,10 @@ describe("OctoPrint-API-Client-Service", () => {
     const instance = new OctoprintApiClientService();
 
     // TODO Not human-friendly
-    expect(
-      async () => await instance.get(null, "key", "route", false)
-    ).rejects.toHaveProperty("code", "ERR_INVALID_URL");
+    expect(async () => await instance.get(null, "key", "route", false)).rejects.toHaveProperty(
+      "code",
+      "ERR_INVALID_URL"
+    );
   });
 
   it("should throw error on getSettings with incorrect printerURL", async () => {

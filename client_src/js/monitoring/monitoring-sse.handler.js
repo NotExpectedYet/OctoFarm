@@ -3,7 +3,7 @@ import { getViewType, setMonitoringPrinterInfo } from "./monitoring-view.state";
 import { initMonitoring } from "./monitoring.updater";
 
 let controlModal = false;
-export const monitoringWorkerURL = "/monitoringInfo/get/";
+export const monitoringWorkerURL = "/mon/sse/";
 
 export async function monitoringSSEventHandler(data) {
   if (data != false) {
@@ -21,11 +21,7 @@ export async function monitoringSSEventHandler(data) {
 
     if (event.data.clientSettings.panelView.currentOp) {
       const currentOperationsData = data.currentOperations;
-      currentOperations(
-        currentOperationsData.operations,
-        currentOperationsData.count,
-        printerInfo
-      );
+      currentOperations(currentOperationsData.operations, currentOperationsData.count, printerInfo);
     }
   }
 }

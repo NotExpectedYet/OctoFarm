@@ -21,6 +21,7 @@ class Printer {
     this.group = group;
   }
 }
+
 export class PrintersManagement {
   constructor(printerURL, camURL, apikey, group, name) {
     this.printer = new Printer(printerURL, camURL, apikey, group, name);
@@ -28,9 +29,7 @@ export class PrintersManagement {
 
   static addPrinter(newPrinter) {
     // Insert Blank Row at top of printer list
-    if (
-      document.getElementById("printerNewTable").classList.contains("d-none")
-    ) {
+    if (document.getElementById("printerNewTable").classList.contains("d-none")) {
       document.getElementById("printerNewTable").classList.remove("d-none");
     }
 
@@ -101,24 +100,18 @@ export class PrintersManagement {
       );
     }
     let currentIndex = JSON.parse(JSON.stringify(newPrintersIndex));
-    document
-      .getElementById(`delButton-${newPrintersIndex}`)
-      .addEventListener("click", (event) => {
-        UI.removeLine(
-          document.getElementById(`newPrinterCard-${currentIndex}`)
-        );
-        const table = document.getElementById("printerNewTable");
-        if (table.rows.length === 1) {
-          if (!table.classList.contains("d-none")) {
-            table.classList.add("d-none");
-          }
+    document.getElementById(`delButton-${newPrintersIndex}`).addEventListener("click", (event) => {
+      UI.removeLine(document.getElementById(`newPrinterCard-${currentIndex}`));
+      const table = document.getElementById("printerNewTable");
+      if (table.rows.length === 1) {
+        if (!table.classList.contains("d-none")) {
+          table.classList.add("d-none");
         }
-      });
-    document
-      .getElementById(`saveButton-${newPrintersIndex}`)
-      .addEventListener("click", (event) => {
-        PrintersManagement.savePrinter(event.target);
-      });
+      }
+    });
+    document.getElementById(`saveButton-${newPrintersIndex}`).addEventListener("click", (event) => {
+      PrintersManagement.savePrinter(event.target);
+    });
     newPrintersIndex++;
   }
 
@@ -175,10 +168,7 @@ export class PrintersManagement {
   static async deletePrinter(deletedPrinters) {
     if (deletedPrinters.length > 0) {
       try {
-        const printersToRemove = await OctoFarmClient.post(
-          "printers/remove",
-          deletedPrinters
-        );
+        const printersToRemove = await OctoFarmClient.post("printers/remove", deletedPrinters);
         // Should help with SSE event re-building the deleted printer causing a refresh to be needed to actually clear from UI
         await UI.delay(5000);
         const printersRemoved = printersToRemove.printersRemoved;
@@ -218,26 +208,17 @@ export class PrintersManagement {
 
       // Grab new printer cells...
       const printerURL = document.getElementById(`newPrinterURL-${newId}`);
-      const printerCamURL = document.getElementById(
-        `newPrinterCamURL-${newId}`
-      );
-      const printerAPIKEY = document.getElementById(
-        `newPrinterAPIKEY-${newId}`
-      );
+      const printerCamURL = document.getElementById(`newPrinterCamURL-${newId}`);
+      const printerAPIKEY = document.getElementById(`newPrinterAPIKEY-${newId}`);
       const printerGroup = document.getElementById(`newPrinterGroup-${newId}`);
       const printerName = document.getElementById(`newPrinterName-${newId}`);
 
       const errors = [];
       let printCheck = -1;
       if (printerURL.value !== "") {
-        const printerInfo = await OctoFarmClient.post(
-          "printers/printerInfo",
-          {}
-        );
+        const printerInfo = await OctoFarmClient.post("printers/printerInfo", {});
         printCheck = _.findIndex(printerInfo, function (o) {
-          return (
-            JSON.stringify(o.printerURL) === JSON.stringify(printerURL.value)
-          );
+          return JSON.stringify(o.printerURL) === JSON.stringify(printerURL.value);
         });
       }
       // Check information is filled correctly...
@@ -284,10 +265,7 @@ export class PrintersManagement {
           printerName.value
         ).build();
         printers.push(printer);
-        const printersToAdd = await OctoFarmClient.post(
-          "printers/add",
-          printers
-        );
+        const printersToAdd = await OctoFarmClient.post("printers/add", printers);
         const printersAdded = printersToAdd.printersAdded;
         printersAdded.forEach((printer) => {
           UI.createAlert(

@@ -19,11 +19,9 @@ export default class CustomGenerator {
       customScripts.forEach((scripts) => {
         let button = getButton(scripts);
         area.insertAdjacentHTML("beforeend", button);
-        document
-          .getElementById("gcode-" + scripts._id)
-          .addEventListener("click", (e) => {
-            this.fireCommand(scripts._id, scripts.gcode, printers);
-          });
+        document.getElementById("gcode-" + scripts._id).addEventListener("click", (e) => {
+          this.fireCommand(scripts._id, scripts.gcode, printers);
+        });
       });
     }
   }

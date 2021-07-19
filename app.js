@@ -10,7 +10,7 @@ if (!!majorVersion && majorVersion < 14) {
   const {
     serveNodeVersionFallback,
     setupFallbackExpressServer
-  } = require("./app-fallbacks");
+  } = require("./server_src/app-fallbacks");
 
   const octoFarmServer = setupFallbackExpressServer();
   serveNodeVersionFallback(octoFarmServer);
@@ -19,10 +19,10 @@ if (!!majorVersion && majorVersion < 14) {
     setupEnvConfig,
     fetchMongoDBConnectionString,
     fetchOctoFarmPort
-  } = require("./app-env");
+  } = require("./server_src/app-env");
 
   function bootAutoDiscovery() {
-    require("./server_src/runners/autoDiscovery.js");
+    require("./server_src/services/auto-discovery.service.js");
   }
 
   // Set environment/.env file and NODE_ENV if not set. Will call startup checks.
@@ -32,10 +32,10 @@ if (!!majorVersion && majorVersion < 14) {
     setupExpressServer,
     serveOctoFarmNormally,
     ensureSystemSettingsInitiated
-  } = require("./app-core");
+  } = require("./server_src/app-core");
 
   const mongoose = require("mongoose");
-  const Logger = require("./server_src/lib/logger.js");
+  const Logger = require("./server_src/handlers/logger.js");
   const logger = new Logger("OctoFarm-Server");
 
   const octoFarmServer = setupExpressServer();
@@ -52,9 +52,7 @@ if (!!majorVersion && majorVersion < 14) {
     .then(async () => {
       const port = fetchOctoFarmPort();
       if (!port || Number.isNaN(parseInt(port))) {
-        throw new Error(
-          "The server database-issue mode requires a numeric port input argument"
-        );
+        throw new Error("The server database-issue mode requires a numeric port input argument");
       }
 
       const app = await serveOctoFarmNormally(octoFarmServer);
@@ -63,8 +61,8 @@ if (!!majorVersion && majorVersion < 14) {
       });
     })
     .catch(async (err) => {
-      logger.error(err);
-      const { serveDatabaseIssueFallback } = require("./app-fallbacks");
+      logger.error(err.stack);
+      const { serveDatabaseIssueFallback } = require("./server_src/app-fallbacks");
       serveDatabaseIssueFallback(octoFarmServer, fetchOctoFarmPort());
     });
 

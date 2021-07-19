@@ -150,31 +150,21 @@ export default class Script {
         alertsTrigger.value = alert.trigger;
 
         document.getElementById("active-" + alert._id).checked = alert.active;
-        document
-          .getElementById("edit-" + alert._id)
-          .addEventListener("click", (event) => {
-            Script.edit(alert._id);
-          });
-        document
-          .getElementById("save-" + alert._id)
-          .addEventListener("click", (event) => {
-            let newAlert = {
-              active: document.getElementById("active-" + alert._id).checked,
-              trigger: document.getElementById("trigger-" + alert._id).value,
-              script: document
-                .getElementById("scriptLocation-" + alert._id)
-                .innerHTML.trim(),
-              message: document
-                .getElementById("message-" + alert._id)
-                .innerHTML.trim()
-            };
-            Script.saveEdit(alert._id, newAlert);
-          });
-        document
-          .getElementById("delete-" + alert._id)
-          .addEventListener("click", (event) => {
-            Script.delete(alert._id);
-          });
+        document.getElementById("edit-" + alert._id).addEventListener("click", (event) => {
+          Script.edit(alert._id);
+        });
+        document.getElementById("save-" + alert._id).addEventListener("click", (event) => {
+          let newAlert = {
+            active: document.getElementById("active-" + alert._id).checked,
+            trigger: document.getElementById("trigger-" + alert._id).value,
+            script: document.getElementById("scriptLocation-" + alert._id).innerHTML.trim(),
+            message: document.getElementById("message-" + alert._id).innerHTML.trim()
+          };
+          Script.saveEdit(alert._id, newAlert);
+        });
+        document.getElementById("delete-" + alert._id).addEventListener("click", (event) => {
+          Script.delete(alert._id);
+        });
       });
     } else {
       alertsTable.insertAdjacentHTML("beforeend"`
@@ -223,12 +213,7 @@ export default class Script {
     if (post.status !== 200) {
       UI.createAlert("error", "Failed to save your alert!", 3000, "Clicked");
     } else {
-      UI.createAlert(
-        "success",
-        "Successfully saved your alert!",
-        3000,
-        "Clicked"
-      );
+      UI.createAlert("success", "Successfully saved your alert!", 3000, "Clicked");
       Script.get();
     }
     let row = document.getElementById("alertList-" + id);
@@ -255,12 +240,7 @@ export default class Script {
     if (post.status !== 200) {
       UI.createAlert("error", "Failed to save your alert!", 3000, "Clicked");
     } else {
-      UI.createAlert(
-        "success",
-        "Successfully saved your alert!",
-        3000,
-        "Clicked"
-      );
+      UI.createAlert("success", "Successfully saved your alert!", 3000, "Clicked");
       Script.get();
     }
   }
@@ -271,12 +251,7 @@ export default class Script {
       UI.createAlert("error", "Failed to delete your alert.", 3000, "Clicked");
       document.getElementById("alertList-" + id).remove();
     } else {
-      UI.createAlert(
-        "success",
-        "Successfully deleted your alert.",
-        3000,
-        "Clicked"
-      );
+      UI.createAlert("success", "Successfully deleted your alert.", 3000, "Clicked");
     }
   }
   static async test(scriptLocation, message) {

@@ -40,21 +40,15 @@ export default class FileSorting {
     document.getElementById("sortFileNameUp").addEventListener("click", (e) => {
       this.sortFileName(printer, true);
     });
-    document
-      .getElementById("sortFileNameDown")
-      .addEventListener("click", (e) => {
-        this.sortFileName(printer);
-      });
-    document
-      .getElementById("sortPrintTimeUp")
-      .addEventListener("click", (e) => {
-        this.sortPrintTime(printer, true);
-      });
-    document
-      .getElementById("sortPrintTimeDown")
-      .addEventListener("click", (e) => {
-        this.sortPrintTime(printer);
-      });
+    document.getElementById("sortFileNameDown").addEventListener("click", (e) => {
+      this.sortFileName(printer);
+    });
+    document.getElementById("sortPrintTimeUp").addEventListener("click", (e) => {
+      this.sortPrintTime(printer, true);
+    });
+    document.getElementById("sortPrintTimeDown").addEventListener("click", (e) => {
+      this.sortPrintTime(printer);
+    });
     document.getElementById("sortDateUp").addEventListener("click", (e) => {
       this.sortUploadDate(printer);
     });
@@ -102,12 +96,10 @@ export default class FileSorting {
     if (reverse) {
       printer.fileList.fileList = printer.fileList.fileList.reverse();
       printer.fileList.folderList = printer.fileList.folderList.reverse();
-      sortHeader.innerHTML =
-        '<i class="fas fa-sort-numeric-down"></i> Upload Date';
+      sortHeader.innerHTML = '<i class="fas fa-sort-numeric-down"></i> Upload Date';
       this.saveSort("date", true);
     } else {
-      sortHeader.innerHTML =
-        '<i class="fas fa-sort-numeric-up"></i> Upload Date';
+      sortHeader.innerHTML = '<i class="fas fa-sort-numeric-up"></i> Upload Date';
       this.saveSort("date", false);
     }
     FileManager.drawFiles(printer, recursive);
@@ -128,12 +120,10 @@ export default class FileSorting {
     if (reverse) {
       printer.fileList.fileList = printer.fileList.fileList.reverse();
       printer.fileList.folderList = printer.fileList.folderList.reverse();
-      sortHeader.innerHTML =
-        '<i class="fas fa-sort-numeric-up"></i> Print Time';
+      sortHeader.innerHTML = '<i class="fas fa-sort-numeric-up"></i> Print Time';
       this.saveSort("time", false);
     } else {
-      sortHeader.innerHTML =
-        '<i class="fas fa-sort-numeric-down"></i> Print Time';
+      sortHeader.innerHTML = '<i class="fas fa-sort-numeric-down"></i> Print Time';
       this.saveSort("time", true);
     }
     FileManager.drawFiles(printer, recursive);

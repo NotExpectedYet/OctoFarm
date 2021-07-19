@@ -1,7 +1,4 @@
-import {
-  massDragAndDropId,
-  massDragAndDropStatusId
-} from "./printer-map.options";
+import { massDragAndDropId, massDragAndDropStatusId } from "./printer-map.options";
 
 export function constructMassDragAndDropPanelHTML() {
   return `

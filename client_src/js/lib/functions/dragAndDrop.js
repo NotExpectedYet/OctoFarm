@@ -111,12 +111,7 @@ function handleMassDrop(e, printers, currentElement) {
 }
 
 function sendFilesToPrinter(singleFileOnly, printAfterUpload, uploadableFiles, printer) {
-  UI.createAlert(
-    "warning",
-    `${Validate.getName(printer)}: started upload`,
-    3000,
-    "Clicked"
-  );
+  UI.createAlert("warning", `${Validate.getName(printer)}: started upload`, 3000, "Clicked");
 
   // Only single files can be sent to be printed immediately after upload
   if (printAfterUpload && singleFileOnly) {

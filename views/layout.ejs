@@ -25,7 +25,7 @@
     <script src="/assets/bootbox.min.js"></script>
     <script src="/assets/dist/bootstrap.min.js"></script>
     <script src="/assets/dist/vendor.min.js"></script>
-    <script src="/assets/dist/serverAliveCheck.min.js"></script>
+    <script src="/assets/dist/amialive.service.min.js"></script>
 </head>
 
 <body>
@@ -65,12 +65,12 @@
             </li>
             <li class="nav-item">
                 <a title="Davids super power tool" class="nav-link text-light text-center btn-sm d-none"
-                   id="menuListView" href="/mon/printerMap"><i class="fas fa-list"></i> Map</a>
+                   id="menuListView" href="/mon/map"><i class="fas fa-list"></i> Map</a>
             </li>
             <li class="nav-item">
                 <a title="Current Operations Monitoring Layout View"
                    class="nav-link text-light text-center btn-sm <%= noPrinters %>" id="menucurrentOperationsView"
-                   href="/mon/currentOp"><i class="fas fa-star"></i>
+                   href="/mon/current-ops"><i class="fas fa-star"></i>
                     Current Operations</a>
             </li>
             <% if(page.includes("Camera") || page.includes("List") || page.includes("Panel") || page.includes("Printer Map")){ %>

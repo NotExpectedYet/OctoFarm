@@ -1,4 +1,4 @@
-const Logger = require("../lib/logger.js");
+const Logger = require("../handlers/logger.js");
 
 const logger = new Logger("OctoFarm-Server");
 
@@ -27,9 +27,14 @@ async function bench(cb, report = false) {
   } else return result;
 }
 
+function byteCount(s) {
+  return encodeURI(s).split(/%..|./).length - 1;
+}
+
 function noop() {}
 
 module.exports = {
   bench,
+  byteCount,
   noop
 };

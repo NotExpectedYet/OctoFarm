@@ -1,17 +1,19 @@
 let tickerMessageBox = document.getElementById("printerTickerMessageBox");
-let tickerMessageBoxStatus = document.getElementById(
-  "printerManagementConnectionLogStatus"
-);
+let tickerMessageBoxStatus = document.getElementById("printerManagementConnectionLogStatus");
 
 /**
  * Checks if the ticker contains the loader element and removes it.
  * Also updates the tickers styling to remove the d-flex class.
  */
-function checkIfLoaderExistsAndRemove() {
+export function checkIfLoaderExistsAndRemove(errored = false) {
   const loader = document.getElementById("printerTickerLoader");
   if (loader) {
-    tickerMessageBox.classList.remove("d-flex");
-    loader.remove();
+    if (errored) {
+      tickerMessageBox.innerText = "No logs received ❌";
+    } else {
+      tickerMessageBox.classList.remove("d-flex");
+      loader.remove();
+    }
   }
 }
 
@@ -33,7 +35,6 @@ function updateStatus(lineLength) {
  * Updates the printer ticker on printer manager
  */
 export function updateConnectionLog(list) {
-  const textList = "";
   checkIfLoaderExistsAndRemove();
   updateStatus(list.length);
   list.forEach((e) => {

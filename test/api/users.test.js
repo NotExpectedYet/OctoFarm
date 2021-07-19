@@ -1,6 +1,6 @@
 const dbHandler = require("../db-handler");
 const supertest = require("supertest");
-const { setupTestApp } = require("../../app-test");
+const { setupTestApp } = require("../../server_src/app-test");
 
 let request;
 
@@ -61,10 +61,7 @@ describe("Users API", () => {
       password2: "deeeeeeewd",
       remember_me: "asdasdasd"
     };
-    const response = await request
-      .post(registerRoute)
-      .redirects(1)
-      .send(credentials);
+    const response = await request.post(registerRoute).redirects(1).send(credentials);
     expect(response.statusCode).toEqual(200);
 
     const cookies = getCookies(response);

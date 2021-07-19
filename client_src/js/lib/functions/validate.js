@@ -25,10 +25,7 @@ export default class Validate {
       /^[\],:{}\s]*$/.test(
         file
           .replace(/\\["\\\/bfnrtu]/g, "@")
-          .replace(
-            /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,
-            "]"
-          )
+          .replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, "]")
           .replace(/(?:^|:|,)(?:\s*\[)+/g, "")
       )
     ) {
@@ -39,10 +36,7 @@ export default class Validate {
   }
   static getName(printer) {
     if (typeof printer.settingsAppearance != "undefined") {
-      if (
-        printer.settingsAppearance.name === "" ||
-        printer.settingsAppearance.name === null
-      ) {
+      if (printer.settingsAppearance.name === "" || printer.settingsAppearance.name === null) {
         return printer.printerURL;
       } else {
         return printer.settingsAppearance.name;

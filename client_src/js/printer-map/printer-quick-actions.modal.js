@@ -25,10 +25,7 @@ export function getFileRow(file, index) {
       ${file.name}
     </td>
     <td class="text-right">
-      <strong class="badge badge-dark">${humanFileSize(
-        file?.fileSize,
-        true
-      )}</strong>
+      <strong class="badge badge-dark">${humanFileSize(file?.fileSize, true)}</strong>
     </td>
     <td>${timeDifference(Date.now(), file.uploadDate * 1000)}</td>
     <td>${secondsToTime(file.expectedPrintTime)}</td>
@@ -105,10 +102,7 @@ export const printerQuickActionsModal = (printer) => {
   const files = printer?.fileList;
   const fileListSorted = getSortedPrinterFiles(files);
   const filesOutdated = findOldFiles(fileListSorted, presetFilterOldFilesDays);
-  const storageStats = calculatePrinterSystemStorageStats(
-    printer,
-    presetFilterOldFilesDays
-  );
+  const storageStats = calculatePrinterSystemStorageStats(printer, presetFilterOldFilesDays);
   const storageBadges = calculatePrinterSystemStorageBadges(storageStats);
 
   const hasNoOutdatedFiles = !filesOutdated || filesOutdated?.length === 0;
@@ -118,26 +112,22 @@ export const printerQuickActionsModal = (printer) => {
 </span><br/>
 
 <strong>
-    Storage Free: <span class="badge ${
-      storageBadges.storageRatioBadge
-    }">${humanFileSize(storageStats.storageFree)} of ${humanFileSize(
-    storageStats.storageTotal
-  )}</span><br/>
+    Storage Free: <span class="badge ${storageBadges.storageRatioBadge}">${humanFileSize(
+    storageStats.storageFree
+  )} of ${humanFileSize(storageStats.storageTotal)}</span><br/>
     Removable (${presetFilterOldFilesDays} days+): <span class="badge ${
     storageBadges.clearedOldFilesBadge
   }">${humanFileSize(storageStats.clearedStorageOldFiles)}</span><br/>
-    Removable (all): <span class="badge ${
-      storageBadges.clearedAllFilesBadge
-    }">${humanFileSize(storageStats.clearedStorageAllFiles)}</span>
+    Removable (all): <span class="badge ${storageBadges.clearedAllFilesBadge}">${humanFileSize(
+    storageStats.clearedStorageAllFiles
+  )}</span>
 </strong><br/>
 
 <hr style="margin: 10px 0 10px 0;" />
 
 <button class="btn btn-outline-warning ${
     hasNoOutdatedFiles ? "disabled" : ""
-  }" id="${actionDeleteOldFiles}">Clear ${
-    filesOutdated?.length
-  } old files (2 weeks+)</button>
+  }" id="${actionDeleteOldFiles}">Clear ${filesOutdated?.length} old files (2 weeks+)</button>
 <button ${
     hasFiles ? "" : "disabled "
   } class="btn btn-outline-danger" id="${actionDeleteAllFiles}">Clear all ${

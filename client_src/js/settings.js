@@ -57,22 +57,18 @@ document.getElementById("restartOctoFarmBtn").addEventListener("click", (e) => {
 document.getElementById("updateOctoFarmBtn").addEventListener("click", (e) => {
   ServerSettings.updateOctoFarmCommand(false);
 });
-document
-  .getElementById("checkUpdatesForOctoFarmBtn")
-  .addEventListener("click", (e) => {
-    ServerSettings.checkForOctoFarmUpdates();
-  });
+document.getElementById("checkUpdatesForOctoFarmBtn").addEventListener("click", (e) => {
+  ServerSettings.checkForOctoFarmUpdates();
+});
 
 document.getElementById("exportAlerts").addEventListener("click", (e) => {
   // Validate Printer Form, then Add
   ServerSettings.exportDatabases("AlertsDB");
 });
-document
-  .getElementById("exportClientSettings")
-  .addEventListener("click", (e) => {
-    // Validate Printer Form, then Add
-    ServerSettings.exportDatabases("ClientSettingsDB");
-  });
+document.getElementById("exportClientSettings").addEventListener("click", (e) => {
+  // Validate Printer Form, then Add
+  ServerSettings.exportDatabases("ClientSettingsDB");
+});
 document.getElementById("exportFilament").addEventListener("click", (e) => {
   // Validate Printer Form, then Add
   ServerSettings.exportDatabases("FilamentDB");
@@ -89,28 +85,22 @@ document.getElementById("exportRoomData").addEventListener("click", (e) => {
   // Validate Printer Form, then Add
   ServerSettings.exportDatabases("roomDataDB");
 });
-document
-  .getElementById("exportServerSettings")
-  .addEventListener("click", (e) => {
-    // Validate Printer Form, then Add
-    ServerSettings.exportDatabases("ServerSettingsDB");
-  });
+document.getElementById("exportServerSettings").addEventListener("click", (e) => {
+  // Validate Printer Form, then Add
+  ServerSettings.exportDatabases("ServerSettingsDB");
+});
 document.getElementById("exportUsers").addEventListener("click", (e) => {
   // Validate Printer Form, then Add
   ServerSettings.exportDatabases("UserDB");
 });
 
-document
-  .getElementById("setupTimelapseOctoPrint")
-  .addEventListener("click", async (e) => {
-    await setupOctoPrintClientsforTimelapse();
-  });
+document.getElementById("setupTimelapseOctoPrint").addEventListener("click", async (e) => {
+  await setupOctoPrintClientsforTimelapse();
+});
 
-document
-  .getElementById("logDumpGenerateBtn")
-  .addEventListener("click", async (e) => {
-    await ServerSettings.generateLogFileDump();
-  });
+document.getElementById("logDumpGenerateBtn").addEventListener("click", async (e) => {
+  await ServerSettings.generateLogFileDump();
+});
 
 async function setupOctoPrintClientsforTimelapse() {
   let printers = await OctoFarmclient.post("printers/printerInfo");
@@ -145,16 +135,11 @@ async function setupOctoPrintClientsforTimelapse() {
           };
           for (let i = 0; i < printers.length; i++) {
             if (printers[i].printerState.colour.category !== "Offline") {
-              let sett = await OctoPrintClient.post(
-                printers[i],
-                "settings",
-                settings
-              );
+              let sett = await OctoPrintClient.post(printers[i], "settings", settings);
               if (sett.status === 200) {
                 UI.createAlert(
                   "success",
-                  printers[i].printerName +
-                    ": Updated your web camera settings!",
+                  printers[i].printerName + ": Updated your web camera settings!",
                   1000,
                   "Clicked"
                 );
@@ -166,16 +151,11 @@ async function setupOctoPrintClientsforTimelapse() {
                   "Clicked"
                 );
               }
-              let time = await OctoPrintClient.post(
-                printers[i],
-                "timelapse",
-                timelapse
-              );
+              let time = await OctoPrintClient.post(printers[i], "timelapse", timelapse);
               if (time.status === 200) {
                 UI.createAlert(
                   "success",
-                  printers[i].printerName +
-                    ": Updated your timelapse settings!",
+                  printers[i].printerName + ": Updated your timelapse settings!",
                   1000,
                   "Clicked"
                 );
@@ -195,12 +175,7 @@ async function setupOctoPrintClientsforTimelapse() {
       }
     });
   } else {
-    UI.createAlert(
-      "error",
-      "Sorry OctoFarm is not responding...",
-      3000,
-      "Clicked"
-    );
+    UI.createAlert("error", "Sorry OctoFarm is not responding...", 3000, "Clicked");
   }
   // ?
   // OctoPrintClient.post;
@@ -212,12 +187,7 @@ document.getElementById("resetDashboardBtn").addEventListener("click", (e) => {
   if (serializedData !== null && serializedData.length !== 0) {
     localStorage.removeItem("dashboardConfiguration");
   }
-  UI.createAlert(
-    "success",
-    "Dashboard data cleared from browser",
-    3000,
-    "clicked"
-  );
+  UI.createAlert("success", "Dashboard data cleared from browser", 3000, "clicked");
 });
 
 let oldServerSettings = {};
@@ -424,10 +394,7 @@ const optionsCPU = {
     }
   }
 };
-const systemChartCPU = new ApexCharts(
-  document.querySelector("#systemChartCPU"),
-  optionsCPU
-);
+const systemChartCPU = new ApexCharts(document.querySelector("#systemChartCPU"), optionsCPU);
 systemChartCPU.render();
 const systemChartMemory = new ApexCharts(
   document.querySelector("#systemChartMemory"),
@@ -494,17 +461,13 @@ class ClientSettings {
       })
       .then((res) => {
         // localStorage.setItem("clientSettings", JSON.stringify(res));
-        document.getElementById("panelCurrentOpOn").checked =
-          res.panelView.currentOp;
-        document.getElementById("panelHideOffline").checked =
-          res.panelView.hideOff;
-        document.getElementById("panelHideClosed").checked =
-          res.panelView.hideClosed;
+        document.getElementById("panelCurrentOpOn").checked = res.panelView.currentOp;
+        document.getElementById("panelHideOffline").checked = res.panelView.hideOff;
+        document.getElementById("panelHideClosed").checked = res.panelView.hideClosed;
         // document.getElementById("panelHideIdle").checked =
         //   res.panelView.hideIdle;
         if (res.panelView.printerRows) {
-          document.getElementById("selectCameraGrid").value =
-            res.panelView.printerRows;
+          document.getElementById("selectCameraGrid").value = res.panelView.printerRows;
         } else {
           document.getElementById("selectCameraGrid").value = 2;
         }
@@ -514,8 +477,7 @@ class ClientSettings {
             res.dashboard.farmActivity.currentOperations;
           document.getElementById("cumulativeTimes").checked =
             res.dashboard.farmActivity.cumulativeTimes;
-          document.getElementById("averageTimes").checked =
-            res.dashboard.farmActivity.averageTimes;
+          document.getElementById("averageTimes").checked = res.dashboard.farmActivity.averageTimes;
 
           document.getElementById("printerState").checked =
             res.dashboard.printerStates.printerState;
@@ -600,40 +562,28 @@ class ClientSettings {
         ],
         savedLayout: localStorage.getItem("dashboardConfiguration"),
         farmActivity: {
-          currentOperations:
-            document.getElementById("currentOperations").checked,
+          currentOperations: document.getElementById("currentOperations").checked,
           cumulativeTimes: document.getElementById("cumulativeTimes").checked,
           averageTimes: document.getElementById("averageTimes").checked
         },
         printerStates: {
           printerState: document.getElementById("printerState").checked,
           printerTemps: document.getElementById("printerTemps").checked,
-          printerUtilisation:
-            document.getElementById("printerUtilisation").checked,
+          printerUtilisation: document.getElementById("printerUtilisation").checked,
           printerProgress: document.getElementById("printerProgress").checked,
           currentStatus: document.getElementById("currentStatus").checked
         },
         farmUtilisation: {
-          currentUtilisation:
-            document.getElementById("currentUtilisation").checked,
+          currentUtilisation: document.getElementById("currentUtilisation").checked,
           farmUtilisation: document.getElementById("farmUtilisation").checked
         },
         historical: {
-          weeklyUtilisation:
-            document.getElementById("weeklyUtilisation").checked,
-          hourlyTotalTemperatures: document.getElementById(
-            "hourlyTotalTemperatures"
-          ).checked,
-          environmentalHistory: document.getElementById("environmentalHistory")
-            .checked,
-          historyCompletionByDay: document.getElementById(
-            "printCompletionCheck"
-          ).checked,
-          filamentUsageByDay:
-            document.getElementById("filamentUsageCheck").checked,
-          filamentUsageOverTime: document.getElementById(
-            "filamentUsageOverTimeCheck"
-          ).checked
+          weeklyUtilisation: document.getElementById("weeklyUtilisation").checked,
+          hourlyTotalTemperatures: document.getElementById("hourlyTotalTemperatures").checked,
+          environmentalHistory: document.getElementById("environmentalHistory").checked,
+          historyCompletionByDay: document.getElementById("printCompletionCheck").checked,
+          filamentUsageByDay: document.getElementById("filamentUsageCheck").checked,
+          filamentUsageOverTime: document.getElementById("filamentUsageOverTimeCheck").checked
         }
       }
     };
@@ -665,26 +615,13 @@ class ServerSettings {
       })
       .then((res) => {
         if (!res || res.database.length === 0) {
-          UI.createAlert(
-            "error",
-            "Database could not be contacted",
-            3000,
-            "clicked"
-          );
+          UI.createAlert("error", "Database could not be contacted", 3000, "clicked");
           return;
         }
         if (res.databases[0].length !== 0) {
-          FileOperations.download(
-            database + ".json",
-            JSON.stringify(res.databases)
-          );
+          FileOperations.download(database + ".json", JSON.stringify(res.databases));
         } else {
-          UI.createAlert(
-            "warning",
-            "Database is empty, will not export...",
-            3000,
-            "clicked"
-          );
+          UI.createAlert("warning", "Database is empty, will not export...", 3000, "clicked");
         }
       });
   }
@@ -696,24 +633,17 @@ class ServerSettings {
       })
       .then((res) => {
         oldServerSettings = res;
-        document.getElementById("webSocketThrottle").value =
-          res.onlinePolling.seconds;
+        document.getElementById("webSocketThrottle").value = res.onlinePolling.seconds;
         document.getElementById("serverPortNo").value = res.server.port;
-        document.getElementById("requireLogin").checked =
-          res.server.loginRequired;
-        document.getElementById("requireRegistration").checked =
-          res.server.registration;
+        document.getElementById("requireLogin").checked = res.server.loginRequired;
+        document.getElementById("requireRegistration").checked = res.server.registration;
 
-        document.getElementById("webSocketRetry").value =
-          res.timeout.webSocketRetry / 1000;
-        document.getElementById("APITimeout").value =
-          res.timeout.apiTimeout / 1000;
-        document.getElementById("APIRetryTimeout").value =
-          res.timeout.apiRetryCutoff / 1000;
+        document.getElementById("webSocketRetry").value = res.timeout.webSocketRetry / 1000;
+        document.getElementById("APITimeout").value = res.timeout.apiTimeout / 1000;
+        document.getElementById("APIRetryTimeout").value = res.timeout.apiRetryCutoff / 1000;
         document.getElementById("APIRetry").value = res.timeout.apiRetry / 1000;
         if (typeof res.filament !== "undefined") {
-          document.getElementById("checkFilament").checked =
-            res.filament.filamentCheck;
+          document.getElementById("checkFilament").checked = res.filament.filamentCheck;
         }
 
         if (!res.filamentManager) {
@@ -721,23 +651,16 @@ class ServerSettings {
           filManager.addEventListener("click", async (event) => {
             filManager.innerHTML =
               '<i class="fas fa-sync fa-spin"></i> <br> Syncing <br> Please Wait...';
-            let post = await OctoFarmclient.post(
-              "filament/filamentManagerSync",
-              { activate: true }
-            );
+            let post = await OctoFarmclient.post("filament/filamentManagerSync", {
+              activate: true
+            });
             post = await post.json();
             if (post.status) {
-              filManager.innerHTML =
-                '<i class="fas fa-sync"></i> <br> Sync Filament Manager';
+              filManager.innerHTML = '<i class="fas fa-sync"></i> <br> Sync Filament Manager';
               filManager.disabled = true;
-              UI.createAlert(
-                "success",
-                "Filament Manager Plugin successfully synced",
-                3000
-              );
+              UI.createAlert("success", "Filament Manager Plugin successfully synced", 3000);
             } else {
-              filManager.innerHTML =
-                '<i class="fas fa-sync"></i> <br> Sync Filament Manager';
+              filManager.innerHTML = '<i class="fas fa-sync"></i> <br> Sync Filament Manager';
               filManager.disabled = false;
               UI.createAlert(
                 "error",
@@ -752,47 +675,34 @@ class ServerSettings {
             filManager.disabled = true;
             filManager.innerHTML =
               '<i class="fas fa-sync fa-spin"></i> <br> Syncing... <br> Please Wait...';
-            let post = await OctoFarmclient.post(
-              "filament/filamentManagerReSync"
-            );
+            let post = await OctoFarmclient.post("filament/filamentManagerReSync");
             post = await post.json();
             if (post.status) {
-              filManager.innerHTML =
-                '<i class="fas fa-sync"></i> <br> Re-Sync Database';
+              filManager.innerHTML = '<i class="fas fa-sync"></i> <br> Re-Sync Database';
               filManager.disabled = false;
             } else {
-              filManager.innerHTML =
-                '<i class="fas fa-sync"></i> <br> Re-Sync Database';
+              filManager.innerHTML = '<i class="fas fa-sync"></i> <br> Re-Sync Database';
               filManager.disabled = false;
             }
           });
-          const disableFilManager = document.getElementById(
-            "disable-FilamentManager"
-          );
+          const disableFilManager = document.getElementById("disable-FilamentManager");
           disableFilManager.addEventListener("click", async (event) => {
-            let post = await OctoFarmclient.post(
-              "filament/disableFilamentPlugin",
-              { activate: true }
-            );
+            let post = await OctoFarmclient.post("filament/disableFilamentPlugin", {
+              activate: true
+            });
             post = await post.json();
           });
         }
         if (typeof res.history !== "undefined") {
-          document.getElementById("thumbOnComplete").checked =
-            res.history.thumbnails.onComplete;
-          document.getElementById("thumbOnFailure").checked =
-            res.history.thumbnails.onFailure;
-          document.getElementById("snapOnComplete").checked =
-            res.history.snapshot.onComplete;
-          document.getElementById("snapOnFailure").checked =
-            res.history.snapshot.onFailure;
+          document.getElementById("thumbOnComplete").checked = res.history.thumbnails.onComplete;
+          document.getElementById("thumbOnFailure").checked = res.history.thumbnails.onFailure;
+          document.getElementById("snapOnComplete").checked = res.history.snapshot.onComplete;
+          document.getElementById("snapOnFailure").checked = res.history.snapshot.onFailure;
           if (typeof res.history.timelapse !== "undefined") {
             document.getElementById("timelapseOnComplete").checked =
               res.history.timelapse.onComplete;
-            document.getElementById("timelapseOnFailure").checked =
-              res.history.timelapse.onFailure;
-            document.getElementById("timelapseDelete").checked =
-              res.history.timelapse.deleteAfter;
+            document.getElementById("timelapseOnFailure").checked = res.history.timelapse.onFailure;
+            document.getElementById("timelapseDelete").checked = res.history.timelapse.deleteAfter;
           }
         } else {
           document.getElementById("thumbOnComplete").checked = true;
@@ -801,27 +711,22 @@ class ServerSettings {
           document.getElementById("snapOnFailure").checked = true;
         }
         if (typeof res.influxExport !== "undefined") {
-          document.getElementById("infActivateInfluxExport").checked =
-            res.influxExport.active;
+          document.getElementById("infActivateInfluxExport").checked = res.influxExport.active;
           if (res.influxExport.host !== null) {
             document.getElementById("infHostIP").value = res.influxExport.host;
           }
           if (res.influxExport.username !== null) {
-            document.getElementById("infUsername").value =
-              res.influxExport.username;
+            document.getElementById("infUsername").value = res.influxExport.username;
           }
           if (res.influxExport.password !== null) {
-            document.getElementById("infPassword").value =
-              res.influxExport.password;
+            document.getElementById("infPassword").value = res.influxExport.password;
           }
           if (res.influxExport.database !== null) {
-            document.getElementById("infDatabase").value =
-              res.influxExport.database;
+            document.getElementById("infDatabase").value = res.influxExport.database;
           }
           document.getElementById("infHostPort").value = res.influxExport.port;
 
-          document.getElementById("infDuration").value =
-            res.influxExport.retentionPolicy.duration;
+          document.getElementById("infDuration").value = res.influxExport.retentionPolicy.duration;
           document.getElementById("infReplication").value =
             res.influxExport.retentionPolicy.replication;
           document.getElementById("infRetention").checked =
@@ -860,11 +765,9 @@ class ServerSettings {
             </tr>
         `
       );
-      document
-        .getElementById(logs.name)
-        .addEventListener("click", async (event) => {
-          window.open(`/settings/server/logs/${logs.name}`);
-        });
+      document.getElementById(logs.name).addEventListener("click", async (event) => {
+        window.open(`/settings/server/logs/${logs.name}`);
+      });
     });
   }
 
@@ -879,11 +782,7 @@ class ServerSettings {
     //Make sure response from server is received, and make sure the status is 200
     if (systemRestart && systemRestart.status !== 200) {
       // This alert is pretty mute as the serverAliveCheck will notify before...
-      UI.createAlert(
-        "error",
-        "Server could not be contacted... is it online?",
-        3000
-      );
+      UI.createAlert("error", "Server could not be contacted... is it online?", 3000);
       setTimeout(() => {
         if (systemRestartBtn) {
           systemRestartBtn.disabled = false;
@@ -933,21 +832,13 @@ class ServerSettings {
       updateData.doWeInstallPackages = true;
     }
 
-    let updateOctoFarm = await OctoFarmclient.post(
-      "settings/server/update/octofarm",
-      updateData
-    );
+    let updateOctoFarm = await OctoFarmclient.post("settings/server/update/octofarm", updateData);
     //Make sure response from server is received, and make sure the status is 200
     if (updateOctoFarm && updateOctoFarm.status !== 200) {
       // This alert is pretty mute as the serverAliveCheck will notify before...
-      UI.createAlert(
-        "error",
-        "Server could not be contacted... is it online?",
-        5000
-      );
+      UI.createAlert("error", "Server could not be contacted... is it online?", 5000);
       if (updateOctoFarmBtn) {
-        updateOctoFarmBtn.innerHTML =
-          '<i class="fas fa-thumbs-up"></i> Update OctoFarm';
+        updateOctoFarmBtn.innerHTML = '<i class="fas fa-thumbs-up"></i> Update OctoFarm';
         updateOctoFarmBtn.disabled = false;
       }
       return;
@@ -956,9 +847,7 @@ class ServerSettings {
 
     // Local changes are detected, question whether we overwrite or cancel..
     if (
-      updateOctoFarm.message.includes(
-        "The update is failing due to local changes been detected."
-      )
+      updateOctoFarm.message.includes("The update is failing due to local changes been detected.")
     ) {
       bootbox.confirm({
         title: '<span class="text-warning">Local file changes detected!</span>',
@@ -978,8 +867,7 @@ class ServerSettings {
             ServerSettings.updateOctoFarmCommand(true);
           } else {
             if (updateOctoFarmBtn) {
-              updateOctoFarmBtn.innerHTML =
-                '<i class="fas fa-thumbs-up"></i> Update OctoFarm';
+              updateOctoFarmBtn.innerHTML = '<i class="fas fa-thumbs-up"></i> Update OctoFarm';
               updateOctoFarmBtn.disabled = false;
             }
           }
@@ -994,8 +882,7 @@ class ServerSettings {
       )
     ) {
       bootbox.confirm({
-        title:
-          '<span class="text-warning">Missing dependencies detected!</span>',
+        title: '<span class="text-warning">Missing dependencies detected!</span>',
         message: updateOctoFarm?.message,
         buttons: {
           cancel: {
@@ -1012,8 +899,7 @@ class ServerSettings {
             ServerSettings.updateOctoFarmCommand(false, true);
           } else {
             if (updateOctoFarmBtn) {
-              updateOctoFarmBtn.innerHTML =
-                '<i class="fas fa-thumbs-up"></i> Update OctoFarm';
+              updateOctoFarmBtn.innerHTML = '<i class="fas fa-thumbs-up"></i> Update OctoFarm';
               updateOctoFarmBtn.disabled = false;
             }
           }
@@ -1029,8 +915,7 @@ class ServerSettings {
       "clicked"
     );
     if (updateOctoFarmBtn) {
-      updateOctoFarmBtn.innerHTML =
-        '<i class="fas fa-thumbs-up"></i> Update OctoFarm';
+      updateOctoFarmBtn.innerHTML = '<i class="fas fa-thumbs-up"></i> Update OctoFarm';
     }
 
     if (updateOctoFarm?.haveWeSuccessfullyUpdatedOctoFarm) {
@@ -1044,9 +929,7 @@ class ServerSettings {
     }
   }
   static async checkForOctoFarmUpdates() {
-    let forceCheckForUpdatesBtn = document.getElementById(
-      "checkUpdatesForOctoFarmBtn"
-    );
+    let forceCheckForUpdatesBtn = document.getElementById("checkUpdatesForOctoFarmBtn");
     // Make sure check button is disbaled after key press
     if (forceCheckForUpdatesBtn) {
       forceCheckForUpdatesBtn.disabled = true;
@@ -1089,12 +972,7 @@ class ServerSettings {
         "Clicked"
       );
     } else {
-      UI.createAlert(
-        "warning",
-        "Sorry there are no new updates available!",
-        5000,
-        "Clicked"
-      );
+      UI.createAlert("warning", "Sorry there are no new updates available!", 5000, "Clicked");
     }
 
     setTimeout(() => {
@@ -1189,8 +1067,7 @@ class ServerSettings {
         UI.createAlert(`${res.status}`, `${res.msg}`, 3000, "Clicked");
         if (reboot) {
           bootbox.confirm({
-            message:
-              "Your settings changes require a restart, would you like to do this now?",
+            message: "Your settings changes require a restart, would you like to do this now?",
             buttons: {
               cancel: {
                 label: '<i class="fa fa-times"></i> Cancel'
@@ -1213,31 +1090,19 @@ class ServerSettings {
     if (spinner) {
       spinner.classList.remove("d-none");
     }
-    let logDumpResponse = await OctoFarmclient.post(
-      "settings/server/logs/generateLogDump",
-      {}
-    );
+    let logDumpResponse = await OctoFarmclient.post("settings/server/logs/generateLogDump", {});
     // Safely assume the spinner is done with here after response from server...
     if (spinner) {
       spinner.classList.add("d-none");
     }
     if (!logDumpResponse || logDumpResponse?.status !== 200) {
-      UI.createAlert(
-        "error",
-        "Unable to contact server, is it online?",
-        0,
-        "clicked"
-      );
+      UI.createAlert("error", "Unable to contact server, is it online?", 0, "clicked");
       return;
     }
 
     logDumpResponse = await logDumpResponse.json();
 
-    if (
-      !logDumpResponse?.status ||
-      !logDumpResponse?.msg ||
-      !logDumpResponse?.zipDumpPath
-    ) {
+    if (!logDumpResponse?.status || !logDumpResponse?.msg || !logDumpResponse?.zipDumpPath) {
       UI.createAlert(
         "error",
         "There was an issue with the servers response, please check your logs",
@@ -1247,12 +1112,7 @@ class ServerSettings {
       return;
     }
 
-    UI.createAlert(
-      logDumpResponse.status,
-      logDumpResponse.msg,
-      5000,
-      "clicked"
-    );
+    UI.createAlert(logDumpResponse.status, logDumpResponse.msg, 5000, "clicked");
 
     // Error detected so no need to create button.
     if (logDumpResponse.status === "error") {

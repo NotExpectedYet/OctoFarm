@@ -1,4 +1,4 @@
-const { floatOrZero } = require("../../../server_src/lib/utils/number.util");
+const { floatOrZero } = require("../../../server_src/utils/number.util");
 
 describe("numberUtil", function () {
   it("should tolerate unix timestamp and return number greater than 0", async function () {

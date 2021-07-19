@@ -12,10 +12,7 @@ export const groupsPerGallery = 4; // Square blocks of 2x2 printers, in Y direct
 export const galleries = 3;
 export const groupWidth = 2; // Used to translate gallery coordinates to real X
 export const groupHeight = 2;
-export const mapRealLimits = [
-  galleries * groupWidth,
-  groupsPerGallery * groupHeight
-];
+export const mapRealLimits = [galleries * groupWidth, groupsPerGallery * groupHeight];
 
 /* MODAL OPTIONS */
 export const quickActionsButtonIdPrefix = "quick-actions-";

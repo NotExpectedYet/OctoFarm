@@ -85,12 +85,7 @@ function attachEventToStopButton(printer) {
             })
             .catch((e) => {
               e.target.disabled = false;
-              UI.createAlert(
-                "error",
-                `Failed to cancel job! Error: ${e}`,
-                4000,
-                "Clicked"
-              );
+              UI.createAlert("error", `Failed to cancel job! Error: ${e}`, 4000, "Clicked");
             });
         }
       }
@@ -106,13 +101,9 @@ function addListeners(printer, allPrinters) {
     panel.addEventListener("click", (e) => {
       printer.isSelected = panel.classList.toggle("printer-map-tile-selected");
 
-      const massDragAndDropStatusPanel = document.getElementById(
-        massDragAndDropStatusId
-      );
+      const massDragAndDropStatusPanel = document.getElementById(massDragAndDropStatusId);
       if (massDragAndDropStatusPanel) {
-        const selectedPrinterCount = allPrinters.filter(
-          (p) => !!p.isSelected
-        )?.length;
+        const selectedPrinterCount = allPrinters.filter((p) => !!p.isSelected)?.length;
         if (selectedPrinterCount === 0) {
           massDragAndDropStatusPanel.innerHTML = `<span class="badge badge-danger">${selectedPrinterCount} selected</span> select a printer first to mass-upload.`;
         } else {
@@ -173,11 +164,7 @@ async function updateState(printer, clientSettings, view) {
   if (stateCategory === "Error!") {
     stateCategory = "Offline";
   }
-  UI.doesElementNeedUpdating(
-    cleanPrinterName(printer),
-    elements.name,
-    "innerHTML"
-  );
+  UI.doesElementNeedUpdating(cleanPrinterName(printer), elements.name, "innerHTML");
 
   switch (view) {
     case "list":
@@ -211,16 +198,8 @@ async function updateState(printer, clientSettings, view) {
     //No Job reset
     UI.doesElementNeedUpdating("", elements.progress, "innerHTML");
     elements.progress.style.width = 0 + "%";
-    UI.doesElementNeedUpdating(
-      printTimeElapsedFormat,
-      elements.printTimeElapsed,
-      "innerHTML"
-    );
-    UI.doesElementNeedUpdating(
-      remainingPrintTimeFormat,
-      elements.remainingPrintTime,
-      "innerHTML"
-    );
+    UI.doesElementNeedUpdating(printTimeElapsedFormat, elements.printTimeElapsed, "innerHTML");
+    UI.doesElementNeedUpdating(remainingPrintTimeFormat, elements.remainingPrintTime, "innerHTML");
   }
 }
 
@@ -246,10 +225,7 @@ export async function init(printers, clientSettings, view) {
 
         // Attach drag and drop to mass upload
         massDragAndDropPanelDom = document.getElementById(massDragAndDropId);
-        await dragAndDropEnableMultiplePrinters(
-          massDragAndDropPanelDom,
-          printers
-        );
+        await dragAndDropEnableMultiplePrinters(massDragAndDropPanelDom, printers);
       }
 
       // initialise or start the information updating..
@@ -262,20 +238,14 @@ export async function init(printers, clientSettings, view) {
             coord: parsedGroupCoord,
             subCoord: printerSubCoordinate,
             realCoord: !!parsedGroupCoord
-              ? combineSubAndNormalCoords(
-                  parsedGroupCoord,
-                  printerSubCoordinate
-                )
+              ? combineSubAndNormalCoords(parsedGroupCoord, printerSubCoordinate)
               : undefined
           };
         })
       ];
       for (let realY = mapRealLimits[1] - 1; realY >= 0; realY--) {
         for (let realX = 0; realX < mapRealLimits[0]; realX++) {
-          const printerWithCoord = findPrinterWithBlockCoordinate(
-            parsedPrinters,
-            [realX, realY]
-          );
+          const printerWithCoord = findPrinterWithBlockCoordinate(parsedPrinters, [realX, realY]);
           let printer = null;
           if (!printerWithCoord) {
             // We construct a fakey

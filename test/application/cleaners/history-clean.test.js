@@ -1,8 +1,6 @@
 jest.mock("../../../server_src/services/history.service");
 const mockHistoryService = require("../../../server_src/services/history.service");
-const {
-  noCostSettingsMessage
-} = require("../../../server_src/lib/utils/print-cost.util");
+const { noCostSettingsMessage } = require("../../../server_src/utils/print-cost.util");
 const { isPromise } = require("jest-util");
 
 const illegalHistoryCache = [{ printHistory2: null }];
@@ -80,8 +78,7 @@ describe("historyClean", function () {
   Date.now = () => 1618059562000;
   process.env.TZ = "UTC";
 
-  let HistoryClean =
-    require("../../../server_src/lib/dataFunctions/historyClean").HistoryClean;
+  let HistoryClean = require("../../../server_src/state/data/historyClean").HistoryClean;
   it("should initiate and finish within 5 sec for empty history", async function () {
     expect(await mockHistoryService.find({})).toHaveLength(0);
 
@@ -99,9 +96,7 @@ describe("historyClean", function () {
     // Mock only function
     mockHistoryService.saveMockData(emptyLegalHistoryCache);
 
-    expect(await mockHistoryService.find({})).toStrictEqual(
-      emptyLegalHistoryCache
-    );
+    expect(await mockHistoryService.find({})).toStrictEqual(emptyLegalHistoryCache);
 
     const historyState = new HistoryClean(false, "info");
     const stats = historyState.generateStatistics();
@@ -112,9 +107,7 @@ describe("historyClean", function () {
     // Mock only function
     mockHistoryService.saveMockData(realisticHistoryCache);
 
-    expect(await mockHistoryService.find({})).toStrictEqual(
-      realisticHistoryCache
-    );
+    expect(await mockHistoryService.find({})).toStrictEqual(realisticHistoryCache);
 
     const historyState = new HistoryClean(false, "info");
     await historyState.initCache();
@@ -263,9 +256,7 @@ describe("historyClean", function () {
     const historyState2 = new HistoryClean(false, "info");
     // Expect void resolve
     await expect(historyState2.initCache()).resolves.toBeFalsy();
-    expect(historyState2.historyClean[0].printerCost).toEqual(
-      noCostSettingsMessage
-    );
+    expect(historyState2.historyClean[0].printerCost).toEqual(noCostSettingsMessage);
     // Expect the rabbit hole to be deep.
     expect(historyState2.historyClean[0].index).toEqual(
       interestingButWeirdHistoryCache[0].printHistory.historyIndex
@@ -288,9 +279,7 @@ describe("historyClean", function () {
     expect(historyState.historyClean).toHaveLength(14);
     // A case where a tool is not set
     expect(historyState.historyClean[3].spools).toBeNull();
-    expect(historyState.historyClean[13].spools[0].tool0.toolName).toBe(
-      "Tool 0"
-    );
+    expect(historyState.historyClean[13].spools[0].tool0.toolName).toBe("Tool 0");
   });
 
   it("should not return NaN in printHours", async () => {
@@ -338,8 +327,7 @@ describe("historyClean", function () {
  * Most of these functions below are easily tested in isolation
  */
 describe("historyClean:Static", () => {
-  let HistoryClean =
-    require("../../../server_src/lib/dataFunctions/historyClean").HistoryClean;
+  let HistoryClean = require("../../../server_src/state/data/historyClean").HistoryClean;
 
   it("assignYCumSum tolerate falsy y values and skips falsy entries", () => {
     const undefinedYInput = [
@@ -349,20 +337,8 @@ describe("historyClean:Static", () => {
       { x: 0 },
       { x: 0, y: 1 }
     ];
-    const missingYInput = [
-      { x: 0 },
-      { x: 0, y: 1 },
-      { x: 0, y: 1 },
-      { x: 0 },
-      { x: 0, y: 1 }
-    ];
-    const falsyContainingInput = [
-      null,
-      { x: 0, y: 1 },
-      { x: 0 },
-      undefined,
-      { x: 0, y: 1 }
-    ];
+    const missingYInput = [{ x: 0 }, { x: 0, y: 1 }, { x: 0, y: 1 }, { x: 0 }, { x: 0, y: 1 }];
+    const falsyContainingInput = [null, { x: 0, y: 1 }, { x: 0 }, undefined, { x: 0, y: 1 }];
     // Prove that the old function was buggy
     expect(legacyConvertIncremental(undefinedYInput)[4]).toStrictEqual({
       x: 0,
@@ -436,9 +412,7 @@ describe("historyClean:Static", () => {
             const volume = length * Math.PI * radius * radius;
             let usage = "";
             if (success) {
-              usage = (
-                volume * parseFloat(spool.spools.profile.density)
-              ).toFixed(2);
+              usage = (volume * parseFloat(spool.spools.profile.density)).toFixed(2);
             } else {
               usage = (
                 (printPercentage / 100) *
