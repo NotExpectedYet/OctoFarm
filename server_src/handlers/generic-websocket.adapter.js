@@ -46,8 +46,7 @@ module.exports = class GenericWebsocketAdapter {
   }
 
   /**
-   * @abstract Make sure to override the starting call for the websocket adapter
-   * Note: take into account that a restart can call this with different url or id
+   * Optional function to override the starting call for the websocket adapter
    */
   start() {
     // Add your starting call to bind handlers and connect to your transport

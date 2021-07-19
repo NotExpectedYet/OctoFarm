@@ -2,6 +2,7 @@ const handle = require("hexnut-handle");
 const { byteCount } = require("../../../utils/benchmark.util");
 
 let DEBUG = false;
+
 const octoPrintWebSocketRawDebug = (ctx, next) => {
   if (DEBUG) {
     console.log(`${Date.now()} WS msg size ${byteCount(ctx.message)} bytes`);
@@ -9,9 +10,12 @@ const octoPrintWebSocketRawDebug = (ctx, next) => {
   next();
 };
 
-const parseMessage = (message) => {
+const parseOctoPrintWebsocketMessage = (message) => {
   const packet = JSON.parse(message);
   const header = Object.keys(packet)[0];
+  if (DEBUG) {
+    console.log(`DEBUG WS ['${header}', ${byteCount(message)} bytes]`);
+  }
   return {
     header,
     data: packet[header]
@@ -19,7 +23,7 @@ const parseMessage = (message) => {
 };
 
 const octoprintParseMiddleware = (ctx, next) => {
-  ctx.message = parseMessage(ctx.message);
+  ctx.message = parseOctoPrintWebsocketMessage(ctx.message);
   next();
 };
 
@@ -56,6 +60,7 @@ const matchHeaderMiddleware = (type, callback, err) =>
   handle.matchMessage((body) => body.header === type, safeHandler(callback, err));
 
 module.exports = {
+  parseOctoPrintWebsocketMessage,
   octoPrintWebSocketRawDebug,
   octoprintParseMiddleware,
   octoPrintWebSocketPostDebug,

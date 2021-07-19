@@ -23,13 +23,7 @@ class OctoPrintWebSocketAdapter extends GenericWebsocketAdapter {
   #throttle;
 
   #client;
-  messageSubject = new Subject();
-  patternObs = new Observable((subscriber) => {
-    subscriber.next(1);
-    subscriber.next(2);
-    subscriber.next(3);
-    subscriber.complete();
-  });
+  messageSubject;
 
   constructor({ id, webSocketURL, currentUser, sessionkey, throttle }) {
     super({ id: id.toString(), webSocketURL });
@@ -39,6 +33,7 @@ class OctoPrintWebSocketAdapter extends GenericWebsocketAdapter {
     this.#throttle = throttle;
 
     this.#constructClient();
+    this.messageSubject = new Subject();
   }
 
   #constructClient() {
@@ -46,7 +41,7 @@ class OctoPrintWebSocketAdapter extends GenericWebsocketAdapter {
   }
 
   getMessageSubject() {
-    return this.patternObs;
+    return this.messageSubject;
   }
 
   /**
@@ -62,13 +57,7 @@ class OctoPrintWebSocketAdapter extends GenericWebsocketAdapter {
     }
     this.#client.use(
       handle.connect((ctx) => {
-        const data = { auth: `${this.#currentUser}:${this.#sessionKey}` };
-        ctx.send(JSON.stringify(data));
-
-        if (this.#throttle) {
-          const throtleSettings = { throttle: this.#throttle };
-          ctx.send(throtleSettings);
-        }
+        this.sendSetupData(ctx);
       })
     );
     this.#client.use(
@@ -86,7 +75,11 @@ class OctoPrintWebSocketAdapter extends GenericWebsocketAdapter {
     this.#client.use(skipAnyHeaderInMiddleware(OP_WS_SKIP));
     this.#client.use(octoPrintWebSocketPostDebug);
     this.#client.use(matchHeaderMiddleware(OP_WS_MSG.connected, this.#onConnection));
-    this.#client.use(matchHeaderMiddleware(OP_WS_MSG.current, this.#handleCurrentMessage));
+    this.#client.use(
+      matchHeaderMiddleware(OP_WS_MSG.current, (ctx) => {
+        this.#handleCurrentMessage(ctx);
+      })
+    );
     this.#client.use(matchHeaderMiddleware(OP_WS_MSG.history, this.#handleHistoryMessage));
     this.#client.use(matchHeaderMiddleware(OP_WS_MSG.timelapse, this.#handleTimelapseMessage));
     this.#client.use(matchHeaderMiddleware(OP_WS_MSG.event, this.#handleEventMessage));
@@ -98,6 +91,16 @@ class OctoPrintWebSocketAdapter extends GenericWebsocketAdapter {
 
     const constructedUrl = new URL("/sockjs/websocket", this.websocketURL);
     this.#client.connect(constructedUrl);
+  }
+
+  sendSetupData(ctx) {
+    const data = { auth: `${this.#currentUser}:${this.#sessionKey}` };
+    ctx.send(JSON.stringify(data));
+
+    if (this.#throttle) {
+      const throtleSettings = { throttle: this.#throttle };
+      ctx.send(JSON.stringify(throtleSettings));
+    }
   }
 
   /**
@@ -112,7 +115,7 @@ class OctoPrintWebSocketAdapter extends GenericWebsocketAdapter {
   }
 
   #handleCurrentMessage(ctx) {
-    console.log(`Received current event '${ctx.message.header}'`);
+    // console.log(`Adapter '${ctx.message.header}'`);
     this.messageSubject.next(ctx.message);
   }
 

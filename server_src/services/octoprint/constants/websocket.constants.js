@@ -45,8 +45,18 @@ const OP_WS_MSG = {
 
 const OP_WS_SKIP = [OP_WS_MSG.slicingProgress, OP_WS_MSG.timelapse];
 
+const WS_STATE = {
+  unopened: "unopened",
+  opening: "opening",
+  connected: "connected",
+  errored: "errored", // Not a disconnect error
+  closing: "closing", // Closing error received
+  timeout: "timeout" // Retrying is in timeout
+};
+
 module.exports = {
   EVENT_TYPES,
+  WS_STATE,
   OP_WS_MSG,
   OP_WS_SKIP
 };

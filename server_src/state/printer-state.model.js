@@ -19,7 +19,7 @@ class PrinterStateModel {
   #webSocket = "danger";
   #webSocketDescription = "Websocket unconnected";
   #websocketAdapter;
-  #messageSource;
+  #messageSourceSubject;
   #websocketAdapterType;
   #sessionUser;
   #sessionKey;
@@ -149,23 +149,7 @@ class PrinterStateModel {
       throttle: 2
     });
 
-    this.#messageSource = this.#websocketAdapter.getMessageSubject();
-    this.#messageSource.subscribe(
-      (r) => {
-        console.log("RxJS Subject WS msg");
-        this.handleWebsocketMessage(r);
-      },
-      (e) => {
-        console.log("RxJS Subject WS error");
-      },
-      (c) => {
-        console.log("RxJS Subject WS complete");
-      }
-    );
-  }
-
-  handleWebsocketMessage(msg) {
-    console.log("ws msg RX", msg);
+    this.#messageSourceSubject = this.#websocketAdapter.getMessages$();
   }
 
   /**
@@ -177,7 +161,19 @@ class PrinterStateModel {
         `The websocket adapter was not provided. Please reset it first with 'bindWebSocketAdapter' to connect to it.`
       );
     }
-    this.#websocketAdapter.start();
+    this.#messageSourceSubject.subscribe(
+      (r) => {
+        // console.log(
+        //   `Printer WS msg handler ${r.header} [${this.#entityData.settingsApperance.name}]`
+        // );
+      },
+      (e) => {
+        console.log("err");
+      },
+      (c) => {
+        console.log("RxJS Subject WS complete");
+      }
+    );
   }
 
   /**
